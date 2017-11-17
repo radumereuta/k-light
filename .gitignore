@@ -1,0 +1,17 @@
+.kompile*
+.krun*
+.kast*
+.ktest*
+.kdoc*
+*-kompiled
+*.pdf
+*.swp
+.metadata
+.cache
+.idea
+*.iml
+.project
+.classpath
+.settings/
+*~
+target/
