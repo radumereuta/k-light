@@ -24,7 +24,7 @@ public class Production extends ASTNode implements Interfaces.MutableList<Produc
     private Multimap<Integer, Integer> binderMap;
 
     public static Production makeFunction(Sort funSort, String funName, Sort argSort, org.kframework.frontend.kil.loader.Context context) {
-        List<ProductionItem> prodItems = new ArrayList<ProductionItem>();
+        List<ProductionItem> prodItems = new ArrayList<>();
         prodItems.add(new Terminal(funName));
         prodItems.add(new Terminal("("));
         prodItems.add(new NonTerminal(argSort));
@@ -109,14 +109,7 @@ public class Production extends ASTNode implements Interfaces.MutableList<Produc
     }
 
     public boolean isConstant() {
-        // TODO(Radu): properly determine if a production is a constant or not, just like below
-        return isTerminal() && (sort.getName().startsWith("#") || sort.equals(Sort.KLABEL));
-    }
-
-    public boolean isConstant(org.kframework.frontend.kil.loader.Context context) {
-        return isTerminal() && (sort.getName().startsWith("#") ||
-                                sort.equals(Sort.KLABEL) ||
-                                context.getTokenSorts().contains(getSort()));
+        return containsAttribute(Attribute.TOKEN);
     }
 
     public boolean isBracket() {
@@ -177,7 +170,7 @@ public class Production extends ASTNode implements Interfaces.MutableList<Produc
      * @return
      */
     public String getKLabel() {
-        String klabel = getAttribute("klabel");
+        String klabel = getAttribute(Attribute.KLABEL);
         if (klabel == null && isSyntacticSubsort()) {
             return null;
         } else if (klabel == null) {

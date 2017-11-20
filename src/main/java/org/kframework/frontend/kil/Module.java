@@ -1,12 +1,13 @@
 // Copyright (c) 2012-2016 K Team. All Rights Reserved.
 package org.kframework.frontend.kil;
 
-import org.kframework.frontend.kil.loader.Context;
 import org.kframework.frontend.kil.loader.ModuleContext;
 import org.kframework.frontend.kil.visitors.Visitor;
 
-import java.util.*;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 
 /** A module. */
 public class Module extends DefinitionItem implements Interfaces.MutableList<ModuleItem, Enum<?>> {
@@ -60,7 +61,7 @@ public class Module extends DefinitionItem implements Interfaces.MutableList<Mod
     @Override
     public String toString() {
         String content = "";
-        List<ModuleItem> sortedItems = new ArrayList<ModuleItem>(items);
+        List<ModuleItem> sortedItems = new ArrayList<>(items);
 
         sortedItems.sort(new Comparator<ModuleItem>() {
             @Override
@@ -73,46 +74,6 @@ public class Module extends DefinitionItem implements Interfaces.MutableList<Mod
             content += i + " \n";
 
         return "module " + name + "\n" + content + "\nendmodule";
-    }
-
-    public List<String> getModuleKLabels() {
-        List<String> mkl = new LinkedList<>();
-
-        for (ModuleItem mi : items) {
-            List<String> list = mi.getKLabels();
-            if (list != null)
-                mkl.addAll(list);
-        }
-
-        return mkl;
-    }
-
-    /**
-     * Return a list of the sorts declared by
-     * items in this module, plus a few builtin
-     * sorts.
-     * Result will contain duplicates if
-     * multiple declarations mention the same sort.
-     * @return
-     */
-    public Set<Sort> getAllSorts() {
-        if (sorts != null) {
-            return sorts;
-        }
-        sorts = new LinkedHashSet<>();
-        for (ModuleItem mi : items) {
-            List<Sort> list = mi.getAllSorts();
-            if (list != null)
-                sorts.addAll(list);
-        }
-
-        sorts.add(Sort.BUILTIN_BOOL);
-        sorts.add(Sort.BUILTIN_INT);
-        sorts.add(Sort.BUILTIN_FLOAT);
-        sorts.add(Sort.BUILTIN_STRING);
-        sorts.add(Sort.BUILTIN_ID);
-
-        return sorts;
     }
 
     @Override
@@ -132,70 +93,6 @@ public class Module extends DefinitionItem implements Interfaces.MutableList<Mod
     @Override
     public Module shallowCopy() {
         return new Module(this);
-    }
-
-    public void addSubsort(Sort sort, Sort subsort, Context context) {
-        this.addProduction(sort, new NonTerminal(subsort));
-        context.addSubsort(sort, subsort);
-    }
-
-    public void addConstant(Sort ctSort, String ctName) {
-        this.addProduction(ctSort, new Terminal(ctName));
-    }
-
-    public void addConstant(KLabelConstant kLabelConstant) {
-        this.addProduction(kLabelConstant.getSort(), new Terminal(kLabelConstant.getLabel()));
-    }
-
-    public void addProduction(Sort sort, ProductionItem prodItem) {
-        List<ProductionItem> prodItems = new LinkedList<>();
-        prodItems.add(prodItem);
-        this.addProduction(sort, new Production(new NonTerminal(sort), prodItems));
-    }
-
-    public void addProduction(Sort sort, Production prod) {
-        List<PriorityBlock> pbs = new LinkedList<>();
-        PriorityBlock pb = new PriorityBlock();
-        pbs.add(pb);
-
-        List<Production> prods = new LinkedList<>();
-        pb.setProductions(prods);
-
-        prods.add(prod);
-
-        this.items.add(new Syntax(new NonTerminal(sort), pbs));
-        this.sorts = null;
-    }
-
-    public List<Rule> getRules() {
-        List<Rule> list = new LinkedList<>();
-        for (ModuleItem moduleItem : items) {
-            if (moduleItem instanceof Rule) {
-                list.add((Rule) moduleItem);
-            }
-        }
-
-        return list;
-    }
-
-    /**
-     * Returns a {@code Collection} of {@link Production} instances associated with the given sort.
-     */
-    public Collection<Production> getProductionsOf(Sort sort) {
-        Collection<Production> productions = new ArrayList<>();
-        for (ModuleItem item : items) {
-            if (!(item instanceof Syntax)) {
-                continue;
-            }
-            Syntax syntax = (Syntax) item;
-            if (!syntax.getDeclaredSort().getSort().equals(sort)) {
-                continue;
-            }
-            for (PriorityBlock priorityBlock : syntax.getPriorityBlocks()) {
-                productions.addAll(priorityBlock.getProductions());
-            }
-        }
-        return productions;
     }
 
     @Override

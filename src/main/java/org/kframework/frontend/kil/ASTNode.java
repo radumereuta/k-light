@@ -23,7 +23,7 @@ public abstract class ASTNode implements Serializable {
      */
     private static final long serialVersionUID = 1L;
     /**
-     * Used on any node for metadata also used on {@link Rule} and {@link Production} for the attribute list.
+     * Used on any node for metadata also used on {@link Production} for the attribute list.
      */
     private Attributes attributes;
 
@@ -90,8 +90,8 @@ public abstract class ASTNode implements Serializable {
     /**
      * Constructor with specified location and filename.
      *
-     * @param loc
-     * @param file
+     * @param loc (<start_line>, <start_column>, <end_line>, <end_column>)
+     * @param source File location or compilation stage.
      */
     public ASTNode(Location loc, Source source) {
         setLocation(loc);
@@ -110,7 +110,7 @@ public abstract class ASTNode implements Serializable {
     /**
      * Sets the location or removes it if appropriate.
      *
-     * @param loc
+     * @param location
      */
     public void setLocation(Location location) {
         this.location = location;
@@ -128,7 +128,7 @@ public abstract class ASTNode implements Serializable {
     /**
      * Sets the source or removes it if appropriate.
      *
-     * @param file
+     * @param source
      */
     public void setSource(Source source) {
         this.source = source;

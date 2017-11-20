@@ -7,10 +7,7 @@ import org.kframework.attributes.Att;
 import org.kframework.definition.*;
 import org.kframework.definition.Constructors;
 import org.kframework.definition.ProductionItem;
-import org.kframework.frontend.Sort;
-import org.kframework.frontend.convertors.CheckListDecl;
 import org.kframework.frontend.kil.*;
-import org.kframework.frontend.kil.Configuration;
 import org.kframework.frontend.kil.Definition;
 import org.kframework.frontend.kil.Module;
 import org.kframework.frontend.kil.NonTerminal;
@@ -19,11 +16,9 @@ import org.kframework.frontend.kil.Terminal;
 import org.kframework.utils.errorsystem.KEMException;
 import org.kframework.utils.errorsystem.KExceptionManager;
 import scala.Enumeration.Value;
-import scala.Tuple2;
 import scala.collection.Seq;
 
 import java.util.*;
-import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 

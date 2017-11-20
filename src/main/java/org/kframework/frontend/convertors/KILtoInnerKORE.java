@@ -7,7 +7,6 @@ import org.kframework.attributes.Location;
 import org.kframework.attributes.Source;
 import org.kframework.builtin.Labels;
 import org.kframework.builtin.Sorts;
-import org.kframework.frontend.*;
 import org.kframework.frontend.KApply;
 import org.kframework.frontend.KLabel;
 import org.kframework.frontend.KList;
@@ -15,7 +14,6 @@ import org.kframework.frontend.KRewrite;
 import org.kframework.frontend.KVariable;
 import org.kframework.frontend.kil.*;
 import org.kframework.frontend.kil.Attributes;
-import org.kframework.frontend.kil.KSequence;
 import org.kframework.frontend.kil.loader.Context;
 import org.kframework.meta.Up;
 

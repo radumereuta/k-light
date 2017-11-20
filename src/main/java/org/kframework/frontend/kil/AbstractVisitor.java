@@ -100,9 +100,6 @@ public abstract class AbstractVisitor<P, R, E extends Throwable> implements Visi
     /**
      * Generically visit a single child of an ASTNode. A node implements Interfaces.Parent
      * if it has one or more multiplicity 1 (i.e. not a collection or map) child nodes.
-     * For example usage of this method, refer to {@link #visit(Sentence, Object)}
-     * to see an example with multiple multiplicity 1 child nodes, or
-     * {@link #visit(Bracket, Object)} for an example with only one.
      */
     private <Child extends ASTNode, EnumType extends Enum<?>,
         Parent extends ASTNode & Interfaces.Parent<Child, EnumType>>
@@ -123,7 +120,7 @@ public abstract class AbstractVisitor<P, R, E extends Throwable> implements Visi
     /**
      * Generically visit a list of children of an ASTNode. A node implements Interfaces.Collection
      * if it has one or more multiplicity * (i.e. a java.util.Collection) child nodes.
-     * For example usage of this method, refer to {@link #visit(ListUpdate, Object)}
+     * For example usage of this method, refer to {@link #visit(Object)}
      * to see an example with multiple multiplicity * child nodes, or
      * {@link #visit(Definition, Object)} for an example with only one.
      */
@@ -327,29 +324,6 @@ public abstract class AbstractVisitor<P, R, E extends Throwable> implements Visi
     }
 
     @Override
-    public R visit(Sentence node, P p) throws E {
-        node = genericVisitChild(node, p, mutableChild(Sentence.class), Sentence.Children.BODY);
-        node = genericVisitChild(node, p, mutableChild(Sentence.class), Sentence.Children.ENSURES);
-        node = genericVisitChild(node, p, mutableChild(Sentence.class), Sentence.Children.REQUIRES);
-        return visit((ModuleItem) node, p);
-    }
-
-    @Override
-    public R visit(Configuration node, P p) throws E {
-        return visit((Sentence) node, p);
-    }
-
-    @Override
-    public R visit(org.kframework.frontend.kil.Context node, P p) throws E {
-        return visit((Sentence) node, p);
-    }
-
-    @Override
-    public R visit(Rule node, P p) throws E {
-        return visit((Sentence) node, p);
-    }
-
-    @Override
     public R visit(Syntax node, P p) throws E {
         node = genericVisitChild(node, p, mutableChild(Syntax.class), null);
         node = genericVisitList(node, p, mutableList(Syntax.class), null);
@@ -364,7 +338,6 @@ public abstract class AbstractVisitor<P, R, E extends Throwable> implements Visi
 
     @Override
     public R visit(PriorityExtendedAssoc node, P p) throws E {
-        node = genericVisitList(node, p, mutableList(PriorityExtendedAssoc.class), null);
         return visit((ModuleItem) node, p);
     }
 
@@ -376,7 +349,6 @@ public abstract class AbstractVisitor<P, R, E extends Throwable> implements Visi
 
     @Override
     public R visit(PriorityBlockExtended node, P p) throws E {
-        node = genericVisitList(node, p, mutableList(PriorityBlockExtended.class), null);
         return visit((ASTNode) node, p);
     }
 
@@ -412,381 +384,6 @@ public abstract class AbstractVisitor<P, R, E extends Throwable> implements Visi
     }
 
     @Override
-    public R visit(Term node, P p) throws E {
-        return visit((ASTNode) node, p);
-    }
-
-    @Override
-    public R visit(TermComment node, P p) throws E {
-        return visit((ASTNode) node, p);
-    }
-
-    @Override
-    public R visit(Cell node, P p) throws E {
-        node = genericVisitChild(node, p, mutableChild(Cell.class), null);
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(Collection node, P p) throws E {
-        node = genericVisitList(node, p, mutableList(Collection.class), null);
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(Ambiguity node, P p) throws E {
-        return visit((Collection) node, p);
-    }
-
-    @Override
-    public R visit(Bag node, P p) throws E {
-        return visit((Collection) node, p);
-    }
-
-    @Override
-    public R visit(KSequence node, P p) throws E {
-        return visit((Collection) node, p);
-    }
-
-    @Override
-    public R visit(KList node, P p) throws E {
-        return visit((Collection) node, p);
-    }
-
-    @Override
-    public R visit(CollectionItem node, P p) throws E {
-        node = genericVisitChild(node, p, mutableChild(CollectionItem.class), CollectionItem.Children.VALUE);
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(BagItem node, P p) throws E {
-        return visit((CollectionItem) node, p);
-    }
-
-    @Override
-    public R visit(DataStructureBuiltin node, P p) throws E {
-        node = genericVisitList(node, p,
-                new CollectionASTNodeCopier<Term, DataStructureBuiltin.ListChildren, DataStructureBuiltin>() {
-
-            @Override
-            protected DataStructureBuiltin doCopy(DataStructureBuiltin node,
-                                                  java.util.Collection<Term> items,
-                                                  DataStructureBuiltin.ListChildren _void) {
-                return node.shallowCopy(items);
-            }
-
-        }, DataStructureBuiltin.ListChildren.BASE_TERMS);
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(CollectionBuiltin node, P p) throws E {
-        node = genericVisitList(node, p,
-                new CollectionASTNodeCopier<Term, DataStructureBuiltin.ListChildren, CollectionBuiltin>() {
-
-            @Override
-            protected CollectionBuiltin doCopy(CollectionBuiltin node,
-                    java.util.Collection<Term> items,
-                    DataStructureBuiltin.ListChildren _void) {
-                return node.shallowCopy(node.baseTerms(), items);
-            }
-
-        }, DataStructureBuiltin.ListChildren.ELEMENTS);
-        return visit((DataStructureBuiltin) node, p);
-    }
-
-    @Override
-    public R visit(SetBuiltin node, P p) throws E {
-        return visit((CollectionBuiltin) node, p);
-    }
-
-    @Override
-    public R visit(BuiltinLookup node, P p) throws E {
-        node = genericVisitChild(node, p,
-                new ChildASTNodeCopier<Term, BuiltinLookup.Children, BuiltinLookup>() {
-
-            @Override
-            protected BuiltinLookup doCopy(BuiltinLookup node, Term child, BuiltinLookup.Children type) {
-                return node.shallowCopy((Variable)child, node.key());
-            }
-
-        }, BuiltinLookup.Children.BASE);
-        node = genericVisitChild(node, p,
-                new ChildASTNodeCopier<Term, BuiltinLookup.Children, BuiltinLookup>() {
-
-            @Override
-            protected BuiltinLookup doCopy(BuiltinLookup node, Term child, BuiltinLookup.Children type) {
-                return node.shallowCopy(node.base(), child);
-            }
-
-        }, BuiltinLookup.Children.KEY);
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(SetLookup node, P p) throws E {
-        return visit((BuiltinLookup) node, p);
-    }
-
-    @Override
-    public R visit(SetUpdate node, P p) throws E {
-        node = genericVisitList(node, p, new CollectionASTNodeCopier<Term, Enum<?>, SetUpdate>() {
-
-            @Override
-            protected SetUpdate doCopy(SetUpdate node,
-                    java.util.Collection<Term> items,
-                    Enum<?> _void) {
-                return new SetUpdate(node.set(), items);
-            }
-
-        }, null);
-        node = genericVisitChild(node, p,
-                new ChildASTNodeCopier<Variable, Enum<?>, SetUpdate>() {
-
-            @Override
-            protected SetUpdate doCopy(SetUpdate node, Variable child, Enum<?> type) {
-                return new SetUpdate(child, node.removeEntries());
-            }
-
-        }, null);
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(ListBuiltin node, P p) throws E {
-        node = genericVisitList(node, p,
-                new CollectionASTNodeCopier<Term, DataStructureBuiltin.ListChildren, ListBuiltin>() {
-
-            @Override
-            protected ListBuiltin doCopy(ListBuiltin node,
-                    java.util.Collection<Term> items,
-                    DataStructureBuiltin.ListChildren _void) {
-                return ListBuiltin.of(node.sort(), (List<Term>)node.baseTerms(), node.elementsLeft(), (List<Term>)items);
-            }
-
-        }, DataStructureBuiltin.ListChildren.ELEMENTS_RIGHT);
-        return visit((CollectionBuiltin) node, p);
-    }
-
-    @Override
-    public R visit(ListLookup node, P p) throws E {
-        node = genericVisitChild(node, p,
-                new ChildASTNodeCopier<Term, BuiltinLookup.Children, ListLookup>() {
-
-            @Override
-            protected ListLookup doCopy(ListLookup node, Term child, BuiltinLookup.Children type) {
-                return new ListLookup(node.base(), node.key(), child, node.kind());
-            }
-
-        }, BuiltinLookup.Children.VALUE);
-        return visit((BuiltinLookup) node, p);
-    }
-
-    @Override
-    public R visit(ListUpdate node, P p) throws E {
-        node = genericVisitList(node, p, new CollectionASTNodeCopier<Term, ListUpdate.ListChildren, ListUpdate>() {
-
-            @Override
-            protected ListUpdate doCopy(ListUpdate node,
-                    java.util.Collection<Term> items,
-                    ListUpdate.ListChildren type) {
-                return new ListUpdate(node.base(), items, node.removeRight());
-            }
-
-        }, ListUpdate.ListChildren.REMOVE_LEFT);
-        node = genericVisitList(node, p, new CollectionASTNodeCopier<Term, ListUpdate.ListChildren, ListUpdate>() {
-
-            @Override
-            protected ListUpdate doCopy(ListUpdate node,
-                    java.util.Collection<Term> items,
-                    ListUpdate.ListChildren type) {
-                return new ListUpdate(node.base(), node.removeLeft(), items);
-            }
-
-        }, ListUpdate.ListChildren.REMOVE_RIGHT);
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(MapBuiltin node, P p) throws E {
-        // I decided not to make this method part of the complete generic
-        // machinery because there are only two kil classes which have
-        // java.util.Map<Term, Term> in them, and it would require an entirely separate
-        // genericVisitMap/MapASTNodeCopier/Interfaces.Map implementation.
-        if(visitChildren()) {
-            Map<Term, Term> items = new HashMap<>();
-            for (Map.Entry<Term, Term> entry : node.elements().entrySet()) {
-                Term key = (Term) processChildTerm(entry.getKey(), this.visitNode(entry.getKey(), p));
-                Term value = (Term) processChildTerm(entry.getValue(), this.visitNode(entry.getValue(), p));
-                if (key != null && value != null) {
-                    items.put(key, value);
-                }
-            }
-            if (changed(node.elements(), items)) {
-                node = new MapBuiltin(node.sort(), node.baseTerms(), items);
-            }
-        }
-        return visit((DataStructureBuiltin) node, p);
-    }
-
-    @Override
-    public R visit(MapLookup node, P p) throws E {
-        node = genericVisitChild(node, p,
-                new ChildASTNodeCopier<Term, BuiltinLookup.Children, MapLookup>() {
-
-            @Override
-            protected MapLookup doCopy(MapLookup node, Term child, BuiltinLookup.Children type) {
-                return new MapLookup(node.base(), node.key(), child, node.kind(), node.choice());
-            }
-
-        }, BuiltinLookup.Children.VALUE);
-        return visit((BuiltinLookup) node, p);
-    }
-
-    @Override
-    public R visit(MapUpdate node, P p) throws E {
-        // I decided not to make this method part of the complete generic
-        // machinery because there are only two kil classes which have
-        // java.util.Map<Term, Term> in them, and it would require an entirely separate
-        // genericVisitMap/MapASTNodeCopier/Interfaces.Map implementation.
-        if(visitChildren()) {
-            Variable map = (Variable) processChildTerm(node.map(), this.visitNode(node.map(), p));
-            Map<Term, Term> removeEntries = new HashMap<>();
-            Map<Term, Term> updateEntries = new HashMap<>();
-            for (Map.Entry<Term, Term> entry : node.removeEntries().entrySet()) {
-                Term key = (Term) processChildTerm(entry.getKey(), this.visitNode(entry.getKey(), p));
-                Term value = (Term) processChildTerm(entry.getValue(), this.visitNode(entry.getValue(), p));
-                if (key != null && value != null) {
-                    removeEntries.put(key, value);
-                }
-            }
-            for (Map.Entry<Term, Term> entry : node.updateEntries().entrySet()) {
-                Term key = (Term) processChildTerm(entry.getKey(), this.visitNode(entry.getKey(), p));
-                Term value = (Term) processChildTerm(entry.getValue(), this.visitNode(entry.getValue(), p));
-                if (key != null && value != null) {
-                    updateEntries.put(key, value);
-                }
-            }
-            if (changed(node.map(), map) || changed(node.removeEntries(), removeEntries) ||
-                    changed(node.updateEntries(), updateEntries)) {
-                node = new MapUpdate(map, removeEntries, updateEntries);
-            }
-        }
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(Token node, P p) throws E {
-        return visit((KLabel) node, p);
-    }
-
-    @Override
-    public R visit(BoolBuiltin node, P p) throws E {
-        return visit((Token) node, p);
-    }
-
-    @Override
-    public R visit(IntBuiltin node, P p) throws E {
-        return visit((Token) node, p);
-    }
-
-    @Override
-    public R visit(StringBuiltin node, P p) throws E {
-        return visit((Token) node, p);
-    }
-
-    @Override
-    public R visit(FloatBuiltin node, P p) throws E {
-        return visit((Token) node, p);
-    }
-
-    @Override
-    public R visit(GenericToken node, P p) throws E {
-        return visit((Token) node, p);
-    }
-
-    @Override
-    public R visit(ListTerminator node, P p) throws E {
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(Hole node, P p) throws E {
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(FreezerHole node, P p) throws E {
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(KApp node, P p) throws E {
-        node = genericVisitChild(node, p, mutableChild(KApp.class), KApp.Children.LABEL);
-        node = genericVisitChild(node, p, mutableChild(KApp.class), KApp.Children.CHILD);
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(KItemProjection node, P p) throws E {
-        node = genericVisitChild(node, p, mutableChild(KItemProjection.class), null);
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(KLabel node, P p) throws E {
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(KLabelConstant node, P p) throws E {
-        return visit((KLabel) node, p);
-    }
-
-    @Override
-    public R visit(KLabelInjection node, P p) throws E {
-        node = genericVisitChild(node, p, mutableChild(KLabelInjection.class), null);
-        return visit((KLabel) node, p);
-    }
-
-    @Override
-    public R visit(Rewrite node, P p) throws E {
-        // this is also not part of the generic machinery because alone among kil classes
-        // the setters for the child terms depend on org.kframework.frontend.kil.loader.Context
-        // TODO(Radu): fix when Rewrite.getSort takes the context directly.
-        if(visitChildren()) {
-            Term left = (Term) processChildTerm(node.getLeft(), this.visitNode(node.getLeft(), p));
-            Term right = (Term) processChildTerm(node.getRight(), this.visitNode(node.getRight(), p));
-            if (changed(node.getLeft(), left)) {
-                node = copy(node);
-                node.setLeft(left, context);
-            }
-            if (changed(node.getRight(), right)) {
-                node = copy(node);
-                node.setRight(right, context);
-            }
-        }
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(Constant node, P p) throws E {
-        return visit((ProductionReference) node, p);
-    }
-
-    @Override
-    public R visit(ProductionReference node, P p) throws E {
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(TermCons node, P p) throws E {
-        node = genericVisitList(node, p, mutableList(TermCons.class), null);
-        return visit((ProductionReference) node, p);
-    }
-
-    @Override
     public R visit(Attributes node, P p) throws E {
         node = genericVisitList(node, p, mutableList(Attributes.class), null);
         return visit((ASTNode) node, p);
@@ -799,57 +396,8 @@ public abstract class AbstractVisitor<P, R, E extends Throwable> implements Visi
     }
 
     @Override
-    public R visit(ParseError node, P p) throws E {
-        return visit((ASTNode) node, p);
-    }
-
-    @Override
-    public R visit(Bracket node, P p) throws E {
-        node = genericVisitChild(node, p, mutableChild(Bracket.class), null);
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(Cast node, P p) throws E {
-        node = genericVisitChild(node, p, mutableChild(Cast.class), null);
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(Variable node, P p) throws E {
-        return visit((Term) node, p);
-    }
-
-    @Override
     public R visit(StringSentence node, P p) throws E {
         return visit((ModuleItem) node, p);
-    }
-
-    @Override
-    public R visit(Restrictions node, P p) throws E {
-        return visit((ModuleItem) node, p);
-    }
-
-    @Override
-    public R visit(Freezer node, P p) throws E {
-        node = genericVisitChild(node, p, mutableChild(Freezer.class), null);
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(BackendTerm node, P p) throws E {
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(KInjectedLabel node, P p) throws E {
-        node = genericVisitChild(node, p, mutableChild(KInjectedLabel.class), null);
-        return visit((Term) node, p);
-    }
-
-    @Override
-    public R visit(FreezerLabel node, P p) throws E {
-        return visit((KInjectedLabel) node, p);
     }
 
     public String getName() {
