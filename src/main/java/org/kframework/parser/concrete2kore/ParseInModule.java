@@ -4,10 +4,8 @@ package org.kframework.parser.concrete2kore;
 import com.google.common.collect.Sets;
 import org.kframework.attributes.Source;
 import org.kframework.definition.Module;
-import org.kframework.frontend.K;
 import org.kframework.frontend.Sort;
 import org.kframework.treeNodes.*;
-import org.kframework.parser.TreeNodesToKORE;
 import org.kframework.parser.concrete2kore.disambiguation.*;
 import org.kframework.parser.concrete2kore.kernel.Grammar;
 import org.kframework.parser.concrete2kore.kernel.KSyntax2GrammarStatesFilter;
@@ -45,17 +43,15 @@ public class ParseInModule implements Serializable {
      */
     public final Module parsingModule;
     private volatile Grammar grammar = null;
-    private final boolean strict;
     public ParseInModule(Module seedModule) {
-        this(seedModule, seedModule, seedModule, seedModule, true);
+        this(seedModule, seedModule, seedModule, seedModule);
     }
 
-    public ParseInModule(Module seedModule, Module extensionModule, Module disambModule, Module parsingModule, boolean strict) {
+    public ParseInModule(Module seedModule, Module extensionModule, Module disambModule, Module parsingModule) {
         this.seedModule = seedModule;
         this.extensionModule = extensionModule;
         this.disambModule = disambModule;
         this.parsingModule = parsingModule;
-        this.strict = strict;
     }
 
     /**
@@ -76,30 +72,6 @@ public class ParseInModule implements Serializable {
         return extensionModule;
     }
 
-    /**
-     * Parse as input the given string and start symbol using the module stored in the object.
-     * All type checks for terms and variables are validated. Discard extra ambiguities by choosing the first.
-     * @param input          the string to parse.
-     * @param startSymbol    the start symbol from which to parse.
-     * @return the Term representation of the parsed input.
-     */
-    public Tuple2<Either<Set<ParseFailedException>, K>, Set<ParseFailedException>>
-            parseString(String input, Sort startSymbol, Source source) {
-        return parseString(input, startSymbol, source, 1, 1, true, false);
-    }
-
-    /**
-     * Parse as input the given string and start symbol using the module stored in the object.
-     * All the type checks are omitted when parsing programs. Discard extra ambiguities by choosing the first.
-     * @param input          the string to parse.
-     * @param startSymbol    the start symbol from which to parse.
-     * @return the Term representation of the parsed input.
-     */
-    public Tuple2<Either<Set<ParseFailedException>, K>, Set<ParseFailedException>>
-            parseStringWithoutTypecheck(String input, Sort startSymbol, Source source, boolean keepAmb) {
-        return parseString(input, startSymbol, source, 1, 1, false, keepAmb);
-    }
-
     private void getGrammar() {
         Grammar g = grammar;
         if (g == null) {
@@ -108,31 +80,8 @@ public class ParseInModule implements Serializable {
         }
     }
 
-    public Tuple2<Either<Set<ParseFailedException>, K>, Set<ParseFailedException>>
-            parseString(String input, Sort startSymbol, Source source, int startLine, int startColumn) {
-        return parseString(input, startSymbol, source, startLine, startColumn, true, false);
-    }
-
-    private Tuple2<Either<Set<ParseFailedException>, K>, Set<ParseFailedException>>
-            parseString(String input, Sort startSymbol, Source source, int startLine, int startColumn, boolean typeCheck, boolean keepAmb) {
-        final Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> result
-                = parseStringTerm(input, startSymbol, source, startLine, startColumn, typeCheck, keepAmb);
-        Either<Set<ParseFailedException>, K> parseInfo;
-        if (result._1().isLeft()) {
-            parseInfo = Left.apply(result._1().left().get());
-        } else {
-            parseInfo = Right.apply(TreeNodesToKORE.apply(result._1().right().get()));
-        }
-        return new Tuple2<>(parseInfo, result._2());
-    }
-
     /**
-     * Parse the given input. This function is private because the final disambiguation
-     * in {@link AmbFilter} eliminates ambiguities that will be equivalent only after
-     * calling {@link TreeNodesToKORE#apply(Term)}, but returns a result that is
-     * somewhat arbitrary as an actual org.kframework.parser {@link Term}.
-     * Fortunately all callers want the result as a K, and can use the public
-     * version of this method.
+     * Parse the given input.
      * @param input
      * @param startSymbol
      * @param source
@@ -140,7 +89,7 @@ public class ParseInModule implements Serializable {
      * @param startColumn
      * @return
      */
-    private Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>>
+    public Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>>
             parseStringTerm(String input, Sort startSymbol, Source source, int startLine, int startColumn, boolean typeCheck, boolean keepAmb) {
         getGrammar();
 
@@ -163,31 +112,10 @@ public class ParseInModule implements Serializable {
         Either<Set<ParseFailedException>, Term> rez = new TreeCleanerVisitor().apply(parsed);
         if (rez.isLeft())
             return new Tuple2<>(rez, warn);
-        rez = new CorrectRewritePriorityVisitor().apply(rez.right().get());
-        if (rez.isLeft())
-            return new Tuple2<>(rez, warn);
-        rez = new CorrectKSeqPriorityVisitor().apply(rez.right().get());
-        if (rez.isLeft())
-            return new Tuple2<>(rez, warn);
-        rez = new CorrectCastPriorityVisitor().apply(rez.right().get());
-        if (rez.isLeft())
-            return new Tuple2<>(rez, warn);
-        if (typeCheck) {
-            rez = new ApplyTypeCheckVisitor(disambModule.subsorts()).apply(rez.right().get());
-            if (rez.isLeft())
-                return new Tuple2<>(rez, warn);
-        }
         rez = new PriorityVisitor(disambModule.priorities(), disambModule.leftAssoc(), disambModule.rightAssoc()).apply(rez.right().get());
         if (rez.isLeft())
             return new Tuple2<>(rez, warn);
         Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> rez2;
-        if (typeCheck) {
-            rez2 = new VariableTypeInferenceFilter(disambModule.subsorts(), disambModule.definedSorts(), disambModule.productionsFor(), strict).apply(rez.right().get());
-            if (rez2._1().isLeft())
-                return rez2;
-            warn = rez2._2();
-            rez = rez2._1();
-        }
 
         Term rez3 = new PreferAvoidVisitor().apply(rez.right().get());
         if (!keepAmb) {

@@ -44,13 +44,13 @@ public class PriorityExtendedAssoc extends ModuleItem implements Interfaces.Muta
 
     @Override
     public String toString() {
-        String blocks = "";
+        StringBuilder blocks = new StringBuilder();
 
         for (KLabelConstant pb : tags) {
-            blocks += pb + " ";
+            blocks.append(pb).append(" ");
         }
         if (blocks.length() > 2)
-            blocks = blocks.substring(0, blocks.length() - 1);
+            blocks = new StringBuilder(blocks.substring(0, blocks.length() - 1));
 
         return "  syntax " + assoc + " " + blocks + "\n";
     }

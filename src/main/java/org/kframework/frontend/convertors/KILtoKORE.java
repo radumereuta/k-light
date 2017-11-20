@@ -5,8 +5,8 @@ package org.kframework.frontend.convertors;
 import com.google.common.collect.Sets;
 import org.kframework.attributes.Att;
 import org.kframework.definition.*;
-import org.kframework.definition.Constructors;
 import org.kframework.definition.ProductionItem;
+import org.kframework.frontend.ADT;
 import org.kframework.frontend.kil.*;
 import org.kframework.frontend.kil.Definition;
 import org.kframework.frontend.kil.Module;
@@ -127,8 +127,6 @@ public class KILtoKORE extends KILTransformation<Object> {
     public Set<org.kframework.definition.Sentence> apply(ModuleItem i) {
         if (i instanceof Syntax || i instanceof PriorityExtended) {
             return (Set<org.kframework.definition.Sentence>) apply((ASTNode) i);
-        } else if (i instanceof Restrictions) {
-            return Sets.newHashSet();
         } else {
             return Sets.newHashSet((org.kframework.definition.Sentence) apply((ASTNode) i));
         }
@@ -326,6 +324,6 @@ public class KILtoKORE extends KILTransformation<Object> {
     }
 
     public org.kframework.frontend.Sort apply(org.kframework.frontend.kil.Sort sort) {
-        return KORE.Sort(sort.getName());
+        return ADT.SortLookup.apply(sort.getName());
     }
 }

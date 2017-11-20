@@ -5,26 +5,15 @@ package org.kframework.frontend.convertors;
 import org.kframework.attributes.Att;
 import org.kframework.attributes.Location;
 import org.kframework.attributes.Source;
-import org.kframework.builtin.Labels;
-import org.kframework.builtin.Sorts;
-import org.kframework.frontend.KApply;
-import org.kframework.frontend.KLabel;
-import org.kframework.frontend.KList;
-import org.kframework.frontend.KRewrite;
-import org.kframework.frontend.KVariable;
 import org.kframework.frontend.kil.*;
 import org.kframework.frontend.kil.Attributes;
 import org.kframework.frontend.kil.loader.Context;
-import org.kframework.meta.Up;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.kframework.utils.Collections.*;
 import static org.kframework.utils.Collections.immutable;
-import static org.kframework.frontend.KORE.*;
 
 @SuppressWarnings("unused")
 public class KILtoInnerKORE extends KILTransformation<K> {

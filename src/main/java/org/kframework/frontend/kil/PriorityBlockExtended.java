@@ -10,7 +10,7 @@ import java.util.List;
  * @see PriorityExtended */
 public class PriorityBlockExtended extends ASTNode implements Interfaces.MutableList<KLabelConstant, Enum<?>> {
 
-    List<KLabelConstant> productions = new ArrayList<KLabelConstant>();
+    List<KLabelConstant> productions = new ArrayList<>();
 
     public List<KLabelConstant> getProductions() {
         return productions;
@@ -36,14 +36,14 @@ public class PriorityBlockExtended extends ASTNode implements Interfaces.Mutable
 
     @Override
     public String toString() {
-        String content = "";
-        for (Term production : productions)
-            content += production + " ";
+        StringBuilder content = new StringBuilder();
+        for (KLabelConstant production : productions)
+            content.append(production).append(" ");
 
         if (content.length() > 2)
-            content = content.substring(0, content.length() - 1);
+            content = new StringBuilder(content.substring(0, content.length() - 1));
 
-        return content;
+        return content.toString();
     }
 
     @Override
@@ -76,7 +76,7 @@ public class PriorityBlockExtended extends ASTNode implements Interfaces.Mutable
     public int hashCode() {
         int hash = 0;
 
-        for (Term prd : productions)
+        for (KLabelConstant prd : productions)
             hash += prd.hashCode();
         return hash;
     }

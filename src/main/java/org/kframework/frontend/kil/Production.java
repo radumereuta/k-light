@@ -221,28 +221,6 @@ public class Production extends ASTNode implements Interfaces.MutableList<Produc
         return arity;
     }
 
-    /**
-     * Gets the arity of KItems using the KLabel declared by this production.
-     * A KItem has the arity of its production, if that production is not
-     * a KLabel declaration. KLabel declarations declare KItems with an
-     * arity equal to the value of the required integer attribute "arity".
-     * @return
-     */
-    public int getArityOfKItem() {
-        if (sort.equals(Sort.KLABEL) && isConstant()) {
-            try {
-                String attr = getAttribute(Attribute.ARITY_KEY);
-                if (attr == null) {
-                    throw KExceptionManager.criticalError("Strict KLabels must declare an 'arity' attribute.", this);
-                }
-                return Integer.parseInt(attr);
-            } catch (NumberFormatException e) {
-                throw KExceptionManager.criticalError("Could not parse 'arity' attribute as an integer.", e, this);
-            }
-        }
-        return getArity();
-    }
-
     @Override
     protected <P, R, E extends Throwable> R accept(Visitor<P, R, E> visitor, P p) throws E {
         return visitor.complete(this, visitor.visit(this, p));

@@ -3,7 +3,6 @@ package org.kframework.utils.errorsystem;
 
 import org.kframework.attributes.Location;
 import org.kframework.attributes.Source;
-import org.kframework.frontend.K;
 import org.kframework.frontend.kil.ASTNode;
 import org.kframework.frontend.kil.AbstractVisitor;
 import org.kframework.utils.GlobalOptions;
@@ -107,10 +106,6 @@ public class KExceptionManager {
 
     public void registerCompilerWarning(String message, ASTNode node) {
         register(ExceptionType.WARNING, KExceptionGroup.COMPILER, message, null, null, node.getLocation(), node.getSource());
-    }
-
-    public void registerCompilerWarning(String message, K node) {
-        register(ExceptionType.WARNING, KExceptionGroup.COMPILER, message, null, null, node.att().getOptional(Location.class).orElse(null), node.att().getOptional(Source.class).orElse(null));
     }
 
     public void registerCompilerWarning(String message, Throwable e, ASTNode node) {
