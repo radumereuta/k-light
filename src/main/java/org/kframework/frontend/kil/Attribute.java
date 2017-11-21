@@ -21,7 +21,9 @@ public class Attribute<T> extends ASTNode {
 
     public static final String TOKEN = "token";
     public static final String KLABEL = "klabel";
-    public static final String FUNCTION_KEY = "function";
+    public static final String RULE = "rule";
+    public static final String CONFIG = "config";
+    public static final String CONTEXT = "context";
 
 
     public static final Attribute<String> BRACKET = Attribute.of("bracket", "");

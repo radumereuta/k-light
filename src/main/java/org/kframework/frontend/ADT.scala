@@ -1,10 +1,7 @@
 package org.kframework.frontend
 
-import org.kframework.attributes._
 import org.kframework.definition._
 import org.kframework.frontend
-
-import scala.collection.JavaConverters._
 
 /**
   * Abstract Data Types: basic implementations for the inner KORE interfaces.

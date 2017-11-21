@@ -3,26 +3,11 @@ package org.kframework.frontend.kil.loader;
 
 import com.google.common.collect.*;
 import org.kframework.frontend.kil.*;
-import org.kframework.frontend.kil.Attribute.Key;
 
 import java.io.Serializable;
 import java.util.*;
 
 public class Context implements Serializable {
-
-    public static final Set<Key<String>> parsingTags = ImmutableSet.of(
-        Attribute.keyOf("left"),
-        Attribute.keyOf("right"),
-        Attribute.keyOf("non-assoc"));
-
-    public static final Set<String> specialTerminals = ImmutableSet.of(
-        "(",
-        ")",
-        ",",
-        "[",
-        "]",
-        "{",
-        "}");
 
     /**
      * Represents the bijection map between conses and productions.
@@ -41,10 +26,6 @@ public class Context implements Serializable {
     private BiMap<String, Production> conses;
 
     public Context() {
-    }
-
-    public Sort startSymbolPgm() {
-        return configVarSorts.getOrDefault("PGM", Sort.K);
     }
 
     public void addProduction(Production p) {

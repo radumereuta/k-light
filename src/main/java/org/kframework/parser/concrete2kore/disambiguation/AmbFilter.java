@@ -2,7 +2,6 @@
 package org.kframework.parser.concrete2kore.disambiguation;
 
 import com.google.common.collect.Sets;
-import org.kframework.frontend.K;
 import org.kframework.treeNodes.*;
 import org.kframework.utils.errorsystem.KException;
 import org.kframework.utils.errorsystem.KException.ExceptionType;
@@ -21,12 +20,12 @@ public class AmbFilter extends SetsGeneralTransformer<ParseFailedException, Pars
 
     @Override
     public Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> apply(Ambiguity amb) {
-        K last = null;
+        Term last = null;
         boolean equal = true;
         Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> candidate = null;
         for (Term t : amb.items()) {
             candidate = this.apply(t);
-            K next = TreeNodesToKORE.apply(new RemoveBracketVisitor().apply(candidate._1().right().get()));
+            Term next = new RemoveBracketVisitor().apply(candidate._1().right().get());
             if (last != null) {
                 if (!last.equals(next)) {
                     equal = false;
@@ -40,23 +39,22 @@ public class AmbFilter extends SetsGeneralTransformer<ParseFailedException, Pars
             return candidate;
         }
 
-        String msg = "Parsing ambiguity. Arbitrarily choosing the first.";
+        StringBuilder msg = new StringBuilder("Parsing ambiguity.");
 
         for (int i = 0; i < amb.items().size(); i++) {
-            msg += "\n" + (i + 1) + ": ";
+            msg.append("\n").append(i + 1).append(": ");
             Term elem = (Term) amb.items().toArray()[i];
             if (elem instanceof ProductionReference) {
                 ProductionReference tc = (ProductionReference) elem;
-                msg += tc.production().toString();
+                msg.append(tc.production().toString());
             }
             // TODO: use the unparser
             //Unparser unparser = new Unparser(context);
             //msg += "\n   " + unparser.print(elem).replace("\n", "\n   ");
-            msg += "\n    " + elem;
+            msg.append("\n    ").append(elem);
         }
-        // TODO: add location information
         ParseFailedException w = new ParseFailedException(
-                new KException(ExceptionType.WARNING, KExceptionGroup.INNER_PARSER, msg, amb.items().iterator().next().source().get(), amb.items().iterator().next().location().get()));
+                new KException(ExceptionType.ERROR, KExceptionGroup.INNER_PARSER, msg.toString(), amb.items().iterator().next().source().orElseGet(null), amb.items().iterator().next().location().orElseGet(null)));
 
         Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> rez = this.apply(amb.items().iterator().next());
         return new Tuple2<>(Right.apply(rez._1().right().get()), Sets.union(Sets.newHashSet(w), rez._2()));

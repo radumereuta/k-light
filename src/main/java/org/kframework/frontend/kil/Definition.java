@@ -6,12 +6,13 @@ import org.kframework.utils.errorsystem.KExceptionManager;
 
 import java.io.File;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import static org.kframework.frontend.kil.Attribute.CONFIG;
 
 /**
  * Represents a language definition.
- * Includes contents from all {@code required}-d files.
- * @see DefinitionLoader
  */
 public class Definition extends ASTNode implements Interfaces.MutableList<DefinitionItem, Enum<?>> {
 
@@ -35,9 +36,27 @@ public class Definition extends ASTNode implements Interfaces.MutableList<Defini
         this.locations = d.locations;
     }
 
+    public Sort startSymbolPgm() {
+        for (DefinitionItem di:items) {
+            if (di instanceof Module) {
+                Module m = (Module) di;
+                for (ModuleItem mi : m.getItems()) {
+                    if (mi instanceof StringSentence && ((StringSentence) mi).getType().equals(CONFIG)) {
+                        Pattern p = Pattern.compile("[$]PGM");
+                        Matcher match = p.matcher(((StringSentence) mi).getContent());
+                        if (match.find()) {
+                            return Sort.of(match.group());
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
-        String content = "";
+        StringBuilder content = new StringBuilder();
         List<DefinitionItem> sortedItems = new ArrayList<>(items);
         sortedItems.sort(new Comparator<DefinitionItem>() {
             @Override
@@ -46,7 +65,7 @@ public class Definition extends ASTNode implements Interfaces.MutableList<Defini
             }
         });
         for (DefinitionItem di : sortedItems)
-            content += di + " \n";
+            content.append(di).append(" \n");
 
         return "DEF: " + mainFile + " -> " + mainModule + "\n" + content;
     }

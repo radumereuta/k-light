@@ -121,8 +121,6 @@ public class ParseInModule implements Serializable {
         if (!keepAmb) {
             rez2 = new AmbFilter().apply(rez3);
             warn = Sets.union(rez2._2(), warn);
-            rez2 = new AddEmptyLists(disambModule).apply(rez2._1().right().get());
-            warn = Sets.union(rez2._2(), warn);
             rez3 = rez2._1().right().get();
         }
         rez3 = new RemoveBracketVisitor().apply(rez3);
