@@ -4,6 +4,8 @@ package org.kframework.frontend.convertors;
 
 import com.google.common.collect.Sets;
 import org.kframework.attributes.Att;
+import org.kframework.attributes.Location;
+import org.kframework.attributes.Source;
 import org.kframework.definition.*;
 import org.kframework.definition.ProductionItem;
 import org.kframework.frontend.ADT;
@@ -16,6 +18,8 @@ import org.kframework.frontend.kil.Terminal;
 import org.kframework.utils.errorsystem.KEMException;
 import org.kframework.utils.errorsystem.KExceptionManager;
 import scala.Enumeration.Value;
+import scala.Option;
+import scala.Some;
 import scala.collection.Seq;
 
 import java.util.*;
@@ -27,19 +31,18 @@ import static org.kframework.definition.Constructors.*;
 
 public class KILtoKORE extends KILTransformation<Object> {
 
+    public static final String PRODUCTION_ID = "productionID";
+
     private org.kframework.frontend.kil.loader.Context context;
-    private KILtoInnerKORE inner;
     private final boolean syntactic;
 
     public KILtoKORE(org.kframework.frontend.kil.loader.Context context, boolean syntactic) {
         this.context = context;
-        inner = new KILtoInnerKORE(context);
         this.syntactic = syntactic;
     }
 
     public KILtoKORE(org.kframework.frontend.kil.loader.Context context) {
         this.context = context;
-        inner = new KILtoInnerKORE(context);
         this.syntactic = false;
     }
 
@@ -106,11 +109,34 @@ public class KILtoKORE extends KILTransformation<Object> {
                 }).collect(Collectors.toSet());
 
 
-        org.kframework.definition.Module newModule = Constructors.Module(mainModule.getName(), immutable(importedModules), immutable(items),
-                inner.convertAttributes(mainModule));
+        org.kframework.definition.Module newModule =
+                Constructors.Module(mainModule.getName(), immutable(importedModules), immutable(items), convertAttributes(mainModule));
         koreModules.put(newModule.name(), newModule);
         return newModule;
     }
+
+    public org.kframework.attributes.Att convertAttributes(ASTNode t) {
+        Att att = Att();
+        for (Map.Entry a : t.getAttributes().entrySet()) {
+            att = att.add(a.getKey().toString(), a.getValue().toString());
+        }
+        return att;
+    }
+
+    private Att attributesFromSource(Source source) {
+        if (source != null) {
+            return Att.apply(new scala.Tuple2("Source", source.toString()));
+        }
+        return Att();
+    }
+
+    private org.kframework.attributes.Att attributesFromLocation(Location location) {
+        if (location != null) {
+            return Att.apply(new scala.Tuple2("Location", location.toString()));
+        } else
+            return Att();
+    }
+
 
     private static void checkCircularModuleImports(Module mainModule, scala.collection.Seq<Module> visitedModules) {
         if (visitedModules.contains(mainModule)) {
@@ -133,14 +159,13 @@ public class KILtoKORE extends KILTransformation<Object> {
     }
 
     public org.kframework.definition.Bubble apply(StringSentence sentence) {
-        return Bubble(sentence.getType(), sentence.getContent(), inner.convertAttributes(sentence)
+        return Bubble(sentence.getType(), sentence.getContent(), convertAttributes(sentence)
                 .add("contentStartLine", "" + sentence.getContentStartLine())
                 .add("contentStartColumn", "" + sentence.getContentStartColumn()));
     }
 
     public ModuleComment apply(LiterateModuleComment m) {
-        return new org.kframework.definition.ModuleComment(m.getValue(),
-                inner.convertAttributes(m));
+        return new org.kframework.definition.ModuleComment(m.getValue(), convertAttributes(m), new Some<Location>(m.getLocation()), m.getSource());
     }
 
     public org.kframework.definition.SyntaxAssociativity apply(PriorityExtendedAssoc ii) {
@@ -188,7 +213,7 @@ public class KILtoKORE extends KILTransformation<Object> {
 
         // just a sort declaration
         if (s.getPriorityBlocks().size() == 0) {
-            res.add(SyntaxSort(sort, inner.convertAttributes(s)));
+            res.add(SyntaxSort(sort, convertAttributes(s)));
             return res;
         }
 
@@ -238,22 +263,20 @@ public class KILtoKORE extends KILTransformation<Object> {
                         }
                     }
 
-                    org.kframework.attributes.Att attrs = inner.convertAttributes(p);
+                    org.kframework.attributes.Att attrs = convertAttributes(p);
 
                     org.kframework.definition.Production prod;
                     if (p.getKLabel() == null)
                         prod = Constructors.Production(
                                 sort,
                                 immutable(items),
-                                attrs.add(KILtoInnerKORE.PRODUCTION_ID,
-                                        "" + System.identityHashCode(p)));
+                                attrs.add(PRODUCTION_ID, "" + System.identityHashCode(p)));
                     else
                         prod = Constructors.Production(
                                 p.getKLabel(),
                                 sort,
                                 immutable(items),
-                                attrs.add(KILtoInnerKORE.PRODUCTION_ID,
-                                        "" + System.identityHashCode(p)));
+                                attrs.add(PRODUCTION_ID, "" + System.identityHashCode(p)));
 
                     res.add(prod);
                     // handle associativity for the production
@@ -304,9 +327,9 @@ public class KILtoKORE extends KILTransformation<Object> {
         // Transform list declarations of the form Es ::= List{E, ","} into something representable in kore
         org.kframework.frontend.Sort elementSort = apply(userList.getSort());
 
-        org.kframework.attributes.Att attrs = inner.convertAttributes(p).add(Att.userList(), userList.getListType());
+        org.kframework.attributes.Att attrs = convertAttributes(p).add(Att.userList(), userList.getListType());
         String kilProductionId = "" + System.identityHashCode(p);
-        Att attrsWithKilProductionId = attrs.add(KILtoInnerKORE.PRODUCTION_ID, kilProductionId);
+        Att attrsWithKilProductionId = attrs.add(PRODUCTION_ID, kilProductionId);
         org.kframework.definition.Production prod1, prod3;
 
         // Es ::= E "," Es
@@ -324,6 +347,6 @@ public class KILtoKORE extends KILTransformation<Object> {
     }
 
     public org.kframework.frontend.Sort apply(org.kframework.frontend.kil.Sort sort) {
-        return ADT.SortLookup.apply(sort.getName());
+        return Sort(sort.getName());
     }
 }
