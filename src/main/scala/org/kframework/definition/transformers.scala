@@ -90,7 +90,7 @@ trait HybridModuleTransformer extends ModuleTransformer {
   def apply(input: Module): Module = wrapExceptions({
     val newImports = input.imports map this
     if (newImports != input.imports)
-      processHybridModule(Module(input.name, newImports, input.localSentences, input.att))
+      processHybridModule(Module(input.name, newImports, input.localSentences, input.att, input.location, input.source))
     else
       processHybridModule(input)
   })
@@ -130,7 +130,7 @@ abstract class SentenceBasedModuleTransformer extends BasicModuleTransformer {
             throw e
         }
     }
-    Module(inputModule.name, alreadyProcessedImports, newSentences, inputModule.att)
+    Module(inputModule.name, alreadyProcessedImports, newSentences, inputModule.att, inputModule.location, inputModule.source)
   }
 }
 

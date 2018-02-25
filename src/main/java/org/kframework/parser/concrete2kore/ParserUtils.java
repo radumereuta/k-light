@@ -6,15 +6,14 @@ import org.kframework.attributes.Att;
 import org.kframework.attributes.Source;
 import org.kframework.definition.Constructors;
 import org.kframework.definition.Module;
-import org.kframework.frontend.K;
 import org.kframework.frontend.Sort;
 import org.kframework.frontend.convertors.KILtoKORE;
 import org.kframework.frontend.kil.Definition;
 import org.kframework.frontend.kil.DefinitionItem;
 import org.kframework.frontend.kil.Require;
 import org.kframework.frontend.kil.loader.Context;
+import org.kframework.treeNodes.Term;
 import org.kframework.utils.GlobalOptions;
-import org.kframework.parser.concrete2kore.generator.RuleGrammarGenerator;
 import org.kframework.parser.outer.Outer;
 import org.kframework.utils.errorsystem.KEMException;
 import org.kframework.utils.errorsystem.KExceptionManager;
@@ -47,7 +46,7 @@ public class ParserUtils {
         this.options = options;
     }
 
-    public static K parseWithFile(String theTextToParse,
+    public static Term parseWithFile(String theTextToParse,
                                   String mainModule,
                                   Sort startSymbol,
                                   File definitionFile) {
@@ -60,7 +59,7 @@ public class ParserUtils {
         return parseWithString(theTextToParse, mainModule, startSymbol, Source.apply(definitionFile.getAbsolutePath()), definitionText);
     }
 
-    public static K parseWithString(String theTextToParse,
+    public static Term parseWithString(String theTextToParse,
                                     String mainModule,
                                     Sort startSymbol,
                                     Source source,
@@ -69,7 +68,7 @@ public class ParserUtils {
         return parseWithModule(theTextToParse, startSymbol, source, kastModule);
     }
 
-    public static K parseWithModule(String theTextToParse,
+    public static Term parseWithModule(String theTextToParse,
                                     Sort startSymbol,
                                     Source source,
                                     org.kframework.definition.Module kastModule) {
@@ -77,10 +76,10 @@ public class ParserUtils {
         return parseWithModule(theTextToParse, startSymbol, source, parser);
     }
 
-    public static K parseWithModule(String theTextToParse,
-                                    Sort startSymbol,
-                                    Source source,
-                                    ParseInModule kastModule) {
+    public static Term parseWithModule(String theTextToParse,
+                                       Sort startSymbol,
+                                       Source source,
+                                       ParseInModule kastModule) {
         return kastModule.parseString(theTextToParse, startSymbol, source)._1().right().get();
     }
 
@@ -253,6 +252,6 @@ public class ParserUtils {
             syntaxModule = opt.get();
         }
 
-        return RuleGrammarGenerator.autoGenerateBaseKCasts(org.kframework.definition.Definition.apply(mainModule, immutable(modules), Constructors.Att().add(Att.syntaxModule(), syntaxModule.name())));
+        return org.kframework.definition.Definition.apply(mainModule, immutable(modules), Constructors.Att().add(Att.syntaxModule(), syntaxModule.name()));
     }
 }

@@ -3,7 +3,7 @@
 package org.kframework.definition
 
 import dk.brics.automaton.{BasicAutomata, RegExp, RunAutomaton, SpecialOperations}
-import org.kframework.attributes.Att
+import org.kframework.attributes.{Att, Location, Source}
 import org.kframework.definition.Constructors._
 import org.kframework.frontend._
 import org.kframework.utils.errorsystem.KEMException
@@ -13,6 +13,11 @@ import scala.collection.JavaConverters._
 import scala.collection.{Set, _}
 
 trait OuterKORE
+
+trait HasLocation {
+  val location: Option[Location]
+  val source: Source
+}
 
 case class NonTerminalsWithUndefinedSortException(nonTerminals: Set[NonTerminal])
   extends AssertionError(nonTerminals.toString())
@@ -30,6 +35,7 @@ case class Definition(
                        mainModule: Module,
                        entryModules: Set[Module],
                        att: Att = Att())
+
   extends DefinitionToString with OuterKORE {
 
   private def allModules(m: Module): Set[Module] = m.imports | (m.imports flatMap allModules) + m
@@ -55,7 +61,7 @@ case class Definition(
 trait Sorting {
   def computeSubsortPOSet(sentences: Set[Sentence]): POSet[Sort] = {
     val subsortRelations: Set[(Sort, Sort)] = sentences collect {
-      case Production(endSort, Seq(NonTerminal(startSort)), att) if !att.contains("klabel") => (startSort, endSort)
+      case Production(endSort, Seq(NonTerminal(startSort, _, _)), att, _, _) if !att.contains("klabel") => (startSort, endSort)
     }
 
     POSet(subsortRelations)
@@ -74,7 +80,7 @@ trait GeneratingListSubsortProductions extends Sorting {
            l2 <- userLists
            if l1 != l2 && l1.klabel == l2.klabel &&
              subsorts.>(l1.childSort, l2.childSort)) yield {
-        Production(l1.sort, Seq(NonTerminal(l2.sort)), Att().add(Att.generatedByListSubsorting))
+        new Production(l1.sort, Seq(new NonTerminal(l2.sort, Option.empty, Source(Att.generatedByListSubsorting))), Att().add(Att.generatedByListSubsorting), Option.empty, Source(Att.generatedByListSubsorting))
       }
 
     listProductions.toSet
@@ -82,21 +88,21 @@ trait GeneratingListSubsortProductions extends Sorting {
 }
 
 object Module {
-  def apply(name: String, unresolvedLocalSentences: Set[Sentence]): Module = {
-    new Module(name, Set(), unresolvedLocalSentences, Att())
+  def apply(name: String, unresolvedLocalSentences: Set[Sentence], oLocation: Option[Location], source: Source): Module = {
+    new Module(name, Set(), unresolvedLocalSentences, Att(), oLocation, source)
   }
 }
 
-case class Module(name: String, imports: Set[Module], unresolvedLocalSentences: Set[Sentence], att: Att = Att())
-  extends ModuleToString with OuterKORE with Sorting with GeneratingListSubsortProductions with Serializable {
+case class Module(name: String, imports: Set[Module], unresolvedLocalSentences: Set[Sentence], att: Att = Att(), location: Option[Location], source: Source)
+  extends ModuleToString with HasLocation with OuterKORE with Sorting with GeneratingListSubsortProductions with Serializable {
   assert(att != null)
 
   val unresolvedLocalSyntaxSentences: Set[SyntaxSentence] = unresolvedLocalSentences.collect({ case s: SyntaxSentence => s })
   val unresolvedLocalSemanticSentences: Set[SemanticSentence] = unresolvedLocalSentences.collect({ case s: SemanticSentence => s })
 
   val lookingToDefineSorts: Set[Sort] = unresolvedLocalSyntaxSentences collect {
-    case Production(s, _, _) => s
-    case SyntaxSort(s, _) => s
+    case Production(s, _, _, _, _) => s
+    case SyntaxSort(s, _, _, _) => s
   }
 
   val sortResolver: SymbolResolver[Sort, ADT.Sort] =
@@ -212,7 +218,7 @@ case class Module(name: String, imports: Set[Module], unresolvedLocalSentences: 
       ps: Set[Production] =>
         ps.map {
           p: Production =>
-            val params: Seq[Sort] = p.items collect { case NonTerminal(sort) => sort }
+            val params: Seq[Sort] = p.items collect { case NonTerminal(sort, _, _) => sort }
             (params, p.sort)
         }
     }
@@ -231,11 +237,11 @@ case class Module(name: String, imports: Set[Module], unresolvedLocalSentences: 
 
   val withSameShortName: Map[String, Set[Sort]] = definedSorts.groupBy(_.asInstanceOf[ADT.Sort].localName).filter(_._2.size > 1)
 
-  val usedCellSorts: Set[Sort] = productions.flatMap { p => p.items.collect { case NonTerminal(s) => s }
+  val usedCellSorts: Set[Sort] = productions.flatMap { p => p.items.collect { case NonTerminal(s, _, _) => s }
     .filter(s => s.name.endsWith("Cell") || s.name.endsWith("CellFragment"))
   }
 
-  lazy val listSorts: Set[Sort] = sentences.collect({ case Production(srt, _, att1) if att1.contains("userList") =>
+  lazy val listSorts: Set[Sort] = sentences.collect({ case Production(srt, _, att1, _, _) if att1.contains("userList") =>
     srt
   })
 
@@ -243,7 +249,7 @@ case class Module(name: String, imports: Set[Module], unresolvedLocalSentences: 
 
   private lazy val expressedPriorities: Set[(Tag, Tag)] =
     sentences
-      .collect({ case SyntaxPriority(ps, _) => ps })
+      .collect({ case SyntaxPriority(ps, _, _, _) => ps })
       .flatMap { ps: Seq[Set[Tag]] =>
         val pairSetAndPenultimateTagSet = ps.foldLeft((Set[(Tag, Tag)](), Set[Tag]())) {
           case ((all, prev), current) =>
@@ -259,7 +265,7 @@ case class Module(name: String, imports: Set[Module], unresolvedLocalSentences: 
 
   private def buildAssoc(side: Associativity.Value): Set[(Tag, Tag)] = {
     sentences
-      .collect({ case SyntaxAssociativity(`side` | Associativity.NonAssoc, ps, _) => ps })
+      .collect({ case SyntaxAssociativity(`side` | Associativity.NonAssoc, ps, _, _, _) => ps })
       .flatMap { ps: Set[Tag] =>
         for (a <- ps; b <- ps) yield (a, b)
       }
@@ -267,7 +273,7 @@ case class Module(name: String, imports: Set[Module], unresolvedLocalSentences: 
 
   // check that non-terminals have a defined sort
   private val nonTerminalsWithUndefinedSort = sentences flatMap {
-    case p@Production(_, items, _) =>
+    case p@Production(_, items, _, _, _) =>
       val res = items collect { case nt: NonTerminal if !definedSorts.contains(nt.sort) && !usedCellSorts.contains(nt.sort) => nt }
       if (res.nonEmpty)
         throw KEMException.compilerError("Could not find sorts: " + res.asJava, p)
@@ -286,7 +292,7 @@ case class Module(name: String, imports: Set[Module], unresolvedLocalSentences: 
 
 // hooked but different from core, Import is a sentence here
 
-trait Sentence {
+trait Sentence extends HasLocation {
   // marker
   val att: Att
 }
@@ -295,13 +301,13 @@ trait SyntaxSentence extends Sentence
 
 trait SemanticSentence extends Sentence
 
-case class ModuleComment(comment: String, att: Att = Att()) extends SyntaxSentence with OuterKORE
+case class ModuleComment(comment: String, att: Att = Att(), location: Option[Location], source: Source) extends SyntaxSentence with OuterKORE
 
 // hooked
 
 // syntax declarations
 
-case class SyntaxPriority(priorities: Seq[Set[Tag]], att: Att = Att())
+case class SyntaxPriority(priorities: Seq[Set[Tag]], att: Att = Att(), location: Option[Location], source: Source)
   extends SyntaxSentence with SyntaxPriorityToString with OuterKORE
 
 object Associativity extends Enumeration {
@@ -312,22 +318,23 @@ object Associativity extends Enumeration {
 case class SyntaxAssociativity(
                                 assoc: Associativity.Value,
                                 tags: Set[Tag],
-                                att: Att = Att())
+                                att: Att = Att(),
+                                location: Option[Location], source: Source)
   extends SyntaxSentence with SyntaxAssociativityToString with OuterKORE
 
 case class Tag(name: String) extends TagToString with OuterKORE
 
-case class SyntaxSort(sort: Sort, att: Att = Att()) extends SyntaxSentence
+case class SyntaxSort(sort: Sort, att: Att = Att(), location: Option[Location], source: Source) extends SyntaxSentence
   with SyntaxSortToString with OuterKORE {
   def items = Seq()
 }
 
-case class Production(sort: Sort, items: Seq[ProductionItem], att: Att)
+case class Production(sort: Sort, items: Seq[ProductionItem], att: Att, location: Option[Location], source: Source)
   extends SyntaxSentence with ProductionToString {
   lazy val klabel: Option[String] = att.get("klabel").get
 
   override def equals(that: Any): Boolean = that match {
-    case p@Production(`sort`, `items`, _) => this.klabel == p.klabel
+    case p@Production(`sort`, `items`, _, _, _) => this.klabel == p.klabel
     case _ => false
   }
 
@@ -349,7 +356,7 @@ case class Production(sort: Sort, items: Seq[ProductionItem], att: Att)
 
 // hooked but problematic, see kast-core.k
 
-sealed trait ProductionItem extends OuterKORE
+sealed trait ProductionItem extends OuterKORE with HasLocation
 
 // marker
 
@@ -361,10 +368,10 @@ sealed trait TerminalLike extends ProductionItem {
   def precedePattern: RunAutomaton
 }
 
-case class NonTerminal(sort: Sort) extends ProductionItem
+case class NonTerminal(sort: Sort, location: Option[Location], source: Source) extends ProductionItem
   with NonTerminalToString
 
-case class RegexTerminal(precedeRegex: String, regex: String, followRegex: String) extends TerminalLike with
+case class RegexTerminal(precedeRegex: String, regex: String, followRegex: String, location: Option[Location], source: Source) extends TerminalLike with
   RegexTerminalToString {
   lazy val pattern: RunAutomaton = new RunAutomaton(new RegExp(regex).toAutomaton, false)
   lazy val followPattern: RunAutomaton = new RunAutomaton(new RegExp(followRegex).toAutomaton, false)
@@ -376,12 +383,12 @@ case class RegexTerminal(precedeRegex: String, regex: String, followRegex: Strin
 }
 
 object Terminal {
-  def apply(value: String): Terminal = Terminal(value, Seq())
+  def apply(value: String): Terminal = Terminal(value, Seq(), Option.empty, Source("generated"))
 }
 
-case class Terminal(value: String, followRegex: Seq[String]) extends TerminalLike // hooked
+case class Terminal(value: String, followRegex: Seq[String], location: Option[Location], source: Source) extends TerminalLike // hooked
   with TerminalToString {
-  def this(value: String) = this(value, Seq())
+  def this(value: String) = this(value, Seq(), Option.empty, Source("generated"))
 
   lazy val pattern = new RunAutomaton(BasicAutomata.makeString(value), false)
   lazy val followPattern =
@@ -391,5 +398,5 @@ case class Terminal(value: String, followRegex: Seq[String]) extends TerminalLik
 
 /* Helper constructors */
 object NonTerminal {
-  def apply(sort: String): NonTerminal = NonTerminal(ADT.SortLookup(sort))
+  def apply(sort: String): NonTerminal = NonTerminal(ADT.SortLookup(sort), Option.empty, Source("generated"))
 }

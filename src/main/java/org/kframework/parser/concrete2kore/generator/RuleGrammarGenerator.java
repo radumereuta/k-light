@@ -5,22 +5,18 @@ import org.kframework.attributes.Att;
 import org.kframework.frontend.ADT;
 import org.kframework.utils.Collections;
 import org.kframework.definition.*;
-import org.kframework.frontend.Sort;
-import org.kframework.frontend.kil.Attribute;
 import org.kframework.frontend.kil.loader.Constants;
 import org.kframework.parser.concrete2kore.ParseInModule;
 import org.kframework.utils.UserList;
-import scala.collection.Seq;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.kframework.utils.Collections.*;
-import static org.kframework.definition.Constructors.Att;
 import static org.kframework.definition.Constructors.NonTerminal;
 import static org.kframework.definition.Constructors.SyntaxSort;
+import static org.kframework.definition.Constructors.Sort;
+
 
 /**
  * Generator for rule and ground parsers.
@@ -81,35 +77,37 @@ public class RuleGrammarGenerator {
                     Production prod1, prod2, prod3, prod4, prod5;
 
                     Att newAtts = ul.attrs.remove("userList");
+                    // TODO: find a way to pass on the original production to the parser
                     // Es#Terminator ::= "" [klabel('.Es)]
-                    prod1 = Constructors.Production(ul.terminatorKLabel, ADT.SortLookup.apply(ul.sort.localName() + "#Terminator"), Collections.Seq(Constructors.Terminal("")),
+                    prod1 = Constructors.Production(ul.terminatorKLabel,
+                            Sort(ul.sort.localName() + "#Terminator"),
+                            Collections.Seq(Constructors.Terminal("")),
                             newAtts.add("klabel", ul.terminatorKLabel).add(Constants.ORIGINAL_PRD, ul.pTerminator.toString()));
                     // Ne#Es ::= E "," Ne#Es [klabel('_,_)]
-                    prod2 = Constructors.Production(ul.klabel, ADT.SortLookup.apply("Ne#" + ul.sort.localName()),
-                            Collections.Seq(NonTerminal(ul.childSort), Constructors.Terminal(ul.separator), NonTerminal(ADT.SortLookup.apply("Ne#" + ul.sort.localName()))),
+                    prod2 = Constructors.Production(ul.klabel, Sort("Ne#" + ul.sort.localName()),
+                            Collections.Seq(NonTerminal(ul.childSort), Constructors.Terminal(ul.separator), NonTerminal(Sort("Ne#" + ul.sort.localName()))),
                             newAtts.add("klabel", ul.klabel).add(Constants.ORIGINAL_PRD, ul.pList.toString()));
                     // Ne#Es ::= E Es#Terminator [klabel('_,_)]
-                    prod3 = Constructors.Production(ul.klabel, ADT.SortLookup.apply("Ne#" + ul.sort.localName()),
-                            Collections.Seq(NonTerminal(ul.childSort), NonTerminal(ADT.SortLookup.apply(ul.sort.localName() + "#Terminator"))),
+                    prod3 = Constructors.Production(ul.klabel, Sort("Ne#" + ul.sort.localName()),
+                            Collections.Seq(NonTerminal(ul.childSort), NonTerminal(Sort(ul.sort.localName() + "#Terminator"))),
                             newAtts.add("klabel", ul.klabel).add(Constants.ORIGINAL_PRD, ul.pList.toString()));
                     // Es ::= Ne#Es
-                    prod4 = Constructors.Production(ul.sort, Collections.Seq(NonTerminal(ADT.SortLookup.apply("Ne#" + ul.sort.localName()))));
+                    prod4 = Constructors.Production(ul.sort, Collections.Seq(NonTerminal(Sort("Ne#" + ul.sort.localName()))));
                     // Es ::= Es#Terminator // if the list is *
-                    prod5 = Constructors.Production(ul.sort, Collections.Seq(NonTerminal(ADT.SortLookup.apply(ul.sort.localName() + "#Terminator"))));
+                    prod5 = Constructors.Production(ul.sort, Collections.Seq(NonTerminal(Sort(ul.sort.localName() + "#Terminator"))));
 
                     newProds.add(prod1);
                     newProds.add(prod2);
                     newProds.add(prod3);
                     newProds.add(prod4);
-                    newProds.add(SyntaxSort(ADT.SortLookup.apply(ul.sort.localName() + "#Terminator")));
-                    newProds.add(SyntaxSort(ADT.SortLookup.apply("Ne#" + ul.sort.localName())));
+                    newProds.add(SyntaxSort(Sort(ul.sort.localName() + "#Terminator")));
+                    newProds.add(SyntaxSort(Sort("Ne#" + ul.sort.localName())));
                     if (!ul.nonEmpty) {
                         newProds.add(prod5);
                     }
                 }
 
                 return Constructors.Module(m.name(), m.imports(), immutable(newProds), m.att());
-                return m;
             }
         }).apply(disambM);
     }

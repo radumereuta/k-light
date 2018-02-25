@@ -28,6 +28,8 @@ object Att {
   val allowChainSubsort = "allowChainSubsort"
   val generatedBy = "generatedBy"
   val kLabelAttribute:String = "klabel"
+  val syntaxModule = "syntaxModule"
+
 }
 
 trait AttributesToString {

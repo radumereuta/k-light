@@ -69,6 +69,13 @@
 
     <repositories>
         <repository>
+            <id>mvn-central</id>
+            <name>Maven Central Repository</name>
+            <url>https://mvnrepository.com/artifact/org.scala-tools/maven-scala-plugin</url>
+            <snapshots><enabled>false</enabled></snapshots>
+            <releases><enabled>true</enabled></releases>
+        </repository>
+        <repository>
             <id>runtime-verification</id>
             <name>Runtime Verification Repository</name>
             <url>http://office.runtimeverification.com:8888/repository/internal</url>
@@ -87,7 +94,7 @@
     <properties>
         <base>master</base>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <scala.version>2.12.2</scala.version>
+        <scala.version>2.12.4</scala.version>
     </properties>
 
     <build>

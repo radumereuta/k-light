@@ -38,7 +38,7 @@ public class KEMException extends RuntimeException {
     }
 
     public static KEMException criticalError(String message, Sentence node) {
-        return create(ExceptionType.ERROR, KExceptionGroup.CRITICAL, message, null, node.att().getOptional(Location.class).orElse(null), node.att().getOptional(Source.class).orElse(null));
+        return create(ExceptionType.ERROR, KExceptionGroup.CRITICAL, message, null, node.location().getOrElse(null), node.source());
     }
 
     public static KEMException criticalError(String message, Throwable e, Location loc, Source source) {
@@ -62,7 +62,7 @@ public class KEMException extends RuntimeException {
     }
 
     public static KEMException compilerError(String message, Sentence node) {
-        return create(ExceptionType.ERROR, KExceptionGroup.COMPILER, message, null, node.att().get("Location").orElse(null), node.att().get("Source").getOrElse());
+        return create(ExceptionType.ERROR, KExceptionGroup.COMPILER, message, null, node.location().getOrElse(null), node.source());
     }
 
     public static KEMException innerParserError(String message) {

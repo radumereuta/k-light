@@ -81,16 +81,28 @@ public class ParseInModule implements Serializable {
     }
 
     /**
+     * Parse as input the given string and start symbol using the module stored in the object.
+     * All type checks for terms and variables are validated. Discard extra ambiguities by choosing the first.
+     * @param input          the string to parse.
+     * @param startSymbol    the start symbol from which to parse.
+     * @return the Term representation of the parsed input.
+     */
+    public Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>>
+    parseString(String input, Sort startSymbol, Source source) {
+        return parseStringTerm(input, startSymbol, source, 1, 1, false);
+    }
+
+    /**
      * Parse the given input.
-     * @param input
-     * @param startSymbol
+     * @param input         the string to parse.
+     * @param startSymbol   the start symbol from which to parse.
      * @param source
      * @param startLine
      * @param startColumn
      * @return
      */
     public Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>>
-            parseStringTerm(String input, Sort startSymbol, Source source, int startLine, int startColumn, boolean typeCheck, boolean keepAmb) {
+            parseStringTerm(String input, Sort startSymbol, Source source, int startLine, int startColumn, boolean keepAmb) {
         getGrammar();
 
         Grammar.NonTerminal startSymbolNT = grammar.get(parsingModule.resolve(startSymbol).name());
