@@ -28,7 +28,7 @@ public class KILTransformation<R> implements Function<ASTNode, R> {
         } catch (NoSuchMethodException e) {
             throw new VisitingException("Visitor " + this.getClass()
                     + " is missing a definition for visit(" + t.getClass() + ")"
-                    + ". Encounteed when visiting " + makeErrorMessage(t), e);
+                    + ". Encountered when visiting " + makeErrorMessage(t), e);
         // DISABLE EXCEPTION CHECKSTYLE
         } catch (VisitingException e) {
             throw e;

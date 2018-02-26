@@ -331,7 +331,7 @@ case class SyntaxSort(sort: Sort, att: Att = Att(), location: Option[Location], 
 
 case class Production(sort: Sort, items: Seq[ProductionItem], att: Att, location: Option[Location], source: Source)
   extends SyntaxSentence with ProductionToString {
-  lazy val klabel: Option[String] = att.get("klabel").get
+  lazy val klabel: Option[String] = att.get("klabel").flatten
 
   override def equals(that: Any): Boolean = that match {
     case p@Production(`sort`, `items`, _, _, _) => this.klabel == p.klabel

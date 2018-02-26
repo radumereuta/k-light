@@ -51,7 +51,7 @@ public class UserList {
                     ul.klabel = p.klabel().get();
                     ul.attrs = p.att().remove("klabel");
                     // should work without the Att.userList() att, i.e. for any list -- see #1892
-                    ul.nonEmpty = ul.attrs.get(Att.userList()).get().equals("+");
+                    ul.nonEmpty = ul.attrs.get(Att.userList()).get().get().equals("+");
                     ul.childSort = ((NonTerminal) p.items().head()).sort();
                     ul.pList = p;
                 } else if (p.items().size() == 1 && p.items().head() instanceof Terminal) {
