@@ -126,7 +126,7 @@ public class KSyntax2GrammarStatesFilter {
                         if (prd.att().contains(Constants.AUTOREJECT))
                             rejects = autoRejects;
                         if (prd.att().contains(Constants.REJECT2))
-                            pattern = getAutomaton(prd.att().get(Constants.REJECT2).get().toString());
+                            pattern = getAutomaton(prd.att().get(Constants.REJECT2).get().get());
                     }
                     // TODO: find a way to reference this production to the original
                     //if (prd.att().contains(Constants.ORIGINAL_PRD))

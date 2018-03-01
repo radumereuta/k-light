@@ -17,7 +17,7 @@ import java.lang.annotation.Annotation;
  * The inherited member attributes is used for location information
  * if this represents an explicitly written attribute.
  */
-public class Attribute<T> extends ASTNode {
+public class Attribute extends ASTNode {
 
     public static final String TOKEN = "token";
     public static final String KLABEL = "klabel";
@@ -26,115 +26,22 @@ public class Attribute<T> extends ASTNode {
     public static final String CONTEXT = "context";
 
 
-    public static final Attribute<String> BRACKET = Attribute.of("bracket", "");
-    public static final Attribute<String> NOT_IN_RULES = Attribute.of("notInRules", "");
+    public static final Attribute BRACKET = Attribute.of("bracket", "");
 
-    private Key<T> key;
-    private T value;
+    private String key;
+    private String value;
 
-    public static class Key<T> implements Serializable {
-        private final TypeToken<T> typeToken;
-        private final Annotation annotation;
-
-        protected Key(TypeToken<T> typeToken, Annotation annotation) {
-            this.typeToken = typeToken;
-            this.annotation = annotation;
-        }
-
-        public TypeToken<T> getTypeToken() {
-            return typeToken;
-        }
-
-        public Annotation getAnnotation() {
-            return annotation;
-        }
-
-        public static <T> Key<T> get(Class<T> cls, Annotation annotation) {
-            return new Key<T>(TypeToken.of(cls), annotation);
-        }
-
-        public static <T> Key<T> get(Class<T> cls) {
-            return new Key<T>(TypeToken.of(cls), null);
-        }
-
-        public static <T> Key<T> get(TypeToken<T> type) {
-            return new Key<T>(type, null);
-        }
-
-        public static <T> Key<T> get(TypeToken<T> type, Annotation annotation) {
-            return new Key<T>(type, annotation);
-        }
-
-        @Override
-        public String toString() {
-            if (getTypeToken().equals(TypeToken.of(String.class))) {
-                return toString(getAnnotation());
-            }
-            String annotation = toString(getAnnotation());
-            if (annotation != null) {
-                return "@" + getTypeToken().toString() + "." + annotation;
-            } else {
-                return "@" + getTypeToken().toString();
-            }
-        }
-
-        public static String toString(Annotation annotation) {
-            if (annotation == null) return null;
-            if (annotation instanceof Named) {
-                return ((Named)annotation).value();
-            }
-            return annotation.toString();
-        }
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result
-                    + ((annotation == null) ? 0 : annotation.hashCode());
-            result = prime * result
-                    + ((typeToken == null) ? 0 : typeToken.hashCode());
-            return result;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            Key<?> other = (Key<?>) obj;
-            if (annotation == null) {
-                if (other.annotation != null)
-                    return false;
-            } else if (!annotation.equals(other.annotation))
-                return false;
-            if (typeToken == null) {
-                if (other.typeToken != null)
-                    return false;
-            } else if (!typeToken.equals(other.typeToken))
-                return false;
-            return true;
-        }
+    public static Attribute of(String key, String value) {
+        return new Attribute(key, value);
     }
 
-    public static Attribute<String> of(String key, String value) {
-        return new Attribute<String>(keyOf(key), value);
-    }
-
-    public static Key<String> keyOf(String key) {
-        return Key.get(String.class, Names.named(key));
-    }
-
-    public Attribute(Key<T> key, T value) {
+    public Attribute(String key, String value) {
         super();
         this.key = key;
         this.value = value;
     }
 
-    public Attribute(Attribute<T> attribute) {
+    public Attribute(Attribute attribute) {
         super(attribute);
         key = attribute.key;
         value = attribute.value;
@@ -145,25 +52,25 @@ public class Attribute<T> extends ASTNode {
         return " " + this.getKey() + "(" + this.getValue() + ")";
     }
 
-    public void setValue(T value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
-    public T getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setKey(Key<T> key) {
+    public void setKey(String key) {
         this.key = key;
     }
 
-    public Key<T> getKey() {
+    public String getKey() {
         return key;
     }
 
     @Override
-    public Attribute<T> shallowCopy() {
-        return new Attribute<T>(this);
+    public Attribute shallowCopy() {
+        return new Attribute(this);
     }
 
     @Override
@@ -188,7 +95,7 @@ public class Attribute<T> extends ASTNode {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Attribute<?> other = (Attribute<?>) obj;
+        Attribute other = (Attribute) obj;
         if (key == null) {
             if (other.key != null)
                 return false;

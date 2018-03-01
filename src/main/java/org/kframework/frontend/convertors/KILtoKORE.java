@@ -118,7 +118,10 @@ public class KILtoKORE extends KILTransformation<Object> {
     public org.kframework.attributes.Att convertAttributes(ASTNode t) {
         Att att = Att();
         for (Map.Entry a : t.getAttributes().entrySet()) {
-            att = att.add(a.getKey().toString(), a.getValue().toString());
+            if (((Attribute) a.getValue()).getValue().toString().equals(""))
+                att = att.add(a.getKey().toString(), Option.<String>empty());
+            else
+                att = att.add(a.getKey().toString(), ((Attribute) a.getValue()).getValue().toString());
         }
         return att;
     }
@@ -234,8 +237,6 @@ public class KILtoKORE extends KILTransformation<Object> {
             }
 
             for (Production p : b.getProductions()) {
-                if (p.containsAttribute("reject")) // skip productions of the old reject type
-                    continue;
                 // Handle a special case first: List productions have only
                 // one item.
                 if (p.getItems().size() == 1 && p.getItems().get(0) instanceof UserList) {
@@ -248,13 +249,7 @@ public class KILtoKORE extends KILTransformation<Object> {
                         } else if (it instanceof UserList) {
                             throw new AssertionError("Lists should have applied before.");
                         } else if (it instanceof Lexical) {
-                            String regex;
-                            if (p.containsAttribute("regex"))
-                                regex = p.getAttribute("regex");
-                            else
-                                regex = ((Lexical) it).getLexicalRule();
-                            RegexTerminal regexTerminal = getRegexTerminal(regex);
-
+                            RegexTerminal regexTerminal = getRegexTerminal(((Lexical) it).getLexicalRule());
                             items.add(regexTerminal);
                         } else if (it instanceof Terminal) {
                             items.add(Constructors.Terminal(((Terminal) it).getTerminal()));

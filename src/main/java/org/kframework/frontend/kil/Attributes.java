@@ -1,17 +1,14 @@
 // Copyright (c) 2014-2016 K Team. All Rights Reserved.
 package org.kframework.frontend.kil;
 
-import com.google.inject.name.Names;
 import org.kframework.attributes.Location;
 import org.kframework.attributes.Source;
-import org.kframework.frontend.kil.Attribute.Key;
 import org.kframework.frontend.kil.visitors.Visitor;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.*;
-import java.util.Collection;
 
 /**
  * class for AST Attributes.
@@ -23,9 +20,9 @@ import java.util.Collection;
  *
  * @see ASTNode
  */
-public class Attributes extends ASTNode implements Interfaces.MutableList<Attribute<?>, Enum<?>>, Map<Key<?>, Attribute<?>> {
+public class Attributes extends ASTNode implements Interfaces.MutableList<Attribute, Enum<?>>, Map<String, Attribute> {
 
-    protected transient LinkedHashMap<Key<?>, Attribute<?>> contents;
+    protected transient LinkedHashMap<String, Attribute> contents;
 
     public Attributes(Attributes c) {
         super(c);
@@ -46,7 +43,7 @@ public class Attributes extends ASTNode implements Interfaces.MutableList<Attrib
         if (isEmpty())
             return "";
         String content = "[";
-        for (Attribute<?> t : contents.values())
+        for (Attribute t : contents.values())
             content += t + ", ";
         return content.substring(0, content.length() - 2) + "]";
     }
@@ -91,56 +88,24 @@ public class Attributes extends ASTNode implements Interfaces.MutableList<Attrib
     }
 
     @Override
-    public List<Attribute<?>> getChildren(Enum<?> _void) {
-        return new ArrayList<Attribute<?>>(contents.values());
+    public List<Attribute> getChildren(Enum<?> _void) {
+        return new ArrayList<Attribute>(contents.values());
     }
 
     @Override
-    public void setChildren(List<Attribute<?>> children, Enum<?> _void) {
+    public void setChildren(List<Attribute> children, Enum<?> _void) {
         contents.clear();
-        for (Attribute<?> attr : children) {
+        for (Attribute attr : children) {
             add(attr);
         }
     }
 
-    public void add(Attribute<?> e) {
+    public void add(Attribute e) {
         contents.put(e.getKey(), e);
     }
 
-    public <T> void add(Class<T> cls, T value) {
-        add(new Attribute<T>(Key.get(cls), value));
-    }
-
-    public <T> void add(Class<T> cls, String string, T value) {
-        add(new Attribute<T>(Key.get(cls, Names.named(string)), value));
-    }
-
-    public <T> T typeSafeGet(Key<T> key) {
-        Attribute<?> attr = get(key);
-        if (attr == null) return null;
-        return (T) attr.getValue();
-    }
-
-    public <T> T typeSafeGet(Class<T> cls) {
-        return typeSafeGet(Key.get(cls));
-    }
-
-    public <T> T typeSafeGet(Class<T> cls, String string) {
-        return typeSafeGet(Key.get(cls, Names.named(string)));
-    }
-
-    /**
-     * Retrieves the attribute by key from the list of attributes
-     */
-    public <T> T getAttr(Key<T> key) {
-        final Attribute<T> value = (Attribute<T>) get(key);
-        if (value == null)
-            return null;
-        return value.getValue();
-    }
-
-    public String getAttr(String key) {
-        return getAttr(Attribute.keyOf(key));
+    public void add(String cls, String value) {
+        add(new Attribute(cls, value));
     }
 
     @Override
@@ -159,12 +124,12 @@ public class Attributes extends ASTNode implements Interfaces.MutableList<Attrib
     }
 
     @Override
-    public Set<Entry<Key<?>, Attribute<?>>> entrySet() {
+    public Set<Entry<String, Attribute>> entrySet() {
         return contents.entrySet();
     }
 
     @Override
-    public Attribute<?> get(Object key) {
+    public Attribute get(Object key) {
         return contents.get(key);
     }
 
@@ -174,22 +139,22 @@ public class Attributes extends ASTNode implements Interfaces.MutableList<Attrib
     }
 
     @Override
-    public Set<Key<?>> keySet() {
+    public Set<String> keySet() {
         return contents.keySet();
     }
 
     @Override
-    public Attribute<?> put(Key<?> key, Attribute<?> value) {
+    public Attribute put(String key, Attribute value) {
         return contents.put(key, value);
     }
 
     @Override
-    public void putAll(Map<? extends Key<?>, ? extends Attribute<?>> m) {
+    public void putAll(Map<? extends String, ? extends Attribute> m) {
         contents.putAll(m);
     }
 
     @Override
-    public Attribute<?> remove(Object key) {
+    public Attribute remove(Object key) {
         return contents.remove(key);
     }
 
@@ -199,21 +164,21 @@ public class Attributes extends ASTNode implements Interfaces.MutableList<Attrib
     }
 
     @Override
-    public Collection<Attribute<?>> values() {
+    public Collection<Attribute> values() {
         return contents.values();
     }
 
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.defaultWriteObject();
-        Set<Attribute<?>> attributes = new HashSet<>(contents.values());
+        Set<Attribute> attributes = new HashSet<>(contents.values());
         stream.writeObject(attributes);
     }
 
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         contents = new LinkedHashMap<>();
-        Set<Attribute<?>> attributes = (Set<Attribute<?>>) stream.readObject();
-        for (Attribute<?> attr : attributes) {
+        Set<Attribute> attributes = (Set<Attribute>) stream.readObject();
+        for (Attribute attr : attributes) {
             contents.put(attr.getKey(), attr);
         }
     }

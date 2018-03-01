@@ -44,8 +44,8 @@ public class ModuleContext implements Serializable {
         if (p.isListDecl()) {
             listProductions.put(p.getSort(), p);
         }
-        for (Attribute<?> a : p.getAttributes().values()) {
-            tags.put(a.getKey().toString(), p);
+        for (Attribute a : p.getAttributes().values()) {
+            tags.put(a.getKey(), p);
         }
     }
 }

@@ -11,9 +11,7 @@ import org.junit.Test;
 import org.kframework.attributes.Source;
 import org.kframework.definition.Definition;
 import org.kframework.definition.Module;
-import org.kframework.definition.ModuleName;
 import org.kframework.definition.RegexTerminal;
-import org.kframework.frontend.Sort;
 import org.kframework.frontend.convertors.KILtoKORE;
 import org.kframework.parser.concrete2kore.generator.RuleGrammarGenerator;
 import org.kframework.treeNodes.Term;
@@ -25,6 +23,7 @@ import scala.Tuple2;
 import scala.util.Either;
 
 import java.util.Set;
+
 import static org.kframework.definition.Constructors.Sort;
 
 public class RuleGrammarTest {
@@ -88,9 +87,9 @@ public class RuleGrammarTest {
     // test the new regex engine
     @Test
     public void test17() {
-        Automaton a = new RegExp("[\\\"](([^\\\"\n\r\\\\])|([\\\\][nrtf\\\"\\\\])|([\\\\][x][0-9a-fA-F]{2})|([\\\\][u][0-9a-fA-F]{4})|([\\\\][U][0-9a-fA-F]{8}))*[\\\"]").toAutomaton();
+        Automaton a = new RegExp("(\\#[^\n\r]*)").toAutomaton();
         RunAutomaton ra = new RunAutomaton(a, false);
-        Assert.assertTrue(ra.run("\"n\\\\\\\"\""));
+        Assert.assertTrue(ra.run("# asf"));
     }
 
     // test user lists
@@ -107,5 +106,16 @@ public class RuleGrammarTest {
         parseProgram("0, 1, 2", def, "Ints", 0, false);
         parseProgram("0()", def, "Exp", 0, false);
         parseProgram("0[]", def, "Exp", 0, true);
+    }
+
+    // test user lists
+    @Test
+    public void test27() {
+        String def = "" +
+                "module TEST " +
+                "syntax Id  ::=  r\"[a-z]+\" [token, reject2(int)] " +
+                "syntax Id  ::=  \"int\" " +
+                "endmodule";
+        parseProgram("int", def, "Id", 0, false);
     }
 }

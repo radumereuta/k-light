@@ -170,7 +170,7 @@ public class Production extends ASTNode implements Interfaces.MutableList<Produc
      * @return
      */
     public String getKLabel() {
-        String klabel = getAttribute(Attribute.KLABEL);
+        String klabel = getAttributeValue(Attribute.KLABEL);
         if (klabel == null && isSyntacticSubsort()) {
             return null;
         } else if (klabel == null) {

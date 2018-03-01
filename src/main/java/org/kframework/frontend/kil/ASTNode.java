@@ -5,7 +5,6 @@ import com.google.common.reflect.TypeToken;
 import com.google.inject.name.Names;
 import org.kframework.attributes.Location;
 import org.kframework.attributes.Source;
-import org.kframework.frontend.kil.Attribute.Key;
 import org.kframework.frontend.kil.loader.Constants;
 import org.kframework.frontend.kil.visitors.Visitor;
 import org.w3c.dom.Element;
@@ -148,40 +147,13 @@ public abstract class ASTNode implements Serializable {
         addAttribute(Attribute.of(key, val));
     }
 
-    public <T> void addAttribute(Key<T> key, T val) {
-        addAttribute(new Attribute<>(key, val));
-    }
-
-    public <T> void addAttribute(Class<T> key, T val) {
-        addAttribute(Key.get(key), val);
-    }
-
-    public <T> void addAttribute(TypeToken<T> key, T val) {
-        addAttribute(Key.get(key), val);
-    }
-
-    public <T> void addAttribute(TypeToken<T> key, Annotation annotation, T val) {
-        addAttribute(Key.get(key, annotation), val);
-    }
-
-    public <T> void addAttribute(TypeToken<T> key, String annotation, T val) {
-        addAttribute(Key.get(key, Names.named(annotation)), val);
-    }
-
-    public <T> void addAttribute(Class<T> key, Annotation annotation, T val) {
-        addAttribute(Key.get(key, annotation), val);
-    }
-
-    public <T> void addAttribute(Class<T> key, String annotation, T val) {
-        addAttribute(Key.get(key, Names.named(annotation)), val);
-    }
 
     /**
      * Appends an attribute to the list of attributes.
      *
      * @param attr
      */
-    public void addAttribute(Attribute<?> attr) {
+    public void addAttribute(Attribute attr) {
         if (attributes == null)
             attributes = new Attributes();
 
@@ -196,18 +168,6 @@ public abstract class ASTNode implements Serializable {
         if (attributes == null)
             return false;
 
-        return attributes.containsKey(Attribute.keyOf(key));
-    }
-
-
-    /**
-     * @param key
-     * @return whether the attribute key occurs in the list of attributes.
-     */
-    public boolean containsAttribute(Key<?> key) {
-        if (attributes == null)
-            return false;
-
         return attributes.containsKey(key);
     }
 
@@ -217,47 +177,19 @@ public abstract class ASTNode implements Serializable {
      * @param key
      * @return a value for key in the list of attributes or the default value.
      */
-    public String getAttribute(String key) {
-        return getAttribute(Attribute.keyOf(key));
-    }
-
-    /**
-     * Retrieves the attribute by key from the list of attributes
-     *
-     * @param key
-     * @return a value for key in the list of attributes or the default value.
-     */
-    public <T> T getAttribute(Key<T> key) {
+    public String getAttributeValue(String key) {
         if (attributes == null)
             return null;
-        final Attribute<T> value = (Attribute<T>) attributes.get(key);
+        final Attribute value = (Attribute) attributes.get(key);
         if (value == null)
             return null;
         return value.getValue();
     }
 
-    public <T> T getAttribute(Class<T> cls) {
-        return getAttribute(Key.get(cls));
-    }
-
-    public <T> T getAttribute(Class<T> cls, Annotation annotation) {
-        return getAttribute(Key.get(cls, annotation));
-    }
-
-    public <T> T getAttribute(Class<T> cls, String annotation) {
-        return getAttribute(Key.get(cls, Names.named(annotation)));
-    }
-
-    public <T> T getAttribute(TypeToken<T> type) {
-        return getAttribute(Key.get(type));
-    }
-
-    public <T> T getAttribute(TypeToken<T> type, Annotation annotation) {
-        return getAttribute(Key.get(type, annotation));
-    }
-
-    public <T> T getAttribute(TypeToken<T> type, String annotation) {
-        return getAttribute(Key.get(type, Names.named(annotation)));
+    public Attribute getAttribute(String key) {
+        if (attributes == null)
+            return null;
+        return attributes.get(key);
     }
 
     /**
@@ -271,7 +203,7 @@ public abstract class ASTNode implements Serializable {
     }
 
     public void removeAttribute(String key) {
-        getAttributes().remove(Attribute.keyOf(key));
+        getAttributes().remove(key);
     }
 
     /**

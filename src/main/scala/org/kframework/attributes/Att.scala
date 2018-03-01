@@ -12,6 +12,8 @@ case class Att(att: Map[String, Option[String]]) extends AttributesToString {
 
   def add(key: String, value: String):Att = Att(att + (key -> Some(value)))
 
+  def add(key: String, value: Option[String]):Att = Att(att + (key -> value))
+
   def remove(key: String):Att = Att(att - key)
 
   def ++(that: Att) = Att(att ++ that.att)

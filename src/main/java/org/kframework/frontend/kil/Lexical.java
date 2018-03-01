@@ -2,6 +2,7 @@
 package org.kframework.frontend.kil;
 
 import org.kframework.frontend.kil.visitors.Visitor;
+import org.kframework.utils.StringUtil;
 
 /** A terminal in a {@link Production}. */
 public class Lexical extends ProductionItem {
@@ -23,7 +24,7 @@ public class Lexical extends ProductionItem {
 
     @Override
     public String toString() {
-        return "Lexical{" + lexicalRule + "}";
+        return "r" + StringUtil.enquoteCString(lexicalRule);
     }
 
     @Override

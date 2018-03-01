@@ -130,6 +130,8 @@ public class Grammar implements Serializable {
     static final String multiLine = "(/\\*([^\\*]|(\\*+([^\\*/])))*\\*+/)";
     static final String singleLine = "(//[^\n\r]*)";
     static final String whites = "([\\ \n\r\t])";
+    static final String sharp = "(\\#[^\n\r]*)";
+    static final String attributes = "__attribute__[\\ \n\r\t]*\\(\\([^\n\r]*\\)\\)";
     /**
      * Add a pair of whitespace-remove whitespace rule to the given state.
      * All children of the given state are moved to the remove whitespace rule.
@@ -151,7 +153,7 @@ public class Grammar implements Serializable {
         return whitespace;
     }
 
-    static final RunAutomaton pattern = new RunAutomaton(new RegExp("("+ multiLine +"|"+ singleLine +"|"+ whites +")*").toAutomaton(), false);
+    static final RunAutomaton pattern = new RunAutomaton(new RegExp("("+ multiLine +"|"+ singleLine +"|"+ whites +"|"+ sharp + "|" + attributes +")*").toAutomaton(), false);
 
     /**
      * Calculates Nullability and OrderingInfo for all the states in the grammar.
