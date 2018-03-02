@@ -4,12 +4,13 @@ package org.kframework.parser.concrete2kore.kernel;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import dk.brics.automaton.BasicAutomata;
-import dk.brics.automaton.RegExp;
 import dk.brics.automaton.RunAutomaton;
 import org.kframework.utils.algorithms.SCCTarjan;
 
 import java.io.Serializable;
 import java.util.*;
+
+import static org.kframework.utils.Constants.LAYOUT;
 
 
 /**
@@ -54,13 +55,9 @@ public class Grammar implements Serializable {
     /** The set of "root" NonTerminals */
     private BiMap<String, NonTerminal> startNonTerminals = HashBiMap.create();
 
-    public boolean add(NonTerminal newNT) {
-        if (startNonTerminals.containsKey(newNT.name)) {
-            return false;
-        } else {
-            startNonTerminals.put(newNT.name, newNT);
-            return true;
-        }
+    public void add(NonTerminal newNT) {
+        assert !startNonTerminals.containsKey(newNT.name);
+        startNonTerminals.put(newNT.name, newNT);
     }
 
     /**
@@ -102,58 +99,68 @@ public class Grammar implements Serializable {
     }
 
     /**
-     * Adds (whitespace)---<Del> pairs of states at the beginning of start NonTerminals
+     * Adds [#Layout]---<Del> pairs of states at the beginning of start NonTerminals
      * and right after every PrimitiveState in order to allow for whitespace in the language.
-     *
-     * For now, whitespace means spaces (See {@link #whites}),
-     * single line comments (See {@link #singleLine}), and
-     * multi-line comments (See {@link #multiLine}).
      */
     public void addWhiteSpace() {
+        NonTerminal layoutNT = null;
+        for (NonTerminal s : startNonTerminals.values()) {
+            if (s.name.startsWith(LAYOUT + "@"))
+                layoutNT = s;
+        }
+        if (layoutNT == null)
+            return;
         // create a whitespace PrimitiveState after every every terminal that can match a character
         for (NonTerminal nonTerminal : getAllNonTerminals()) {
+            if (nonTerminal.name.startsWith(LAYOUT))
+                continue;
             for (State s : nonTerminal.getReachableStates()) {
                 if (s instanceof PrimitiveState) {
                     PrimitiveState ps = ((PrimitiveState) s);
-                    addWhitespace(ps);
+                    addWhitespace(ps, layoutNT);
                 }
             }
         }
 
         // add whitespace to the beginning of every start NonTerminal to allow for
         // whitespace at the beginning of the input
-        for (NonTerminal nt : startNonTerminals.values()) {
-            addWhitespace(nt.entryState);
+        BiMap<String, NonTerminal> newNT = startNonTerminals;
+        startNonTerminals = HashBiMap.create();
+
+        for (NonTerminal nt : newNT.values()) {
+            if (nt.name.startsWith(LAYOUT)) {
+                startNonTerminals.put(nt.name, nt);
+            } else {
+                NonTerminal startNT = new Grammar.NonTerminal("Start#" + nt.name);
+                NextableState ns = new NonTerminalState(startNT.name, startNT, nt);
+                startNT.entryState.next.add(ns);
+                ns.next.add(startNT.exitState);
+                addWhitespace(startNT.entryState, layoutNT);
+                startNonTerminals.put(nt.name, startNT);
+            }
         }
     }
 
-    static final String multiLine = "(/\\*([^\\*]|(\\*+([^\\*/])))*\\*+/)";
-    static final String singleLine = "(//[^\n\r]*)";
-    static final String whites = "([\\ \n\r\t])";
-    static final String sharp = "(\\#[^\n\r]*)";
-    static final String attributes = "__attribute__[\\ \n\r\t]*\\(\\([^\n\r]*\\)\\)";
     /**
      * Add a pair of whitespace-remove whitespace rule to the given state.
      * All children of the given state are moved to the remove whitespace rule.
      * (|-- gets transformed into (|-->(white)--
      * @param start NextableState to which to attach the whitespaces
-     * @return the remove whitespace state
      */
-    private NextableState addWhitespace(NextableState start) {
+    private void addWhitespace(NextableState start, NonTerminal whitespaceNT) {
         // usually a terminal may be followed by AddLocationRule and WrapLabelRule.
         // we want to add the whitespce after these, so we iterate over them
         while (start.next.iterator().hasNext() && start.next.iterator().next() instanceof RuleState) {
             start = (NextableState) start.next.iterator().next();
         }
-        PrimitiveState whitespace = new RegExState(
-            "whitespace", start.nt, pattern);
-        whitespace.next.addAll(start.next);
+        NextableState whitespace = new NonTerminalState("whitespace", start.nt, whitespaceNT);
+        NextableState delState = new RuleState("delWhitespace", start.nt, new Rule.DeleteRule(1));
+
+        whitespace.next.add(delState);
+        delState.next.addAll(start.next);
         start.next.clear();
         start.next.add(whitespace);
-        return whitespace;
     }
-
-    static final RunAutomaton pattern = new RunAutomaton(new RegExp("("+ multiLine +"|"+ singleLine +"|"+ whites +"|"+ sharp + "|" + attributes +")*").toAutomaton(), false);
 
     /**
      * Calculates Nullability and OrderingInfo for all the states in the grammar.

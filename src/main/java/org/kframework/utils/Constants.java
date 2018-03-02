@@ -22,12 +22,10 @@ public class Constants {
     public static final String TYPE_userTyped_ATTR = "userTyped";
     public static final String SORT_sort_ATTR = "sort";
     public static final String CONS_cons_ATTR = "cons";
-    public static final String BAG = "Bag";
-    public static final String KLIST = "KList";
-    public static final String FUNCTION = "function";
-    public static final String ANYWHERE = "anywhere";
     public static final String SOURCE_ATTR = "source";
     public static final String ORIGINAL_PRD = "originalPrd";
+
+    public static final String LAYOUT = "#Layout";
 
     // Streams
     public static final String STDIN = "stdin";

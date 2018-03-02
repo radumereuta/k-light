@@ -87,9 +87,9 @@ public class RuleGrammarTest {
     // test the new regex engine
     @Test
     public void test17() {
-        Automaton a = new RegExp("(\\#[^\n\r]*)").toAutomaton();
+        Automaton a = new RegExp("((/\\*([^\\*]|(\\*+([^\\*/])))*\\*+/)|(//[^\n\r]*)|([\\ \n\r\t])|(\\#[^\n\r]*)|([\\ \n\r\t]))*").toAutomaton();
         RunAutomaton ra = new RunAutomaton(a, false);
-        Assert.assertTrue(ra.run("# asf"));
+        Assert.assertTrue(ra.run("#abd"));
     }
 
     // test user lists
@@ -103,12 +103,12 @@ public class RuleGrammarTest {
                 "syntax Ints2 ::= NeList{Int, \".\"} " +
                 "syntax Int ::= r\"[0-9]+\" [token] " +
                 "endmodule";
-        parseProgram("0, 1, 2", def, "Ints", 0, false);
+        parseProgram("0,1,2", def, "Ints", 0, false);
         parseProgram("0()", def, "Exp", 0, false);
         parseProgram("0[]", def, "Exp", 0, true);
     }
 
-    // test user lists
+    // test manual reject
     @Test
     public void test27() {
         String def = "" +
@@ -117,5 +117,67 @@ public class RuleGrammarTest {
                 "syntax Id  ::=  \"int\" " +
                 "endmodule";
         parseProgram("int", def, "Id", 0, false);
+    }
+
+    // test custom whitespace
+    @Test
+    public void test28() {
+        String def = "" +
+                "module TEST " +
+                "syntax #Layout ::= r\"([\\\\ \\n\\r\\t])*\" " +
+                "syntax Ids ::= List{Id, \",\"} " +
+                "syntax Id  ::=  \"a\" " +
+                "endmodule";
+        parseProgram("  a ", def, "Id", 0, false);
+        parseProgram("a,a", def, "Ids", 0, false);
+        parseProgram(" a , a ", def, "Ids", 0, false);
+        parseProgram(" ", def, "Id", 0, true);
+        parseProgram(" ", def, "Ids", 0, false);
+    }
+
+    // test custom recursive whitespace
+    @Test
+    public void test29() {
+        String def = "" +
+                "module TEST " +
+                "syntax #Layout ::= #Layout #LayoutItem " +
+                "syntax #Layout ::= \"\" " +
+                "syntax #LayoutItem ::= r\"/\\\\*([^\\\\*]|(\\\\*+([^\\\\*/])))*\\\\*+/\" " + // "/\\*([^\\*]|(\\*+([^\\*/])))*\\*+/"
+                "syntax #LayoutItem ::= r\"//[^\\n\\r]*\" " +                                 // "//[^\n\r]*"
+                "syntax #LayoutItem ::= r\"[\\\\ \\n\\r\\t]*\" " +                            // "[\\ \n\r\t]*"
+                "syntax Ids ::= List{Id, \",\"} " +
+                "syntax Id  ::=  \"a\" " +
+                "endmodule";
+        parseProgram("  a ", def, "Id", 0, false);
+        parseProgram("//a", def, "Ids", 0, false);
+        parseProgram("/*a*/", def, "Ids", 0, false);
+        parseProgram("/*a*//*a*//*a*/", def, "Ids", 0, false);
+        parseProgram("/*a*/ //asdf\n  ", def, "Ids", 0, false);
+        parseProgram("/*a*/ a,a//asf \n, a ", def, "Ids", 0, false);
+        parseProgram("/*a*/ a //asf \n\r a", def, "Ids", 0, true);
+    }
+
+    // test custom recursive whitespace in C style
+    @Test
+    public void test30() {
+        String def = "module TEST \n" +
+                "syntax #Layout ::= #Layout #LayoutItem \n" +
+                "syntax #Layout ::= \"\" \n" +
+                "syntax #LayoutItem ::= r\"/\\\\*([^\\\\*]|(\\\\*+([^\\\\*/])))*\\\\*+/\" \n" +
+                "syntax #LayoutItem ::= r\"//[^\\n\\r]*\" \n" +
+                "syntax #LayoutItem ::= r\"[\\\\ \\n\\r\\t]*\" \n" +
+                "syntax #LayoutItem ::= r\"\\\\#[^\\n\\r]*\" \n" +
+                "syntax #LayoutItem ::= r\"[\\\\ \\n\\r\\t]*\" \n" +
+                "syntax #LayoutInner ::= #LayoutInner #LayoutItem2 \n" +
+                "syntax #LayoutInner ::= \"\" \n" +
+                "syntax #LayoutItem  ::= \"__attribute__\" r\"[\\\\ \\n\\r\\t]*\"  \"((\" #LayoutInner \"))\"\n" +
+                "syntax #LayoutItem2 ::= r\"[^\\\\(\\\\)]*\"\n" +
+                "syntax #LayoutItem2 ::= \"(\" #LayoutInner \")\" \n" +
+                "syntax Ids ::= \"(\" Ids \")\"\n" +
+                "syntax Ids ::= \"\"\n" +
+                "endmodule\n";
+        parseProgram("  __attribute__ (()) ", def, "Ids", 0, false);
+        parseProgram("  ((__attribute__ ((asdf(a  ), ()))))", def, "Ids", 0, false);
+        parseProgram("  ((__attribute__ ((()(())))))", def, "Ids", 0, false);
     }
 }

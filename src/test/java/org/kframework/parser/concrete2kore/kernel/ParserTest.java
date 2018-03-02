@@ -61,7 +61,6 @@ public class ParserTest {
 
         Assert.assertEquals("Empty Grammar check: ", expected, result);
         // the start and exit state of the NonTerminal
-        grammar.add(nt1);
         Nullability nc = new Nullability(grammar) ;
         Assert.assertEquals("Expected Nullable NTs", true, nc.isNullable(nt1.entryState) && nc.isNullable(nt1.exitState));
         Assert.assertEquals("Expected Nullable NTs", true, nc.isNullable(nt1));

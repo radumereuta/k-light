@@ -101,4 +101,19 @@ public class Main {
 
         Assert.assertTrue(rez1._1.isRight());
     }
+
+    @Test @Ignore
+    public void testTestDotK() {
+        Definition baseK = defParser.loadDefinition("TEST", "TEST", FileUtil.load(new File("c:/work/test/test.k")), new Source("CTests"), Lists.newArrayList());
+        Module syntaxModule = baseK.getModule("TEST").get();
+        ParseInModule parser = RuleGrammarGenerator.getCombinedGrammar(RuleGrammarGenerator.getProgramsGrammar(syntaxModule, baseK));
+
+        File inputFile = new File("c:/work/test/a.test");
+        Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> rez1 =
+                parser.parseString(FileUtil.load(inputFile), Sort("Ids"), Source.apply(inputFile.toString()));
+
+        System.out.println(rez1.toString());
+
+        Assert.assertTrue(rez1._1.isRight());
+    }
 }
