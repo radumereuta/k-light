@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.kframework.attributes.Source;
 import org.kframework.definition.Definition;
 import org.kframework.definition.Module;
+import org.kframework.kore.ReverseChildren;
+import org.kframework.kore.TreeNodesToKORE2;
 import org.kframework.parser.concrete2kore.ParseInModule;
 import org.kframework.parser.concrete2kore.ParserUtils;
 import org.kframework.parser.concrete2kore.generator.RuleGrammarGenerator;
@@ -95,11 +97,13 @@ public class Main {
 
         File inputFile = new File("c:\\work\\syntaxes\\c-syntax\\k\\c11-antlr\\test.c");
         Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> rez1 =
-                parser.parseString(FileUtil.load(inputFile), Sort(startSymbol), Source.apply(inputFile.toString()));
+                parser.parseStringKeepAmb(FileUtil.load(inputFile), Sort(startSymbol), Source.apply(inputFile.toString()));
 
-        System.out.println(rez1.toString());
+        Assert.assertTrue(rez1.toString(), rez1._1.isRight());
+        Term rez = ReverseChildren.apply(rez1._1.right().get());
 
-        Assert.assertTrue(rez1._1.isRight());
+        Either<Set<ParseFailedException>, Term> rez2 = new CDisambVisitor().apply(rez);
+        System.out.println(ReverseChildren.apply(rez2.right().get()).toString());
     }
 
     @Test @Ignore
@@ -110,10 +114,12 @@ public class Main {
 
         File inputFile = new File("c:/work/test/a.test");
         Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> rez1 =
-                parser.parseString(FileUtil.load(inputFile), Sort("Ids"), Source.apply(inputFile.toString()));
+                parser.parseString(FileUtil.load(inputFile), Sort("Start"), Source.apply(inputFile.toString()));
 
         System.out.println(rez1.toString());
 
         Assert.assertTrue(rez1._1.isRight());
+
+        System.out.println("kore: " + TreeNodesToKORE2.apply(rez1._1.right().get()));
     }
 }

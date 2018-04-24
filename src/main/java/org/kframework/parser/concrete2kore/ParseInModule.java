@@ -92,6 +92,11 @@ public class ParseInModule implements Serializable {
         return parseStringTerm(input, startSymbol, source, 1, 1, false);
     }
 
+    public Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>>
+    parseStringKeepAmb(String input, Sort startSymbol, Source source) {
+        return parseStringTerm(input, startSymbol, source, 1, 1, true);
+    }
+
     /**
      * Parse the given input.
      * @param input         the string to parse.
