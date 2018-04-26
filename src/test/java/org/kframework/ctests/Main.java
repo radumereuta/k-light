@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.kframework.attributes.Source;
 import org.kframework.definition.Definition;
 import org.kframework.definition.Module;
-import org.kframework.kore.ReverseChildren;
 import org.kframework.kore.TreeNodesToKORE2;
 import org.kframework.parser.concrete2kore.ParseInModule;
 import org.kframework.parser.concrete2kore.ParserUtils;
@@ -26,16 +25,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Set;
+
 import static org.kframework.definition.Constructors.Sort;
 
 public class Main {
 
-    private static String startPath = "C:/work/c-semantics/";
-    private static String kastPath = "c:/work/syntaxes/c-syntax/k/c11-antlr/";
-    private static File definitionFile = new File(kastPath + "/c.k");
-    private static String mainModule = "C";
-    private static String mainSyntaxModule = "C-SYNTAX";
-    private static String startSymbol = "CompilationUnit";
+    private static final String startPath = "src/test/k/unparametric_examples";
     private static ParserUtils defParser = new ParserUtils(FileUtil.testFileUtil()::resolveWorkingDirectory, new KExceptionManager(new GlobalOptions()));
 
     public static void main(String[] args) {
@@ -44,29 +39,21 @@ public class Main {
         KExceptionManager kem = new KExceptionManager(new GlobalOptions());
 
         try {
-            Definition baseK = defParser.loadDefinition(mainModule, mainSyntaxModule, FileUtil.load(definitionFile), new Source("CTests"), Lists.newArrayList());
-            Module syntaxModule = baseK.getModule(mainSyntaxModule).get();
-            ParseInModule parser = RuleGrammarGenerator.getCombinedGrammar(RuleGrammarGenerator.getProgramsGrammar(syntaxModule, baseK));
-
             Object[] results = Files.find(Paths.get(startPath), Integer.MAX_VALUE,
-                    (filePath, fileAttr) -> fileAttr.isRegularFile() && filePath.toString().endsWith(".c.prep"))
+                    (filePath, fileAttr) -> fileAttr.isRegularFile() && filePath.toString().endsWith(".k"))
                     .parallel()
                     .map(fp -> {
                         long startTime = System.currentTimeMillis();
-                        //RunProcess.ProcessOutput po = RunProcess.execute(new HashMap<String, String>(), new File(kastPath), "kast.bat", fp.toString());
-                        //String err = new String(po.stderr);
-                        //System.out.println("[S]       " + fp.toString());
-                        Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> rez =
-                                parser.parseString(FileUtil.load(fp.toFile()), Sort(startSymbol), Source.apply(fp.toString()));
+                        String rez = process(fp.toFile());
                         long totalTime = System.currentTimeMillis() - startTime;
-                        if (rez._1().isLeft()) {
-                            System.out.println("[Error]   " + fp.toString() + "   (" + totalTime + " ms)   " + rez._1.left().get().iterator().next().getKException().getLocation() + ":" + rez._1.left().get().iterator().next().getKException().getMessage());
+                        if (rez.equals("[Error]")) {
+                            System.out.println("[Error]   " + fp.toFile().getAbsolutePath() + "   (" + totalTime + " ms)");
                             return "[Error]";
-                        } else if (rez._2().size() != 0) {
-                            System.out.println("[Warning] " + fp.toString() + "   (" + totalTime + " ms)   " + rez._2.size());
+                        } else if (rez.equals("[Warning]")) {
+                            System.out.println("[Warning] " + fp.toFile().getAbsolutePath() + "   (" + totalTime + " ms)");
                             return "[Warning]";
                         }
-                        System.out.println("[ok]      " + fp.toString() + " (" + totalTime + " ms)   ");
+                        System.out.println("[ok]      " + fp.toFile().getAbsolutePath() + " (" + totalTime + " ms)");
                         return "[ok]";
                     }).toArray();
             for (Object obj : results) {
@@ -89,25 +76,25 @@ public class Main {
         }
     }
 
-    @Test @Ignore
-    public void testTestDotC() {
-        Definition baseK = defParser.loadDefinition(mainModule, mainSyntaxModule, FileUtil.load(definitionFile), new Source("CTests"), Lists.newArrayList());
-        Module syntaxModule = baseK.getModule(mainSyntaxModule).get();
+    public static String process(File f) {
+        Definition baseK = defParser.loadDefinition("TEST", "TEST", FileUtil.load(f), new Source(f.toString()), Lists.newArrayList());
+        Module syntaxModule = baseK.getModule("TEST").get();
         ParseInModule parser = RuleGrammarGenerator.getCombinedGrammar(RuleGrammarGenerator.getProgramsGrammar(syntaxModule, baseK));
 
-        File inputFile = new File("c:\\work\\syntaxes\\c-syntax\\k\\c11-antlr\\test.c");
+        // TODO: make a transformer from kore to new kore, and parse bubbles to new kore
+        File inputFile = new File("c:/work/test/a.test");
         Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> rez1 =
-                parser.parseStringKeepAmb(FileUtil.load(inputFile), Sort(startSymbol), Source.apply(inputFile.toString()));
+                parser.parseStringKeepAmb(FileUtil.load(inputFile), Sort("Start"), Source.apply(inputFile.toString()));
 
-        Assert.assertTrue(rez1.toString(), rez1._1.isRight());
-        Term rez = ReverseChildren.apply(rez1._1.right().get());
+        System.out.println(rez1.toString());
 
-        Either<Set<ParseFailedException>, Term> rez2 = new CDisambVisitor().apply(rez);
-        System.out.println(ReverseChildren.apply(rez2.right().get()).toString());
+        System.out.println("kore: " + TreeNodesToKORE2.apply(rez1._1.right().get()));
+        return "[ok]";
     }
 
     @Test @Ignore
     public void testTestDotK() {
+        System.out.println(new File(".").getAbsolutePath());
         Definition baseK = defParser.loadDefinition("TEST", "TEST", FileUtil.load(new File("c:/work/test/test.k")), new Source("CTests"), Lists.newArrayList());
         Module syntaxModule = baseK.getModule("TEST").get();
         ParseInModule parser = RuleGrammarGenerator.getCombinedGrammar(RuleGrammarGenerator.getProgramsGrammar(syntaxModule, baseK));
