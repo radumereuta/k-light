@@ -1,0 +1,21 @@
+[]
+module INPUT
+
+  symbol doubleType{}():Type{} []
+  symbol intType{}():Type{} []
+  symbol typeDecl{}(Type{}, Exp{}):Decl{} []
+  axiom{} typeDecl{}(intType{}(),inj{Id{},Exp{}}(\dv{Id{}}("x"))) []
+  symbol inj{Id{},Exp{}}(Id{}):Exp{} []
+endmodule []
+
+module INPUT2
+
+  symbol doubleType{}():Type{} []
+  symbol intType{}():Type{} []
+  symbol typeDecl{}(Type{}, Exp{}):Decl{} []
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character 'x'.
+	Source(generated)
+	Location(21,9,21,10)] []
+  axiom{} typeDecl{}(intType{}(),inj{Id{},Exp{}}(\dv{Id{}}("x"))) []
+  symbol inj{Id{},Exp{}}(Id{}):Exp{} []
+endmodule []

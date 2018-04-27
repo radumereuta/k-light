@@ -1,0 +1,12 @@
+[]
+module INPUT
+
+  symbol stmt{}(Exp{}):Stmt{} []
+  symbol ptype{}(Type{}, Type{}):Type{} []
+  symbol inj{Int{},Exp{}}(Int{}):Exp{} []
+  axiom{} \or{Stmt{}}(tstmt{}(ptype{}(\dv{Type{}}("HashSet"),ptype{}(\dv{Type{}}("HashSet"),\dv{Type{}}("String"))),inj{Var{},Exp{}}(\dv{Var{}}("Foo"))),stmt{}(\or{Exp{}}(rshift{}(\or{Exp{}}(lt{}(lt{}(inj{Var{},Exp{}}(\dv{Var{}}("HashSet")),inj{Var{},Exp{}}(\dv{Var{}}("HashSet"))),inj{Var{},Exp{}}(\dv{Var{}}("String"))),lt{}(inj{Var{},Exp{}}(\dv{Var{}}("HashSet")),lt{}(inj{Var{},Exp{}}(\dv{Var{}}("HashSet")),inj{Var{},Exp{}}(\dv{Var{}}("String"))))),inj{Var{},Exp{}}(\dv{Var{}}("Foo"))),lt{}(inj{Var{},Exp{}}(\dv{Var{}}("HashSet")),\or{Exp{}}(rshift{}(lt{}(inj{Var{},Exp{}}(\dv{Var{}}("HashSet")),inj{Var{},Exp{}}(\dv{Var{}}("String"))),inj{Var{},Exp{}}(\dv{Var{}}("Foo"))),lt{}(inj{Var{},Exp{}}(\dv{Var{}}("HashSet")),rshift{}(inj{Var{},Exp{}}(\dv{Var{}}("String")),inj{Var{},Exp{}}(\dv{Var{}}("Foo")))))),lt{}(lt{}(inj{Var{},Exp{}}(\dv{Var{}}("HashSet")),inj{Var{},Exp{}}(\dv{Var{}}("HashSet"))),rshift{}(inj{Var{},Exp{}}(\dv{Var{}}("String")),inj{Var{},Exp{}}(\dv{Var{}}("Foo"))))))) []
+  symbol lt{}(Exp{}, Exp{}):Exp{} []
+  symbol tstmt{}(Type{}, Exp{}):Stmt{} []
+  symbol rshift{}(Exp{}, Exp{}):Exp{} []
+  symbol inj{Var{},Exp{}}(Var{}):Exp{} []
+endmodule []

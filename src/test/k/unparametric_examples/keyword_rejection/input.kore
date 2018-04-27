@@ -1,0 +1,16 @@
+[]
+module INPUT
+
+  symbol app{}(Exp{}, Exp{}):Exp{} []
+  symbol inj{Id{},Exp{}}(Id{}):Exp{} []
+  symbol callcc{}(Exp{}):Exp{} []
+  axiom{} callcc{}(inj{Id{},Exp{}}(\dv{Id{}}("a"))) []
+endmodule []
+
+module INPUT2
+
+  axiom{} \or{Exp{}}(app{}(inj{Id{},Exp{}}(\dv{Id{}}("callcc")),inj{Id{},Exp{}}(\dv{Id{}}("a"))),callcc{}(inj{Id{},Exp{}}(\dv{Id{}}("a")))) []
+  symbol app{}(Exp{}, Exp{}):Exp{} []
+  symbol inj{Id{},Exp{}}(Id{}):Exp{} []
+  symbol callcc{}(Exp{}):Exp{} []
+endmodule []

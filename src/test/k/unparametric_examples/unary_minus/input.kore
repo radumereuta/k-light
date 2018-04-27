@@ -1,0 +1,16 @@
+[]
+module INPUT
+
+  symbol inj{Int{},Exp{}}(Int{}):Exp{} []
+  axiom{} uminus{}(inj{Int{},Exp{}}(\dv{Int{}}("1"))) []
+  symbol uminus{}(Exp{}):Exp{} []
+  axiom{} \or{Exp{}}(inj{Int{},Exp{}}(\dv{Int{}}("-1")),uminus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")))) []
+endmodule []
+
+module INPUT2
+
+  symbol inj{Int{},Exp{}}(Int{}):Exp{} []
+  axiom{} inj{Int{},Exp{}}(\dv{Int{}}("-1")) []
+  axiom{} uminus{}(inj{Int{},Exp{}}(\dv{Int{}}("1"))) []
+  symbol uminus{}(Exp{}):Exp{} []
+endmodule []

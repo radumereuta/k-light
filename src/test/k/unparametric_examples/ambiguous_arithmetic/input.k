@@ -1,14 +1,14 @@
-module TEST 
- syntax Int ::= r"[0-9]+"  
- syntax Var ::= r"[A-Z][a-zA-Z0-9]*" 
- syntax Exp ::= Int
- syntax Exp ::= Var 
- syntax Exp ::= Exp "+" Exp [symbol(plus)] 
- syntax Exp ::= Exp "*" Exp [symbol(times)]
-endmodule 
+module INPUT
+  syntax Int ::= r"[0-9]+"   [token]
+  syntax Var ::= r"[A-Z][a-zA-Z0-9]*" [token]
+  syntax Exp ::= Int         [klabel(inj)]
+  syntax Exp ::= Var         [klabel(inj)]
+  syntax Exp ::= Exp "+" Exp [klabel(plus)] 
+  syntax Exp ::= Exp "*" Exp [klabel(times)]
 
-input(Int): 1
-input(Exp): 1
-input(Exp): 1+2
-input(Exp): 1+2+3
-input(Exp): 1+2*3+VAR
+  rule 1 [start(Int)]
+  rule 1 [start(Exp)]
+  rule 1+2 [start(Exp)]
+  rule 1+2+3 [start(Exp)]
+  rule 1+2*3 [start(Exp)]
+endmodule 

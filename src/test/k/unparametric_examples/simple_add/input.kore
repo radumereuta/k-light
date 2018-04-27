@@ -1,0 +1,10 @@
+[]
+module INPUT
+
+  axiom{} \dv{Int{}}("1") []
+  symbol inj{Int{},Exp{}}(Int{}):Exp{} []
+  axiom{} plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("2"))) []
+  axiom{} \or{Exp{}}(plus{}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("2"))),inj{Int{},Exp{}}(\dv{Int{}}("3"))),plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),plus{}(inj{Int{},Exp{}}(\dv{Int{}}("2")),inj{Int{},Exp{}}(\dv{Int{}}("3"))))) []
+  axiom{} inj{Int{},Exp{}}(\dv{Int{}}("1")) []
+  symbol plus{}(Exp{}, Exp{}):Exp{} []
+endmodule []

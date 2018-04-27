@@ -4,11 +4,24 @@
  */
 
 module INPUT
+syntax #Layout ::= r"([\\ \n\r\t])*" [token]
+syntax Exp ::= Id [klabel(inj)]
+  | Exp Exp [klabel(app)]
+  | "callcc" Exp [klabel(callcc)]
+syntax Id ::= r"[\\_a-zA-Z][\\_a-zA-Z0-9]*" [token, reject(callcc), autoReject]
 
-syntax Exp ::= Id
-  | Exp Exp
-  | "callcc" Exp
-syntax Id ::= r"[\\_a-zA-Z][\\_a-zA-Z0-9]*" [reject(callcc), autoReject]
+rule callcc a [start(Exp)]
+
+endmodule
+
+module INPUT2
+syntax #Layout ::= r"([\\ \n\r\t])*" [token]
+syntax Exp ::= Id [klabel(inj)]
+  | Exp Exp [klabel(app)]
+  | "callcc" Exp [klabel(callcc)]
+syntax Id ::= r"[\\_a-zA-Z][\\_a-zA-Z0-9]*" [token]
+
+rule callcc a [start(Exp)]
 
 endmodule
 

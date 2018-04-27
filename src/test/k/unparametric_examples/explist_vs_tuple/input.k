@@ -5,21 +5,27 @@
  */
 module INPUT
 
+syntax #Layout ::= r"([\\ \n\r\t])*" [token]
 syntax Id
-syntax Exp ::= Id
-syntax Exps  ::= Exp "," Exps | Exp
-syntax Stmt  ::= "val" Exps ";" Stmt
-syntax KBott ::= "(" K ")" | "(" Id "," Stmt ")"
+syntax Exp ::= Id                    [klabel(inj)]
+syntax Exps  ::= Exp "," Exps        [klabel(expList)]
+syntax Exps  ::= Exp                 [klabel(inj)]
+syntax Stmt  ::= "val" Exps ";" Stmt [klabel(decl)]
+syntax KBott ::= "(" K ")"           [klabel(bracket)]
+syntax KBott ::= "(" Id "," Stmt ")" [klabel(tuple)]
 // auto-generated or predefined
-syntax KBott ::= K "=> " K
-syntax K ::= Id | Exp | Exps | Stmt
-syntax Id ::= KBott
-syntax Exp ::= KBott
-syntax Exps ::= KBott
-syntax Stmt ::= KBott
-syntax Variable ::= r"[A-Z][A-Za-z0-9]*"
-syntax KBott ::= Variable
+syntax KBott ::= K "=> " K           [klabel(rew)]
+syntax K ::= Id [klabel(inj)]
+ | Exp  [klabel(inj)]
+ | Exps [klabel(inj)]
+ | Stmt [klabel(inj)]
+syntax Id ::= KBott [klabel(inj)]
+syntax Exp ::= KBott [klabel(inj)]
+syntax Exps ::= KBott [klabel(inj)]
+syntax Stmt ::= KBott [klabel(inj)]
+syntax Variable ::= r"[A-Z][A-Za-z0-9]*" [token]
+syntax KBott ::= Variable [klabel(inj)]
 
-rule val X; S => (X,S)
+rule val X; S => (X,S) [start(K)]
 
 endmodule

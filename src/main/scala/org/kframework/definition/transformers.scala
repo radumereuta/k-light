@@ -169,34 +169,6 @@ class DefinitionTransformer(moduleTransformer: MemoizingModuleTransformer) exten
     //      d.att)
     // commented above such that the regular transformer behaves like the SelectiveDefinitionTransformer
     // this avoids a bug in the configuration concretization functionality
-    new SelectiveDefinitionTransformer(moduleTransformer).apply(d)
-  }
-}
-
-/**
-  * Only transforms modules which are reachable from mainModule or mainSyntaxModule
-  */
-class SelectiveDefinitionTransformer(moduleTransformer: MemoizingModuleTransformer) extends (Definition => Definition) {
-  override def apply(d: Definition): Definition = {
-    // TODO: Cosmin: the two lines below are a hack to make sure the modules are processed by the pass regardless of
-    // them not being reachable from the main module
-    // I think the right fix would be to explicitly import them when needed
-    List("STDIN-STREAM", "STDOUT-STREAM", "BASIC-K", "K", "RULE-PARSER", "CONFIG-CELLS",
-      "PROGRAM-LISTS", "K-TERM", "ID-PROGRAM-PARSING", "LANGUAGE-PARSING", "MAP", "DEFAULT-CONFIGURATION",
-      "K-REFLECTION")
-      .foreach(d.getModule(_).foreach(moduleTransformer))
-
-    d.entryModules
-      .filter(m => m.name.endsWith("-PROGRAM-PARSING") || m.name.endsWith("-SYNTAX"))
-      .foreach(moduleTransformer)
-
-    val newMainModule = moduleTransformer(d.mainModule)
-    val newEntryModules = d.entryModules flatMap moduleTransformer.memoization.get
-    val newEntryModuleNames = newEntryModules.map(_.name)
-
-    definition.Definition(
-      newMainModule,
-      newEntryModules, // the trick is that any memoized modules have already been transformed
-      d.att)
+    d
   }
 }

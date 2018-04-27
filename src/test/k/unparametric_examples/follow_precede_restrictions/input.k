@@ -3,14 +3,23 @@
  * but the user may expect the space between `int` and `x` to be required.
  */
 module INPUT
+syntax #Layout ::= r"([\\ \n\r\t])*" [token]
+syntax Decl ::= Type Exp ";" [klabel(typeDecl)]
+syntax Type ::= "int" [klabel(intType)] | "double" [klabel(doubleType)]
+syntax Exp  ::= Id [klabel(inj)]
+syntax Id   ::= r"[\\_a-zA-Z][\\_a-zA-Z0-9]*"                    [token] // with problems
+rule intx; [start(Decl)]           // TODO: try to figure out why only one axiom gets printed
+rule int x; [start(Decl)]
+endmodule
 
-syntax Decl ::= Type Exp ";"
-syntax Type ::= "int" | "double"
-syntax Exp  ::= Int | Id
-syntax Id   ::= r"[\\_a-zA-Z][\\_a-zA-Z0-9]*"                     // with problems
-syntax Id   ::= r"(?<![A-Za-z0-9\\_])[A-Za-z\\_][A-Za-z0-9\\_]*"  // precede restriction ensures a delimiter before Id
-
-
+module INPUT2
+syntax #Layout ::= r"([\\ \n\r\t])*" [token]
+syntax Decl ::= Type Exp ";" [klabel(typeDecl)]
+syntax Type ::= "int" [klabel(intType)] | "double" [klabel(doubleType)]
+syntax Exp  ::= Id [klabel(inj)]
+syntax Id   ::= r"(?<![A-Za-z0-9\\_])[A-Za-z\\_][A-Za-z0-9\\_]*"  [token] // precede restriction ensures a delimiter before Id
+rule intx; [start(Decl)]
+rule int x; [start(Decl)]
 endmodule
 
 // input: intx;  // should fail but does not without lexical restrictions

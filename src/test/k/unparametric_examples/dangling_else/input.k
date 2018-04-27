@@ -1,13 +1,12 @@
-module TEST 
-  syntax Exp ::= Exp "==" Exp [symbol(eq)]
-  syntax Exp ::= Exp "<" Exp  [symbol(lt)]
-  syntax Exp ::= Exp ">" Exp  [symbol(gt)]
-  Syntax Exp  ::= Var
-  syntax Stmt ::= Exp
-  syntax Stmt ::= "if" Exp "then" Stmt [symbol(it)]
-  syntax Stmt ::= "if" Exp "then" Stmt "else" Stmt [symbol(ite)]
-  syntax Var   ::= r"[A-Za-z][A-Za-z0-9]*"
-
+module INPUT
+  syntax #Layout ::= r"([\\ \n\r\t])*" [token]
+  syntax Exp ::= Exp "==" Exp [klabel(eq)]
+  syntax Exp ::= Exp "<" Exp  [klabel(lt)]
+  syntax Exp ::= Exp ">" Exp  [klabel(gt)]
+  syntax Exp  ::= Var         [klabel(inj)]
+  syntax Stmt ::= Exp         [klabel(inj)]
+  syntax Stmt ::= "if" Exp "then" Stmt [klabel(it)]
+  syntax Stmt ::= "if" Exp "then" Stmt "else" Stmt [klabel(ite)]
+  syntax Var   ::= r"[A-Za-z][A-Za-z0-9]*" [token]
+  rule if c1 == c2 then if c3 < c4 then s1 else s2 [start(Stmt)]
 endmodule 
-
-input(Stmt): if c1 == c2 then if c3 < c4 then s1 else s2

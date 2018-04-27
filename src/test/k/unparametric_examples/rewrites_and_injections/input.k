@@ -4,17 +4,26 @@
  * rules or use a generic production that takes K (the top sort).
  */
 module INPUT
+syntax #Layout ::= r"([\\ \n\r\t])*" [token]
 syntax Exp ::= Int [klabel(Exp2Int)] | Id [klabel(Exp2Id)]
-syntax K   ::= K   "=>" K
-syntax Exp ::= Exp "=>" Exp
-syntax Int ::= Int "=>" Int
-syntax Id  ::= Id  "=>" Id
-// omitted subsorts to K and cell productions
+syntax K   ::= K   "=>" K   [klabel(rewK)]
+syntax Exp ::= Exp "=>" Exp [klabel(rewExp)]
+syntax Int ::= Int "=>" Int [klabel(rewInt)]
+             | K ":Int"     [klabel(castToInt)]
+syntax Id  ::= Id  "=>" Id  [klabel(rewId)]
+             | K ":Id"      [klabel(castToId)]
 
+syntax K ::= Id      [klabel(inj)]
+           | Int     [klabel(inj)]
+syntax Id  ::= KBott [klabel(inj)]
+syntax Int ::= KBott [klabel(inj)]
+syntax Variable ::= r"[A-Z][A-Za-z0-9]*" [token]
+syntax KBott ::= Variable [klabel(inj)]
+syntax Cell ::= "<k>" K "</k>" "<env>" K "|->" K "</env>" [klabel(cells)]
 
-rule <k> A => B </k>        <env> A |-> B </env>
-rule <k> A:Id => B:Int </k> <env> A |-> B </env>
-rule <k> A => B </k>        <env> A:Id |-> B:Int </env>
+rule <k> A => B </k>        <env> A |-> B </env> [start(Cell)]
+rule <k> A:Id => B:Int </k> <env> A |-> B </env> [start(Cell)]
+rule <k> A => B </k>        <env> A:Id |-> B:Int </env> [start(Cell)]
 
 /*
 amb(

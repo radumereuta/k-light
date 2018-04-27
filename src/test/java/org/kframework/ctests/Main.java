@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.kframework.attributes.Source;
 import org.kframework.definition.Definition;
 import org.kframework.definition.Module;
+import org.kframework.kore.OuterToKORE;
 import org.kframework.kore.TreeNodesToKORE2;
 import org.kframework.parser.concrete2kore.ParseInModule;
 import org.kframework.parser.concrete2kore.ParserUtils;
@@ -76,19 +77,12 @@ public class Main {
         }
     }
 
-    public static String process(File f) {
-        Definition baseK = defParser.loadDefinition("TEST", "TEST", FileUtil.load(f), new Source(f.toString()), Lists.newArrayList());
-        Module syntaxModule = baseK.getModule("TEST").get();
-        ParseInModule parser = RuleGrammarGenerator.getCombinedGrammar(RuleGrammarGenerator.getProgramsGrammar(syntaxModule, baseK));
+    private static String process(File f) {
+        Definition baseK = defParser.loadDefinition("INPUT", "INPUT", FileUtil.load(f), new Source(f.toString()), Lists.newArrayList());
 
-        // TODO: make a transformer from kore to new kore, and parse bubbles to new kore
-        File inputFile = new File("c:/work/test/a.test");
-        Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> rez1 =
-                parser.parseStringKeepAmb(FileUtil.load(inputFile), Sort("Start"), Source.apply(inputFile.toString()));
+        String str = OuterToKORE.apply(baseK);
+        FileUtil.save(new File(f.getAbsolutePath() + "ore"), str);
 
-        System.out.println(rez1.toString());
-
-        System.out.println("kore: " + TreeNodesToKORE2.apply(rez1._1.right().get()));
         return "[ok]";
     }
 

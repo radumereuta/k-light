@@ -1,0 +1,12 @@
+[]
+module INPUT
+
+  symbol gt{}(Exp{}, Exp{}):Exp{} []
+  symbol it{}(Exp{}, Stmt{}):Stmt{} []
+  symbol eq{}(Exp{}, Exp{}):Exp{} []
+  axiom{} \or{Stmt{}}(it{}(eq{}(inj{Var{},Exp{}}(\dv{Var{}}("c1")),inj{Var{},Exp{}}(\dv{Var{}}("c2"))),ite{}(lt{}(inj{Var{},Exp{}}(\dv{Var{}}("c3")),inj{Var{},Exp{}}(\dv{Var{}}("c4"))),inj{Exp{},Stmt{}}(inj{Var{},Exp{}}(\dv{Var{}}("s1"))),inj{Exp{},Stmt{}}(inj{Var{},Exp{}}(\dv{Var{}}("s2"))))),ite{}(eq{}(inj{Var{},Exp{}}(\dv{Var{}}("c1")),inj{Var{},Exp{}}(\dv{Var{}}("c2"))),it{}(lt{}(inj{Var{},Exp{}}(\dv{Var{}}("c3")),inj{Var{},Exp{}}(\dv{Var{}}("c4"))),inj{Exp{},Stmt{}}(inj{Var{},Exp{}}(\dv{Var{}}("s1")))),inj{Exp{},Stmt{}}(inj{Var{},Exp{}}(\dv{Var{}}("s2"))))) []
+  symbol lt{}(Exp{}, Exp{}):Exp{} []
+  symbol inj{Exp{},Stmt{}}(Exp{}):Stmt{} []
+  symbol ite{}(Exp{}, Stmt{}, Stmt{}):Stmt{} []
+  symbol inj{Var{},Exp{}}(Var{}):Exp{} []
+endmodule []
