@@ -3,7 +3,7 @@
  * but the user may expect the space between `int` and `x` to be required.
  */
 module INPUT
-syntax #Layout ::= r"([\\ \n\r\t])*" [token]
+syntax Layout ::= r"([\\ \n\r\t])*" [token]
 syntax Decl ::= Type Exp ";" [klabel(typeDecl)]
 syntax Type ::= "int" [klabel(intType)] | "double" [klabel(doubleType)]
 syntax Exp  ::= Id [klabel(inj)]
@@ -13,7 +13,7 @@ rule int x; [start(Decl)]
 endmodule
 
 module INPUT2
-syntax #Layout ::= r"([\\ \n\r\t])*" [token]
+syntax Layout ::= r"([\\ \n\r\t])*" [token]
 syntax Decl ::= Type Exp ";" [klabel(typeDecl)]
 syntax Type ::= "int" [klabel(intType)] | "double" [klabel(doubleType)]
 syntax Exp  ::= Id [klabel(inj)]

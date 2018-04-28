@@ -1,15 +1,21 @@
 []
 module INPUT
+  sort Layout{} []
+  sort Exp{} []
+  sort Int{} []
+  symbol inj{Sin,Sout}(Sin):Sout []
 
-  symbol inj{Int{},Exp{}}(Int{}):Exp{} []
+  axiom{} \or{Exp{}}(inj{Int{},Exp{}}(\dv{Int{}}("-1")),\or{Exp{}}(uminus{}(inj{Int{},Exp{}}(\dv{Int{}}("1"))),\bottom{Exp{}}())) []
   axiom{} uminus{}(inj{Int{},Exp{}}(\dv{Int{}}("1"))) []
   symbol uminus{}(Exp{}):Exp{} []
-  axiom{} \or{Exp{}}(inj{Int{},Exp{}}(\dv{Int{}}("-1")),uminus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")))) []
 endmodule []
 
 module INPUT2
+  sort Layout{} []
+  sort Exp{} []
+  sort Int{} []
+  symbol inj{Sin,Sout}(Sin):Sout []
 
-  symbol inj{Int{},Exp{}}(Int{}):Exp{} []
   axiom{} inj{Int{},Exp{}}(\dv{Int{}}("-1")) []
   axiom{} uminus{}(inj{Int{},Exp{}}(\dv{Int{}}("1"))) []
   symbol uminus{}(Exp{}):Exp{} []

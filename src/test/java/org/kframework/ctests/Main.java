@@ -1,33 +1,19 @@
 package org.kframework.ctests;
 
 import com.beust.jcommander.internal.Lists;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
 import org.kframework.attributes.Source;
 import org.kframework.definition.Definition;
-import org.kframework.definition.Module;
 import org.kframework.kore.OuterToKORE;
-import org.kframework.kore.TreeNodesToKORE2;
-import org.kframework.parser.concrete2kore.ParseInModule;
 import org.kframework.parser.concrete2kore.ParserUtils;
-import org.kframework.parser.concrete2kore.generator.RuleGrammarGenerator;
-import org.kframework.treeNodes.Term;
 import org.kframework.utils.FileUtil;
 import org.kframework.utils.GlobalOptions;
 import org.kframework.utils.Stopwatch;
 import org.kframework.utils.errorsystem.KExceptionManager;
-import org.kframework.utils.errorsystem.ParseFailedException;
-import scala.Tuple2;
-import scala.util.Either;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Set;
-
-import static org.kframework.definition.Constructors.Sort;
 
 public class Main {
 
@@ -84,23 +70,5 @@ public class Main {
         FileUtil.save(new File(f.getAbsolutePath() + "ore"), str);
 
         return "[ok]";
-    }
-
-    @Test @Ignore
-    public void testTestDotK() {
-        System.out.println(new File(".").getAbsolutePath());
-        Definition baseK = defParser.loadDefinition("TEST", "TEST", FileUtil.load(new File("c:/work/test/test.k")), new Source("CTests"), Lists.newArrayList());
-        Module syntaxModule = baseK.getModule("TEST").get();
-        ParseInModule parser = RuleGrammarGenerator.getCombinedGrammar(RuleGrammarGenerator.getProgramsGrammar(syntaxModule, baseK));
-
-        File inputFile = new File("c:/work/test/a.test");
-        Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> rez1 =
-                parser.parseString(FileUtil.load(inputFile), Sort("Start"), Source.apply(inputFile.toString()));
-
-        System.out.println(rez1.toString());
-
-        Assert.assertTrue(rez1._1.isRight());
-
-        System.out.println("kore: " + TreeNodesToKORE2.apply(rez1._1.right().get()));
     }
 }

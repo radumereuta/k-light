@@ -4,7 +4,7 @@
  */
 
 module INPUT
-syntax #Layout ::= r"([\\ \n\r\t])*" [token]
+syntax Layout ::= r"([\\ \n\r\t])*" [token]
 syntax Exp ::= Id [klabel(inj)]
   | Exp Exp [klabel(app)]
   | "callcc" Exp [klabel(callcc)]
@@ -15,7 +15,7 @@ rule callcc a [start(Exp)]
 endmodule
 
 module INPUT2
-syntax #Layout ::= r"([\\ \n\r\t])*" [token]
+syntax Layout ::= r"([\\ \n\r\t])*" [token]
 syntax Exp ::= Id [klabel(inj)]
   | Exp Exp [klabel(app)]
   | "callcc" Exp [klabel(callcc)]

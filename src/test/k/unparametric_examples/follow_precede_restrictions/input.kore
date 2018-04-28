@@ -1,14 +1,25 @@
 []
 module INPUT
+  sort Decl{} []
+  sort Layout{} []
+  sort Type{} []
+  sort Id{} []
+  sort Exp{} []
+  symbol inj{Sin,Sout}(Sin):Sout []
 
   symbol doubleType{}():Type{} []
   symbol intType{}():Type{} []
   symbol typeDecl{}(Type{}, Exp{}):Decl{} []
   axiom{} typeDecl{}(intType{}(),inj{Id{},Exp{}}(\dv{Id{}}("x"))) []
-  symbol inj{Id{},Exp{}}(Id{}):Exp{} []
 endmodule []
 
 module INPUT2
+  sort Decl{} []
+  sort Layout{} []
+  sort Type{} []
+  sort Id{} []
+  sort Exp{} []
+  symbol inj{Sin,Sout}(Sin):Sout []
 
   symbol doubleType{}():Type{} []
   symbol intType{}():Type{} []
@@ -17,5 +28,4 @@ module INPUT2
 	Source(generated)
 	Location(21,9,21,10)] []
   axiom{} typeDecl{}(intType{}(),inj{Id{},Exp{}}(\dv{Id{}}("x"))) []
-  symbol inj{Id{},Exp{}}(Id{}):Exp{} []
 endmodule []

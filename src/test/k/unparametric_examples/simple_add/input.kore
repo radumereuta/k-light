@@ -1,10 +1,12 @@
 []
 module INPUT
+  sort Exp{} []
+  sort Int{} []
+  symbol inj{Sin,Sout}(Sin):Sout []
 
   axiom{} \dv{Int{}}("1") []
-  symbol inj{Int{},Exp{}}(Int{}):Exp{} []
   axiom{} plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("2"))) []
-  axiom{} \or{Exp{}}(plus{}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("2"))),inj{Int{},Exp{}}(\dv{Int{}}("3"))),plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),plus{}(inj{Int{},Exp{}}(\dv{Int{}}("2")),inj{Int{},Exp{}}(\dv{Int{}}("3"))))) []
   axiom{} inj{Int{},Exp{}}(\dv{Int{}}("1")) []
   symbol plus{}(Exp{}, Exp{}):Exp{} []
+  axiom{} \or{Exp{}}(plus{}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("2"))),inj{Int{},Exp{}}(\dv{Int{}}("3"))),\or{Exp{}}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),plus{}(inj{Int{},Exp{}}(\dv{Int{}}("2")),inj{Int{},Exp{}}(\dv{Int{}}("3")))),\bottom{Exp{}}())) []
 endmodule []

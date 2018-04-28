@@ -1,5 +1,5 @@
 module INPUT
- syntax #Layout ::= r"([\\ \n\r\t])*" [token]
+ syntax Layout ::= r"([\\ \n\r\t])*" [token]
  syntax Stmt ::= Type Exp ";" [klabel(tstmt)]
  syntax Stmt ::= Exp ";"      [klabel(stmt)]
  syntax Exp  ::= Int          [klabel(inj)]

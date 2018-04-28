@@ -25,7 +25,7 @@ public class Constants {
     public static final String SOURCE_ATTR = "source";
     public static final String ORIGINAL_PRD = "originalPrd";
 
-    public static final String LAYOUT = "#Layout";
+    public static final String LAYOUT = "Layout";
 
     // Streams
     public static final String STDIN = "stdin";

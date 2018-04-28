@@ -2,7 +2,7 @@
  * This shows the importance of having lexical disambiguation tools.
  */
 module INPUT
-syntax #Layout ::= r"([\\ \n\r\t])*" [token]
+syntax Layout ::= r"([\\ \n\r\t])*" [token]
 
 syntax Exp ::= "-" Exp [klabel(uminus)]
              | Int     [klabel(inj)]
@@ -17,7 +17,7 @@ rule - 1 [start(Exp)]
 endmodule
 
 module INPUT2
-syntax #Layout ::= r"([\\ \n\r\t])*" [token]
+syntax Layout ::= r"([\\ \n\r\t])*" [token]
 
 syntax Exp ::= r"-(?![0-9])" Exp [klabel(uminus)]
              | Int               [klabel(inj)]

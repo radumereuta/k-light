@@ -124,7 +124,7 @@ public class RuleGrammarTest {
     public void test28() {
         String def = "" +
                 "module TEST " +
-                "syntax #Layout ::= r\"([\\\\ \\n\\r\\t])*\" " +
+                "syntax Layout ::= r\"([\\\\ \\n\\r\\t])*\" " +
                 "syntax Ids ::= List{Id, \",\"} " +
                 "syntax Id  ::=  \"a\" " +
                 "endmodule";
@@ -140,11 +140,11 @@ public class RuleGrammarTest {
     public void test29() {
         String def = "" +
                 "module TEST " +
-                "syntax #Layout ::= #Layout #LayoutItem " +
-                "syntax #Layout ::= \"\" " +
-                "syntax #LayoutItem ::= r\"/\\\\*([^\\\\*]|(\\\\*+([^\\\\*/])))*\\\\*+/\" " + // "/\\*([^\\*]|(\\*+([^\\*/])))*\\*+/"
-                "syntax #LayoutItem ::= r\"//[^\\n\\r]*\" " +                                 // "//[^\n\r]*"
-                "syntax #LayoutItem ::= r\"[\\\\ \\n\\r\\t]*\" " +                            // "[\\ \n\r\t]*"
+                "syntax Layout ::= Layout LayoutItem " +
+                "syntax Layout ::= \"\" " +
+                "syntax LayoutItem ::= r\"/\\\\*([^\\\\*]|(\\\\*+([^\\\\*/])))*\\\\*+/\" " + // "/\\*([^\\*]|(\\*+([^\\*/])))*\\*+/"
+                "syntax LayoutItem ::= r\"//[^\\n\\r]*\" " +                                 // "//[^\n\r]*"
+                "syntax LayoutItem ::= r\"[\\\\ \\n\\r\\t]*\" " +                            // "[\\ \n\r\t]*"
                 "syntax Ids ::= List{Id, \",\"} " +
                 "syntax Id  ::=  \"a\" " +
                 "endmodule";
@@ -161,18 +161,18 @@ public class RuleGrammarTest {
     @Test
     public void test30() {
         String def = "module TEST \n" +
-                "syntax #Layout ::= #Layout #LayoutItem \n" +
-                "syntax #Layout ::= \"\" \n" +
-                "syntax #LayoutItem ::= r\"/\\\\*([^\\\\*]|(\\\\*+([^\\\\*/])))*\\\\*+/\" \n" +
-                "syntax #LayoutItem ::= r\"//[^\\n\\r]*\" \n" +
-                "syntax #LayoutItem ::= r\"[\\\\ \\n\\r\\t]*\" \n" +
-                "syntax #LayoutItem ::= r\"\\\\#[^\\n\\r]*\" \n" +
-                "syntax #LayoutItem ::= r\"[\\\\ \\n\\r\\t]*\" \n" +
-                "syntax #LayoutInner ::= #LayoutInner #LayoutItem2 \n" +
-                "syntax #LayoutInner ::= \"\" \n" +
-                "syntax #LayoutItem  ::= \"__attribute__\" r\"[\\\\ \\n\\r\\t]*\"  \"((\" #LayoutInner \"))\"\n" +
-                "syntax #LayoutItem2 ::= r\"[^\\\\(\\\\)]*\"\n" +
-                "syntax #LayoutItem2 ::= \"(\" #LayoutInner \")\" \n" +
+                "syntax Layout ::= Layout LayoutItem \n" +
+                "syntax Layout ::= \"\" \n" +
+                "syntax LayoutItem ::= r\"/\\\\*([^\\\\*]|(\\\\*+([^\\\\*/])))*\\\\*+/\" \n" +
+                "syntax LayoutItem ::= r\"//[^\\n\\r]*\" \n" +
+                "syntax LayoutItem ::= r\"[\\\\ \\n\\r\\t]*\" \n" +
+                "syntax LayoutItem ::= r\"\\\\#[^\\n\\r]*\" \n" +
+                "syntax LayoutItem ::= r\"[\\\\ \\n\\r\\t]*\" \n" +
+                "syntax LayoutInner ::= LayoutInner LayoutItem2 \n" +
+                "syntax LayoutInner ::= \"\" \n" +
+                "syntax LayoutItem  ::= \"__attribute__\" r\"[\\\\ \\n\\r\\t]*\"  \"((\" LayoutInner \"))\"\n" +
+                "syntax LayoutItem2 ::= r\"[^\\\\(\\\\)]*\"\n" +
+                "syntax LayoutItem2 ::= \"(\" LayoutInner \")\" \n" +
                 "syntax Ids ::= \"(\" Ids \")\"\n" +
                 "syntax Ids ::= \"\"\n" +
                 "endmodule\n";

@@ -5,7 +5,7 @@
  */
 module INPUT
 
-syntax #Layout ::= r"([\\ \n\r\t])*" [token]
+syntax Layout ::= r"([\\ \n\r\t])*" [token]
 syntax Id
 syntax Exp ::= Id                    [klabel(inj)]
 syntax Exps  ::= Exp "," Exps        [klabel(expList)]
@@ -14,7 +14,7 @@ syntax Stmt  ::= "val" Exps ";" Stmt [klabel(decl)]
 syntax KBott ::= "(" K ")"           [klabel(bracket)]
 syntax KBott ::= "(" Id "," Stmt ")" [klabel(tuple)]
 // auto-generated or predefined
-syntax KBott ::= K "=> " K           [klabel(rew)]
+syntax K ::= K "=> " K           [klabel(rew)]
 syntax K ::= Id [klabel(inj)]
  | Exp  [klabel(inj)]
  | Exps [klabel(inj)]
