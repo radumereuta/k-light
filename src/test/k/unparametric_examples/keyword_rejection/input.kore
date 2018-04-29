@@ -1,6 +1,10 @@
 []
 module INJ
+  sort String{} []
+  sort KInt{} []
   symbol inj{Sin,Sout}(Sin):Sout []
+  symbol info{S}(String{}, S) : S []
+  symbol input{}(KInt{}, KInt{}, KInt{}, KInt{}) : String{} []
 endmodule []
 
 module COMMON
@@ -18,7 +22,7 @@ module INPUT
   import COMMON []
 
   /* input(Exp): callcc a */
-  axiom{} callcc{}(inj{Id{},Exp{}}(\dv{Id{}}("a"))) []
+  axiom{} info{Exp{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("6"),\dv{KInt{}}("16"),\dv{KInt{}}("14")),callcc{}(info{Exp{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("13"),\dv{KInt{}}("16"),\dv{KInt{}}("14")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("13"),\dv{KInt{}}("16"),\dv{KInt{}}("14")),\dv{Id{}}("a")))))) []
 endmodule []
 
 module INPUT2
@@ -26,5 +30,5 @@ module INPUT2
   import COMMON []
 
   /* input(Exp): callcc a */
-  axiom{} \or{Exp{}}(app{}(inj{Id{},Exp{}}(\dv{Id{}}("callcc")),inj{Id{},Exp{}}(\dv{Id{}}("a"))),\or{Exp{}}(callcc{}(inj{Id{},Exp{}}(\dv{Id{}}("a"))),\bottom{Exp{}}())) []
+  axiom{} \or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),app{}(info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("13")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("12")),\dv{Id{}}("callcc")))),info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("13"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("13"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),\dv{Id{}}("a")))))),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),callcc{}(info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("13"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("13"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),\dv{Id{}}("a")))))),\bottom{Exp{}}())) []
 endmodule []

@@ -1,6 +1,10 @@
 []
 module INJ
+  sort String{} []
+  sort KInt{} []
   symbol inj{Sin,Sout}(Sin):Sout []
+  symbol info{S}(String{}, S) : S []
+  symbol input{}(KInt{}, KInt{}, KInt{}, KInt{}) : String{} []
 endmodule []
 
 module COMMON
@@ -21,9 +25,9 @@ module INPUT
   import COMMON []
 
   /* input(Decl): intx; */
-  axiom{} typeDecl{}(intType{}(),inj{Id{},Exp{}}(\dv{Id{}}("x"))) []
+  axiom{} info{Decl{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("6"),\dv{KInt{}}("16"),\dv{KInt{}}("11")),typeDecl{}(info{Type{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("6"),\dv{KInt{}}("16"),\dv{KInt{}}("9")),intType{}()),info{Exp{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("9"),\dv{KInt{}}("16"),\dv{KInt{}}("10")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("9"),\dv{KInt{}}("16"),\dv{KInt{}}("10")),\dv{Id{}}("x")))))) []
   /* input(Decl): int x; */
-  axiom{} typeDecl{}(intType{}(),inj{Id{},Exp{}}(\dv{Id{}}("x"))) []
+  axiom{} info{Decl{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("6"),\dv{KInt{}}("17"),\dv{KInt{}}("12")),typeDecl{}(info{Type{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("6"),\dv{KInt{}}("17"),\dv{KInt{}}("9")),intType{}()),info{Exp{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("10"),\dv{KInt{}}("17"),\dv{KInt{}}("11")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("10"),\dv{KInt{}}("17"),\dv{KInt{}}("11")),\dv{Id{}}("x")))))) []
 endmodule []
 
 module INPUT2
@@ -35,5 +39,5 @@ module INPUT2
 	Source(generated)
 	Location(23,9,23,10)] []
   /* input(Decl): int x; */
-  axiom{} typeDecl{}(intType{}(),inj{Id{},Exp{}}(\dv{Id{}}("x"))) []
+  axiom{} info{Decl{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("6"),\dv{KInt{}}("24"),\dv{KInt{}}("12")),typeDecl{}(info{Type{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("6"),\dv{KInt{}}("24"),\dv{KInt{}}("9")),intType{}()),info{Exp{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("11")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("11")),\dv{Id{}}("x")))))) []
 endmodule []

@@ -9,7 +9,11 @@ object OuterToKORE {
   def apply(d: Definition): String = {
     "[]\n" +
       "module INJ\n" +
+      "  sort String{} []\n" +
+      "  sort KInt{} []\n" +
       "  symbol inj{Sin,Sout}(Sin):Sout []\n" +
+      "  symbol info{S}(String{}, S) : S []\n" +
+      "  symbol input{}(KInt{}, KInt{}, KInt{}, KInt{}) : String{} []\n" +
       "endmodule []\n\n" +
       (d.modules map (m => apply(m, d))) .mkString("\n")
   }
