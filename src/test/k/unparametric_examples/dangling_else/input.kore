@@ -1,15 +1,20 @@
 []
+module INJ
+  symbol inj{Sin,Sout}(Sin):Sout []
+endmodule []
+
 module INPUT
+  import INJ []
   sort Layout{} []
   sort Var{} []
   sort Stmt{} []
   sort Exp{} []
-  symbol inj{Sin,Sout}(Sin):Sout []
 
   symbol gt{}(Exp{}, Exp{}):Exp{} []
   symbol it{}(Exp{}, Stmt{}):Stmt{} []
   symbol eq{}(Exp{}, Exp{}):Exp{} []
-  axiom{} \or{Stmt{}}(it{}(eq{}(inj{Var{},Exp{}}(\dv{Var{}}("c1")),inj{Var{},Exp{}}(\dv{Var{}}("c2"))),ite{}(lt{}(inj{Var{},Exp{}}(\dv{Var{}}("c3")),inj{Var{},Exp{}}(\dv{Var{}}("c4"))),inj{Exp{},Stmt{}}(inj{Var{},Exp{}}(\dv{Var{}}("s1"))),inj{Exp{},Stmt{}}(inj{Var{},Exp{}}(\dv{Var{}}("s2"))))),\or{Stmt{}}(ite{}(eq{}(inj{Var{},Exp{}}(\dv{Var{}}("c1")),inj{Var{},Exp{}}(\dv{Var{}}("c2"))),it{}(lt{}(inj{Var{},Exp{}}(\dv{Var{}}("c3")),inj{Var{},Exp{}}(\dv{Var{}}("c4"))),inj{Exp{},Stmt{}}(inj{Var{},Exp{}}(\dv{Var{}}("s1")))),inj{Exp{},Stmt{}}(inj{Var{},Exp{}}(\dv{Var{}}("s2")))),\bottom{Stmt{}}())) []
   symbol lt{}(Exp{}, Exp{}):Exp{} []
+  /* input(Stmt): if c1 == c2 then if c3 < c4 then s1 else s2 */
+  axiom{} \or{Stmt{}}(it{}(eq{}(inj{Var{},Exp{}}(\dv{Var{}}("c1")),inj{Var{},Exp{}}(\dv{Var{}}("c2"))),ite{}(lt{}(inj{Var{},Exp{}}(\dv{Var{}}("c3")),inj{Var{},Exp{}}(\dv{Var{}}("c4"))),inj{Exp{},Stmt{}}(inj{Var{},Exp{}}(\dv{Var{}}("s1"))),inj{Exp{},Stmt{}}(inj{Var{},Exp{}}(\dv{Var{}}("s2"))))),\or{Stmt{}}(ite{}(eq{}(inj{Var{},Exp{}}(\dv{Var{}}("c1")),inj{Var{},Exp{}}(\dv{Var{}}("c2"))),it{}(lt{}(inj{Var{},Exp{}}(\dv{Var{}}("c3")),inj{Var{},Exp{}}(\dv{Var{}}("c4"))),inj{Exp{},Stmt{}}(inj{Var{},Exp{}}(\dv{Var{}}("s1")))),inj{Exp{},Stmt{}}(inj{Var{},Exp{}}(\dv{Var{}}("s2")))),\bottom{Stmt{}}())) []
   symbol ite{}(Exp{}, Stmt{}, Stmt{}):Stmt{} []
 endmodule []

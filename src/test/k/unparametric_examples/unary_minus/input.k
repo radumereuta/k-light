@@ -1,27 +1,26 @@
 /*
  * This shows the importance of having lexical disambiguation tools.
  */
-module INPUT
+module COMMON
 syntax Layout ::= r"([\\ \n\r\t])*" [token]
-
-syntax Exp ::= "-" Exp [klabel(uminus)]
-             | Int     [klabel(inj)]
+syntax Exp ::= Int     [klabel(inj)]
 syntax Int ::= r"[\\-]?[0-9]+" [token]
+endmodule 
+ 
+module INPUT
+import COMMON
+syntax Exp ::= "-" Exp [klabel(uminuss)]
 
 rule -1 [start(Exp)]
 // output: amb("-1", uminus("1"))
 
 rule - 1 [start(Exp)]
 // output: uminus("1")
-
 endmodule
 
 module INPUT2
-syntax Layout ::= r"([\\ \n\r\t])*" [token]
-
-syntax Exp ::= r"-(?![0-9])" Exp [klabel(uminus)]
-             | Int               [klabel(inj)]
-syntax Int ::= r"[\\-]?[0-9]+"   [token]
+import COMMON
+syntax Exp ::= r"-(?![0-9])" Exp [klabel(uminusp)]
 
 rule -1 [start(Exp)]
 // output: "-1"
@@ -29,5 +28,4 @@ rule -1 [start(Exp)]
 
 rule - 1 [start(Exp)]
 // output: uminus("1")
-
 endmodule

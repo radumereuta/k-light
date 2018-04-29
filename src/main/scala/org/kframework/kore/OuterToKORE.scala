@@ -7,13 +7,18 @@ import org.kframework.parser.concrete2kore.generator.RuleGrammarGenerator
 object OuterToKORE {
 
   def apply(d: Definition): String = {
-    "[]\n" + (d.modules map (m => apply(m, d))) .mkString("\n")
+    "[]\n" +
+      "module INJ\n" +
+      "  symbol inj{Sin,Sout}(Sin):Sout []\n" +
+      "endmodule []\n\n" +
+      (d.modules map (m => apply(m, d))) .mkString("\n")
   }
 
   def apply(m: Module, d:Definition): String = {
     "module " + m.name + "\n" +
+      "  import INJ []\n" +
+      (m.imports map (i => "  import " + i.name + " []\n")).mkString("") +
       (m.localSorts map (s => "  sort " + s.localName + "{} []\n")).mkString("") + // make sure all sorts are declared
-      "  symbol inj{Sin,Sout}(Sin):Sout []\n" +
       (m.localSentences map (s => apply(s, m, d))).mkString("\n") +
       "\nendmodule []\n"
   }
@@ -30,7 +35,8 @@ object OuterToKORE {
       val sin = (items.filter((i) => i.isInstanceOf[NonTerminal]) map apply).mkString(", ")
       val inType = if (p.klabel.get == "inj") sin + "," + sort.localName + "{}" else ""
       "  symbol " + p.klabel.get + "{" + inType + "}(" + sin + "):" + sort.localName + "{} []"
-    case b@Bubble(_, _, _, _, _) => "  axiom{} " + parseToKORE(b, m, d) + " []"
+    case b@Bubble(_, _, _, _, _) => "  /* input(" + b.att.get("start").get.get + "): " + b.contents + "*/\n" +
+      "  axiom{} " + parseToKORE(b, m, d) + " []"
     case ModuleComment(_, _, _, _) => ""
   }
 

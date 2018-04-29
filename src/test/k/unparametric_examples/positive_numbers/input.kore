@@ -1,15 +1,25 @@
 []
+module INJ
+  symbol inj{Sin,Sout}(Sin):Sout []
+endmodule []
+
 module INPUT
+  import INJ []
   sort Exp{} []
   sort Int{} []
-  symbol inj{Sin,Sout}(Sin):Sout []
 
+  /* input(Int): 1 */
   axiom{} \dv{Int{}}("1") []
-  axiom{} plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("+2"))) []
-  axiom{} inj{Int{},Exp{}}(\dv{Int{}}("-1")) []
+  /* input(Exp): 1+2 */
+  axiom{} \or{Exp{}}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("2"))),\or{Exp{}}(app{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("+2"))),\bottom{Exp{}}())) []
+  /* input(Exp): +1 */
   axiom{} inj{Int{},Exp{}}(\dv{Int{}}("+1")) []
+  /* input(Exp): -1 */
+  axiom{} inj{Int{},Exp{}}(\dv{Int{}}("-1")) []
+  /* input(Exp): 1 */
   axiom{} inj{Int{},Exp{}}(\dv{Int{}}("1")) []
   symbol app{}(Exp{}, Exp{}):Exp{} []
   symbol plus{}(Exp{}, Exp{}):Exp{} []
-  axiom{} \or{Exp{}}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("2"))),\or{Exp{}}(app{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("+2"))),\bottom{Exp{}}())) []
+  /* input(Exp): 1++2 */
+  axiom{} plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("+2"))) []
 endmodule []

@@ -1,8 +1,30 @@
 []
-module INPUT
+module INJ
+  symbol inj{Sin,Sout}(Sin):Sout []
+endmodule []
+
+module COMMON
+  import INJ []
   sort Layout{} []
+  sort Id{} []
+  sort Exp{} []
+
+  symbol app{}(Exp{}, Exp{}):Exp{} []
+  symbol callcc{}(Exp{}):Exp{} []
+endmodule []
+
+module INPUT
+  import INJ []
+  import COMMON []
+
+  /* input(Exp): callcc a */
+  axiom{} callcc{}(inj{Id{},Exp{}}(\dv{Id{}}("a"))) []
 endmodule []
 
 module INPUT2
-  sort Layout{} []
+  import INJ []
+  import COMMON []
+
+  /* input(Exp): callcc a */
+  axiom{} \or{Exp{}}(app{}(inj{Id{},Exp{}}(\dv{Id{}}("callcc")),inj{Id{},Exp{}}(\dv{Id{}}("a"))),\or{Exp{}}(callcc{}(inj{Id{},Exp{}}(\dv{Id{}}("a"))),\bottom{Exp{}}())) []
 endmodule []

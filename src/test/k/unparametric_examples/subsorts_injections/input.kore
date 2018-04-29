@@ -1,25 +1,33 @@
 []
-module INPUT
-  sort Var{} []
-  sort Top{} []
-  sort A2{} []
-  sort A1{} []
+module INJ
   symbol inj{Sin,Sout}(Sin):Sout []
+endmodule []
 
+module COMMON
+  import INJ []
+  sort A1{} []
+  sort A2{} []
+  sort Top{} []
+  sort Var{} []
+
+endmodule []
+
+module INPUT
+  import INJ []
+  import COMMON []
+
+  /* input(Top): a */
   axiom{} \dv{Var{}}("a") []
 endmodule []
 
 module INPUT2
-  sort Var{} []
-  sort Top{} []
-  sort A2{} []
-  sort A1{} []
-  symbol inj{Sin,Sout}(Sin):Sout []
-  symbol {}():Var{} []
+  import INJ []
+  import COMMON []
 
   symbol A22Var{}(Var{}):A2{} []
   symbol Top2A1{}(A1{}):Top{} []
   symbol A12Var{}(Var{}):A1{} []
+  /* input(Top): a */
+  axiom{} \or{Top{}}(Top2A2{}(A22Var{}(\dv{Var{}}("a"))),\or{Top{}}(Top2A1{}(A12Var{}(\dv{Var{}}("a"))),\bottom{Top{}}())) []
   symbol Top2A2{}(A2{}):Top{} []
-  axiom{} \or{Top{}}(Top2A2{}(A22Var{}({}())),\or{Top{}}(Top2A1{}(A12Var{}({}())),\bottom{Top{}}())) []
 endmodule []

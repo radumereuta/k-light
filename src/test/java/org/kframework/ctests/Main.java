@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
 public class Main {
 
@@ -64,11 +65,17 @@ public class Main {
     }
 
     private static String process(File f) {
+        String koreParserCWD = "c:\\work\\kore\\src\\main\\haskell\\"; // hardcoded for each machine - for testing only
         Definition baseK = defParser.loadDefinition("INPUT", "INPUT", FileUtil.load(f), new Source(f.toString()), Lists.newArrayList());
 
         String str = OuterToKORE.apply(baseK);
         FileUtil.save(new File(f.getAbsolutePath() + "ore"), str);
-
-        return "[ok]";
+        try {
+            RunProcess.ProcessOutput po = RunProcess.execute(new HashMap<>(), new File(koreParserCWD), "C:\\work\\stack\\bin\\stack.exe", "exec", "--", "kore-parser", f.getAbsolutePath() + "ore");
+            return po.exitCode != 0 ? "[Error]" : "[ok]";
+        } catch (InterruptedException | IOException e) {
+            e.printStackTrace();
+            return "[Error]";
+        }
     }
 }

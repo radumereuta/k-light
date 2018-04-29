@@ -1,11 +1,18 @@
 /*
  * The difference between subsorts which have a klabel/symbol and those which have none.
  */
+module COMMON
+syntax Top
+syntax A1
+syntax A2
+syntax Var ::= r"[a-z]+" [token]
+endmodule
+
 module INPUT
+import COMMON
 syntax Top ::= A1 | A2
 syntax A1 ::= Var
 syntax A2 ::= Var
-syntax Var ::= r"[a-z]+" [token]
 rule a [start(Top)]
 // output: #token("a", Var)
 // Even though the parser explores multiple paths to reach the final result,
@@ -13,11 +20,10 @@ rule a [start(Top)]
 endmodule
  
 module INPUT2
-
+import COMMON
 syntax Top ::= A1 [klabel(Top2A1)] | A2 [klabel(Top2A2)]
 syntax A1 ::= Var [klabel(A12Var)]
 syntax A2 ::= Var [klabel(A22Var)]
-syntax Var ::= r"[a-z]+"
 rule a [start(Top)]
 // output: amb(
 //    Top2A1(A12Var(#token("a", Var))),

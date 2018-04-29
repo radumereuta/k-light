@@ -1,31 +1,39 @@
 []
-module INPUT
+module INJ
+  symbol inj{Sin,Sout}(Sin):Sout []
+endmodule []
+
+module COMMON
+  import INJ []
   sort Decl{} []
   sort Layout{} []
   sort Type{} []
   sort Id{} []
   sort Exp{} []
-  symbol inj{Sin,Sout}(Sin):Sout []
 
   symbol doubleType{}():Type{} []
   symbol intType{}():Type{} []
   symbol typeDecl{}(Type{}, Exp{}):Decl{} []
+endmodule []
+
+module INPUT
+  import INJ []
+  import COMMON []
+
+  /* input(Decl): intx; */
+  axiom{} typeDecl{}(intType{}(),inj{Id{},Exp{}}(\dv{Id{}}("x"))) []
+  /* input(Decl): int x; */
   axiom{} typeDecl{}(intType{}(),inj{Id{},Exp{}}(\dv{Id{}}("x"))) []
 endmodule []
 
 module INPUT2
-  sort Decl{} []
-  sort Layout{} []
-  sort Type{} []
-  sort Id{} []
-  sort Exp{} []
-  symbol inj{Sin,Sout}(Sin):Sout []
+  import INJ []
+  import COMMON []
 
-  symbol doubleType{}():Type{} []
-  symbol intType{}():Type{} []
-  symbol typeDecl{}(Type{}, Exp{}):Decl{} []
+  /* input(Decl): intx; */
   axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character 'x'.
 	Source(generated)
-	Location(21,9,21,10)] []
+	Location(23,9,23,10)] []
+  /* input(Decl): int x; */
   axiom{} typeDecl{}(intType{}(),inj{Id{},Exp{}}(\dv{Id{}}("x"))) []
 endmodule []

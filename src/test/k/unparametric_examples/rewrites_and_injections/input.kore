@@ -1,5 +1,10 @@
 []
+module INJ
+  symbol inj{Sin,Sout}(Sin):Sout []
+endmodule []
+
 module INPUT
+  import INJ []
   sort Variable{} []
   sort K{} []
   sort KBott{} []
@@ -8,18 +13,20 @@ module INPUT
   sort Exp{} []
   sort Int{} []
   sort Cell{} []
-  symbol inj{Sin,Sout}(Sin):Sout []
 
-  symbol rewId{}(Id{}, Id{}):Id{} []
+  /* input(Cell): <k> A:Id => B:Int </k> <env> A |-> B </env> */
   axiom{} cells{}(\or{K{}}(inj{Int{},K{}}(castToInt{}(\or{K{}}(inj{Id{},K{}}(rewId{}(castToId{}(\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\bottom{K{}}()))),inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\or{K{}}(rewK{}(inj{Id{},K{}}(castToId{}(\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\bottom{K{}}())))),\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\bottom{K{}}()))),\bottom{K{}}())))),\or{K{}}(rewK{}(inj{Id{},K{}}(castToId{}(\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\bottom{K{}}())))),inj{Int{},K{}}(castToInt{}(\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\bottom{K{}}()))))),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\bottom{K{}}()))) []
+  symbol rewId{}(Id{}, Id{}):Id{} []
   symbol cells{}(K{}, K{}, K{}):Cell{} []
   symbol castToInt{}(K{}):Int{} []
   symbol rewExp{}(Exp{}, Exp{}):Exp{} []
   symbol Exp2Int{}(Int{}):Exp{} []
-  axiom{} cells{}(\or{K{}}(inj{Int{},K{}}(rewInt{}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))),inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\or{K{}}(inj{Id{},K{}}(rewId{}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))),inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\or{K{}}(rewK{}(\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\bottom{K{}}()))),\bottom{K{}}()))),inj{Id{},K{}}(castToId{}(\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\bottom{K{}}())))),inj{Int{},K{}}(castToInt{}(\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\bottom{K{}}()))))) []
   symbol rewInt{}(Int{}, Int{}):Int{} []
   symbol rewK{}(K{}, K{}):K{} []
-  symbol Exp2Id{}(Id{}):Exp{} []
+  /* input(Cell): <k> A => B </k>        <env> A |-> B </env> */
   axiom{} cells{}(\or{K{}}(inj{Int{},K{}}(rewInt{}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))),inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\or{K{}}(inj{Id{},K{}}(rewId{}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))),inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\or{K{}}(rewK{}(\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\bottom{K{}}()))),\bottom{K{}}()))),\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\bottom{K{}}()))) []
+  symbol Exp2Id{}(Id{}):Exp{} []
+  /* input(Cell): <k> A => B </k>        <env> A:Id |-> B:Int </env> */
+  axiom{} cells{}(\or{K{}}(inj{Int{},K{}}(rewInt{}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))),inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\or{K{}}(inj{Id{},K{}}(rewId{}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))),inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\or{K{}}(rewK{}(\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\bottom{K{}}()))),\bottom{K{}}()))),inj{Id{},K{}}(castToId{}(\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),\bottom{K{}}())))),inj{Int{},K{}}(castToInt{}(\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\bottom{K{}}()))))) []
   symbol castToId{}(K{}):Id{} []
 endmodule []
