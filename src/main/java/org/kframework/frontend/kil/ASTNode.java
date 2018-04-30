@@ -1,17 +1,11 @@
 // Copyright (c) 2014-2016 K Team. All Rights Reserved.
 package org.kframework.frontend.kil;
 
-import com.google.common.reflect.TypeToken;
-import com.google.inject.name.Names;
 import org.kframework.attributes.Location;
 import org.kframework.attributes.Source;
-import org.kframework.frontend.kil.loader.Constants;
 import org.kframework.frontend.kil.visitors.Visitor;
-import org.w3c.dom.Element;
 
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
-import java.util.Scanner;
 
 /**
  * Base class for K AST. Useful for Visitors and Transformers.
@@ -28,45 +22,6 @@ public abstract class ASTNode implements Serializable {
 
     private Source source;
     private Location location;
-
-    /**
-     * Initializes an ASTNode from XML describing the parse tree
-     *
-     * @param elem
-     *            The XML element describing the ASTNode
-     */
-    public ASTNode(Element elem) {
-        this(getElementLocation(elem), getElementSource(elem));
-    }
-
-    /**
-     * Retrieves the location from an XML element
-     *
-     * @param elem
-     * @return the location stored in XML or Constants.GENERATED_LOCATION if no location found.
-     */
-    public static Location getElementLocation(Element elem) {
-        if (elem != null && elem.hasAttribute(Constants.LOC_loc_ATTR)) {
-            Scanner scanner = new Scanner(elem.getAttribute(Constants.LOC_loc_ATTR)).useDelimiter("[,)]").skip("\\(");
-            int beginLine = scanner.nextInt();
-            int beginCol = scanner.nextInt();
-            int endLine = scanner.nextInt();
-            int endCol = scanner.nextInt();
-            return new Location(beginLine, beginCol, endLine, endCol);
-        }
-        else
-            return null;
-    }
-
-    /**
-     * Retrieves the file name from an XML element
-     *
-     * @param elem
-     * @return the file name stored in XML or Constants.GENERATED_FILENAME if no filename found.
-     */
-    public static Source getElementSource(Element elem) {
-        return (Source) elem.getUserData(Constants.SOURCE_ATTR);
-    }
 
     /**
      * Copy constructor
