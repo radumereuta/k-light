@@ -56,6 +56,6 @@ object OuterToKORE {
     if (rez._1.isLeft)
       rez._1.left.get.toString
     else
-      TreeNodesToKORE.apply(rez._1.right.get)
+      TreeNodesToKORE.print(rez._1.right.get)
   }
 }

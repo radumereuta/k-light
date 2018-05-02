@@ -19,19 +19,24 @@ endmodule []
 module INPUT
   import INJ []
   import COMMON []
-  /* input(Top): a */
-  axiom{} info{Var{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("6"),\dv{KInt{}}("16"),\dv{KInt{}}("7")),\dv{Var{}}("a")) []
 
+  /* input(Top): a */
+  axiom{} 
+info{Var{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("6"),\dv{KInt{}}("16"),\dv{KInt{}}("7")),\dv{Var{}}("a")) []
 endmodule []
 
 module INPUT2
   import INJ []
   import COMMON []
-  /* input(Top): a */
-  axiom{} \or{Top{}}(info{Top{}}(input{}(\dv{KInt{}}("27"),\dv{KInt{}}("6"),\dv{KInt{}}("27"),\dv{KInt{}}("7")),Top2A2{}(info{A2{}}(input{}(\dv{KInt{}}("27"),\dv{KInt{}}("6"),\dv{KInt{}}("27"),\dv{KInt{}}("7")),A22Var{}(info{Var{}}(input{}(\dv{KInt{}}("27"),\dv{KInt{}}("6"),\dv{KInt{}}("27"),\dv{KInt{}}("7")),\dv{Var{}}("a")))))),\or{Top{}}(info{Top{}}(input{}(\dv{KInt{}}("27"),\dv{KInt{}}("6"),\dv{KInt{}}("27"),\dv{KInt{}}("7")),Top2A1{}(info{A1{}}(input{}(\dv{KInt{}}("27"),\dv{KInt{}}("6"),\dv{KInt{}}("27"),\dv{KInt{}}("7")),A12Var{}(info{Var{}}(input{}(\dv{KInt{}}("27"),\dv{KInt{}}("6"),\dv{KInt{}}("27"),\dv{KInt{}}("7")),\dv{Var{}}("a")))))),\bottom{Top{}}())) []
 
   symbol A22Var{}(Var{}):A2{} []
   symbol Top2A1{}(A1{}):Top{} []
   symbol A12Var{}(Var{}):A1{} []
+  /* input(Top): a */
+  axiom{} 
+\exists{Top{}}(V0:Var{},
+    \and{Top{}}(
+        \equals{Var{},Top{}}(V0:Var{},info{Var{}}(input{}(\dv{KInt{}}("27"),\dv{KInt{}}("6"),\dv{KInt{}}("27"),\dv{KInt{}}("7")),\dv{Var{}}("a"))),
+\or{Top{}}(info{Top{}}(input{}(\dv{KInt{}}("27"),\dv{KInt{}}("6"),\dv{KInt{}}("27"),\dv{KInt{}}("7")),Top2A2{}(info{A2{}}(input{}(\dv{KInt{}}("27"),\dv{KInt{}}("6"),\dv{KInt{}}("27"),\dv{KInt{}}("7")),A22Var{}(V0:Var{})))),\or{Top{}}(info{Top{}}(input{}(\dv{KInt{}}("27"),\dv{KInt{}}("6"),\dv{KInt{}}("27"),\dv{KInt{}}("7")),Top2A1{}(info{A1{}}(input{}(\dv{KInt{}}("27"),\dv{KInt{}}("6"),\dv{KInt{}}("27"),\dv{KInt{}}("7")),A12Var{}(V0:Var{})))),\bottom{Top{}}())))) []
   symbol Top2A2{}(A2{}):Top{} []
 endmodule []

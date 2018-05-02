@@ -19,20 +19,24 @@ module INPUT
   import INJ []
   import COMMON []
 
-  /* input(Exp): - 1 */
-  axiom{} info{Exp{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("6"),\dv{KInt{}}("17"),\dv{KInt{}}("9")),uminuss{}(info{Exp{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("8"),\dv{KInt{}}("17"),\dv{KInt{}}("9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("8"),\dv{KInt{}}("17"),\dv{KInt{}}("9")),\dv{Int{}}("1")))))) []
   symbol uminuss{}(Exp{}):Exp{} []
   /* input(Exp): -1 */
-  axiom{} \or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("14"),\dv{KInt{}}("6"),\dv{KInt{}}("14"),\dv{KInt{}}("8")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("14"),\dv{KInt{}}("6"),\dv{KInt{}}("14"),\dv{KInt{}}("8")),\dv{Int{}}("-1")))),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("14"),\dv{KInt{}}("6"),\dv{KInt{}}("14"),\dv{KInt{}}("8")),uminuss{}(info{Exp{}}(input{}(\dv{KInt{}}("14"),\dv{KInt{}}("7"),\dv{KInt{}}("14"),\dv{KInt{}}("8")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("14"),\dv{KInt{}}("7"),\dv{KInt{}}("14"),\dv{KInt{}}("8")),\dv{Int{}}("1")))))),\bottom{Exp{}}())) []
+  axiom{} 
+\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("14"),\dv{KInt{}}("6"),\dv{KInt{}}("14"),\dv{KInt{}}("8")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("14"),\dv{KInt{}}("6"),\dv{KInt{}}("14"),\dv{KInt{}}("8")),\dv{Int{}}("-1")))),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("14"),\dv{KInt{}}("6"),\dv{KInt{}}("14"),\dv{KInt{}}("8")),uminuss{}(info{Exp{}}(input{}(\dv{KInt{}}("14"),\dv{KInt{}}("7"),\dv{KInt{}}("14"),\dv{KInt{}}("8")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("14"),\dv{KInt{}}("7"),\dv{KInt{}}("14"),\dv{KInt{}}("8")),\dv{Int{}}("1")))))),\bottom{Exp{}}())) []
+  /* input(Exp): - 1 */
+  axiom{} 
+info{Exp{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("6"),\dv{KInt{}}("17"),\dv{KInt{}}("9")),uminuss{}(info{Exp{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("8"),\dv{KInt{}}("17"),\dv{KInt{}}("9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("8"),\dv{KInt{}}("17"),\dv{KInt{}}("9")),\dv{Int{}}("1")))))) []
 endmodule []
 
 module INPUT2
   import INJ []
   import COMMON []
 
-  symbol uminusp{}(Exp{}):Exp{} []
   /* input(Exp): -1 */
-  axiom{} info{Exp{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("6"),\dv{KInt{}}("25"),\dv{KInt{}}("8")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("6"),\dv{KInt{}}("25"),\dv{KInt{}}("8")),\dv{Int{}}("-1")))) []
+  axiom{} 
+info{Exp{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("6"),\dv{KInt{}}("25"),\dv{KInt{}}("8")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("6"),\dv{KInt{}}("25"),\dv{KInt{}}("8")),\dv{Int{}}("-1")))) []
+  symbol uminusp{}(Exp{}):Exp{} []
   /* input(Exp): - 1 */
-  axiom{} info{Exp{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("6"),\dv{KInt{}}("29"),\dv{KInt{}}("9")),uminusp{}(info{Exp{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("8"),\dv{KInt{}}("29"),\dv{KInt{}}("9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("8"),\dv{KInt{}}("29"),\dv{KInt{}}("9")),\dv{Int{}}("1")))))) []
+  axiom{} 
+info{Exp{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("6"),\dv{KInt{}}("29"),\dv{KInt{}}("9")),uminusp{}(info{Exp{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("8"),\dv{KInt{}}("29"),\dv{KInt{}}("9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("8"),\dv{KInt{}}("29"),\dv{KInt{}}("9")),\dv{Int{}}("1")))))) []
 endmodule []

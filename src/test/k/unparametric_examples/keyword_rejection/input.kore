@@ -22,7 +22,8 @@ module INPUT
   import COMMON []
 
   /* input(Exp): callcc a */
-  axiom{} info{Exp{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("6"),\dv{KInt{}}("16"),\dv{KInt{}}("14")),callcc{}(info{Exp{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("13"),\dv{KInt{}}("16"),\dv{KInt{}}("14")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("13"),\dv{KInt{}}("16"),\dv{KInt{}}("14")),\dv{Id{}}("a")))))) []
+  axiom{} 
+info{Exp{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("6"),\dv{KInt{}}("16"),\dv{KInt{}}("14")),callcc{}(info{Exp{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("13"),\dv{KInt{}}("16"),\dv{KInt{}}("14")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("13"),\dv{KInt{}}("16"),\dv{KInt{}}("14")),\dv{Id{}}("a")))))) []
 endmodule []
 
 module INPUT2
@@ -30,5 +31,9 @@ module INPUT2
   import COMMON []
 
   /* input(Exp): callcc a */
-  axiom{} \or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),app{}(info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("13")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("12")),\dv{Id{}}("callcc")))),info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("13"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("13"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),\dv{Id{}}("a")))))),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),callcc{}(info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("13"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("13"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),\dv{Id{}}("a")))))),\bottom{Exp{}}())) []
+  axiom{} 
+\exists{Exp{}}(V0:Exp{},
+    \and{Exp{}}(
+        \equals{Exp{},Exp{}}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("13"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("13"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),\dv{Id{}}("a"))))),
+\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),app{}(info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("13")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("12")),\dv{Id{}}("callcc")))),V0:Exp{})),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),callcc{}(V0:Exp{})),\bottom{Exp{}}())))) []
 endmodule []
