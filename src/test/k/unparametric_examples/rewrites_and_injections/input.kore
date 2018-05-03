@@ -18,41 +18,7 @@ module INPUT
   sort Int{} []
   sort Cell{} []
 
-  /* input(Cell): <k> A => B </k>        <env> A:Id |-> B:Int </env> */
-  axiom{} 
-\exists{Cell{}}(V0:KBott{},
-\exists{Cell{}}(V4:KBott{},
-\exists{Cell{}}(V1:Id{},
-\exists{Cell{}}(V5:Id{},
-\exists{Cell{}}(V3:K{},
-\exists{Cell{}}(V7:K{},
-\exists{Cell{}}(V2:Int{},
-\exists{Cell{}}(V6:Int{},
-    \and{Cell{}}(
-        \equals{KBott{},Cell{}}(V0:KBott{},info{KBott{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("10"),\dv{KInt{}}("26"),\dv{KInt{}}("12")),inj{Variable{},KBott{}}(info{Variable{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("10"),\dv{KInt{}}("26"),\dv{KInt{}}("11")),\dv{Variable{}}("A"))))),
-    \and{Cell{}}(
-        \equals{KBott{},Cell{}}(V4:KBott{},info{KBott{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("15"),\dv{KInt{}}("26"),\dv{KInt{}}("17")),inj{Variable{},KBott{}}(info{Variable{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("15"),\dv{KInt{}}("26"),\dv{KInt{}}("16")),\dv{Variable{}}("B"))))),
-    \and{Cell{}}(
-        \equals{Id{},Cell{}}(V1:Id{},info{Id{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("10"),\dv{KInt{}}("26"),\dv{KInt{}}("12")),inj{KBott{},Id{}}(V0:KBott{}))),
-    \and{Cell{}}(
-        \equals{Id{},Cell{}}(V5:Id{},info{Id{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("15"),\dv{KInt{}}("26"),\dv{KInt{}}("17")),inj{KBott{},Id{}}(V4:KBott{}))),
-    \and{Cell{}}(
-        \equals{K{},Cell{}}(V3:K{},\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("10"),\dv{KInt{}}("26"),\dv{KInt{}}("12")),inj{Int{},K{}}(V2:Int{})),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("10"),\dv{KInt{}}("26"),\dv{KInt{}}("12")),inj{Id{},K{}}(V1:Id{})),\bottom{K{}}()))),
-    \and{Cell{}}(
-        \equals{K{},Cell{}}(V7:K{},\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("15"),\dv{KInt{}}("26"),\dv{KInt{}}("17")),inj{Int{},K{}}(V6:Int{})),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("15"),\dv{KInt{}}("26"),\dv{KInt{}}("17")),inj{Id{},K{}}(V5:Id{})),\bottom{K{}}()))),
-    \and{Cell{}}(
-        \equals{Int{},Cell{}}(V2:Int{},info{Int{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("10"),\dv{KInt{}}("26"),\dv{KInt{}}("12")),inj{KBott{},Int{}}(V0:KBott{}))),
-    \and{Cell{}}(
-        \equals{Int{},Cell{}}(V6:Int{},info{Int{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("15"),\dv{KInt{}}("26"),\dv{KInt{}}("17")),inj{KBott{},Int{}}(V4:KBott{}))),
-info{Cell{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("6"),\dv{KInt{}}("26"),\dv{KInt{}}("56")),cells{}(\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("10"),\dv{KInt{}}("26"),\dv{KInt{}}("17")),inj{Int{},K{}}(info{Int{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("10"),\dv{KInt{}}("26"),\dv{KInt{}}("17")),rewInt{}(V2:Int{},V6:Int{})))),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("10"),\dv{KInt{}}("26"),\dv{KInt{}}("17")),inj{Id{},K{}}(info{Id{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("10"),\dv{KInt{}}("26"),\dv{KInt{}}("17")),rewId{}(V1:Id{},V5:Id{})))),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("10"),\dv{KInt{}}("26"),\dv{KInt{}}("17")),rewK{}(V3:K{},V7:K{})),\bottom{K{}}()))),info{K{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("35"),\dv{KInt{}}("26"),\dv{KInt{}}("40")),inj{Id{},K{}}(info{Id{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("35"),\dv{KInt{}}("26"),\dv{KInt{}}("39")),castToId{}(V3:K{})))),info{K{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("44"),\dv{KInt{}}("26"),\dv{KInt{}}("50")),inj{Int{},K{}}(info{Int{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("44"),\dv{KInt{}}("26"),\dv{KInt{}}("49")),castToInt{}(V7:K{})))))))))))))))))))))) []
   symbol rewId{}(Id{}, Id{}):Id{} []
-  symbol cells{}(K{}, K{}, K{}):Cell{} []
-  symbol castToInt{}(K{}):Int{} []
-  symbol rewExp{}(Exp{}, Exp{}):Exp{} []
-  symbol Exp2Int{}(Int{}):Exp{} []
-  symbol rewInt{}(Int{}, Int{}):Int{} []
-  symbol rewK{}(K{}, K{}):K{} []
-  symbol Exp2Id{}(Id{}):Exp{} []
   /* input(Cell): <k> A => B </k>        <env> A |-> B </env> */
   axiom{} 
 \exists{Cell{}}(V0:KBott{},
@@ -64,22 +30,23 @@ info{Cell{}}(input{}(\dv{KInt{}}("26"),\dv{KInt{}}("6"),\dv{KInt{}}("26"),\dv{KI
 \exists{Cell{}}(V2:Int{},
 \exists{Cell{}}(V6:Int{},
     \and{Cell{}}(
-        \equals{KBott{},Cell{}}(V0:KBott{},info{KBott{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("12")),inj{Variable{},KBott{}}(info{Variable{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("11")),\dv{Variable{}}("A"))))),
+        \equals{KBott{},Cell{}}(V0:KBott{},inj{Variable{},KBott{}}(\dv{Variable{}}("A"))),
     \and{Cell{}}(
-        \equals{KBott{},Cell{}}(V4:KBott{},info{KBott{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("15"),\dv{KInt{}}("24"),\dv{KInt{}}("17")),inj{Variable{},KBott{}}(info{Variable{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("15"),\dv{KInt{}}("24"),\dv{KInt{}}("16")),\dv{Variable{}}("B"))))),
+        \equals{KBott{},Cell{}}(V4:KBott{},inj{Variable{},KBott{}}(\dv{Variable{}}("B"))),
     \and{Cell{}}(
-        \equals{Id{},Cell{}}(V1:Id{},info{Id{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("12")),inj{KBott{},Id{}}(V0:KBott{}))),
+        \equals{Id{},Cell{}}(V1:Id{},inj{KBott{},Id{}}(V0:KBott{})),
     \and{Cell{}}(
-        \equals{Id{},Cell{}}(V5:Id{},info{Id{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("15"),\dv{KInt{}}("24"),\dv{KInt{}}("17")),inj{KBott{},Id{}}(V4:KBott{}))),
+        \equals{Id{},Cell{}}(V5:Id{},inj{KBott{},Id{}}(V4:KBott{})),
     \and{Cell{}}(
-        \equals{K{},Cell{}}(V3:K{},\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("12")),inj{Int{},K{}}(V2:Int{})),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("12")),inj{Id{},K{}}(V1:Id{})),\bottom{K{}}()))),
+        \equals{K{},Cell{}}(V3:K{},\or{K{}}(inj{Int{},K{}}(V2:Int{}),\or{K{}}(inj{Id{},K{}}(V1:Id{}),\bottom{K{}}()))),
     \and{Cell{}}(
-        \equals{K{},Cell{}}(V7:K{},\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("15"),\dv{KInt{}}("24"),\dv{KInt{}}("17")),inj{Int{},K{}}(V6:Int{})),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("15"),\dv{KInt{}}("24"),\dv{KInt{}}("17")),inj{Id{},K{}}(V5:Id{})),\bottom{K{}}()))),
+        \equals{K{},Cell{}}(V7:K{},\or{K{}}(inj{Int{},K{}}(V6:Int{}),\or{K{}}(inj{Id{},K{}}(V5:Id{}),\bottom{K{}}()))),
     \and{Cell{}}(
-        \equals{Int{},Cell{}}(V2:Int{},info{Int{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("12")),inj{KBott{},Int{}}(V0:KBott{}))),
+        \equals{Int{},Cell{}}(V2:Int{},inj{KBott{},Int{}}(V0:KBott{})),
     \and{Cell{}}(
-        \equals{Int{},Cell{}}(V6:Int{},info{Int{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("15"),\dv{KInt{}}("24"),\dv{KInt{}}("17")),inj{KBott{},Int{}}(V4:KBott{}))),
-info{Cell{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("6"),\dv{KInt{}}("24"),\dv{KInt{}}("49")),cells{}(\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("17")),inj{Int{},K{}}(info{Int{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("17")),rewInt{}(V2:Int{},V6:Int{})))),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("17")),inj{Id{},K{}}(info{Id{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("17")),rewId{}(V1:Id{},V5:Id{})))),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("17")),rewK{}(V3:K{},V7:K{})),\bottom{K{}}()))),V3:K{},V7:K{})))))))))))))))))) []
+        \equals{Int{},Cell{}}(V6:Int{},inj{KBott{},Int{}}(V4:KBott{})),
+cells{}(\or{K{}}(inj{Int{},K{}}(rewInt{}(V2:Int{},V6:Int{})),\or{K{}}(inj{Id{},K{}}(rewId{}(V1:Id{},V5:Id{})),\or{K{}}(rewK{}(V3:K{},V7:K{}),\bottom{K{}}()))),V3:K{},V7:K{}))))))))))))))))) []
+  symbol cells{}(K{}, K{}, K{}):Cell{} []
   /* input(Cell): <k> A:Id => B:Int </k> <env> A |-> B </env> */
   axiom{} 
 \exists{Cell{}}(V0:KBott{},
@@ -90,19 +57,52 @@ info{Cell{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("6"),\dv{KInt{}}("24"),\dv{KI
 \exists{Cell{}}(V6:K{},
 \exists{Cell{}}(V3:K{},
     \and{Cell{}}(
-        \equals{KBott{},Cell{}}(V0:KBott{},info{KBott{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("10"),\dv{KInt{}}("25"),\dv{KInt{}}("11")),inj{Variable{},KBott{}}(info{Variable{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("10"),\dv{KInt{}}("25"),\dv{KInt{}}("11")),\dv{Variable{}}("A"))))),
+        \equals{KBott{},Cell{}}(V0:KBott{},inj{Variable{},KBott{}}(\dv{Variable{}}("A"))),
     \and{Cell{}}(
-        \equals{KBott{},Cell{}}(V4:KBott{},info{KBott{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("18"),\dv{KInt{}}("25"),\dv{KInt{}}("19")),inj{Variable{},KBott{}}(info{Variable{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("18"),\dv{KInt{}}("25"),\dv{KInt{}}("19")),\dv{Variable{}}("B"))))),
+        \equals{KBott{},Cell{}}(V4:KBott{},inj{Variable{},KBott{}}(\dv{Variable{}}("B"))),
     \and{Cell{}}(
-        \equals{Id{},Cell{}}(V2:Id{},info{Id{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("10"),\dv{KInt{}}("25"),\dv{KInt{}}("14")),castToId{}(V1:K{}))),
+        \equals{Id{},Cell{}}(V2:Id{},castToId{}(V1:K{})),
     \and{Cell{}}(
-        \equals{Id{},Cell{}}(V5:Id{},info{Id{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("18"),\dv{KInt{}}("25"),\dv{KInt{}}("19")),inj{KBott{},Id{}}(V4:KBott{}))),
+        \equals{Id{},Cell{}}(V5:Id{},inj{KBott{},Id{}}(V4:KBott{})),
     \and{Cell{}}(
-        \equals{K{},Cell{}}(V1:K{},\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("10"),\dv{KInt{}}("25"),\dv{KInt{}}("11")),inj{Int{},K{}}(info{Int{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("10"),\dv{KInt{}}("25"),\dv{KInt{}}("11")),inj{KBott{},Int{}}(V0:KBott{})))),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("10"),\dv{KInt{}}("25"),\dv{KInt{}}("11")),inj{Id{},K{}}(info{Id{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("10"),\dv{KInt{}}("25"),\dv{KInt{}}("11")),inj{KBott{},Id{}}(V0:KBott{})))),\bottom{K{}}()))),
+        \equals{K{},Cell{}}(V1:K{},\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(V0:KBott{})),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(V0:KBott{})),\bottom{K{}}()))),
     \and{Cell{}}(
-        \equals{K{},Cell{}}(V6:K{},\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("18"),\dv{KInt{}}("25"),\dv{KInt{}}("19")),inj{Int{},K{}}(info{Int{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("18"),\dv{KInt{}}("25"),\dv{KInt{}}("19")),inj{KBott{},Int{}}(V4:KBott{})))),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("18"),\dv{KInt{}}("25"),\dv{KInt{}}("19")),inj{Id{},K{}}(V5:Id{})),\bottom{K{}}()))),
+        \equals{K{},Cell{}}(V6:K{},\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(V4:KBott{})),\or{K{}}(inj{Id{},K{}}(V5:Id{}),\bottom{K{}}()))),
     \and{Cell{}}(
-        \equals{K{},Cell{}}(V3:K{},info{K{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("10"),\dv{KInt{}}("25"),\dv{KInt{}}("15")),inj{Id{},K{}}(V2:Id{}))),
-info{Cell{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("6"),\dv{KInt{}}("25"),\dv{KInt{}}("49")),cells{}(\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("10"),\dv{KInt{}}("25"),\dv{KInt{}}("24")),inj{Int{},K{}}(info{Int{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("10"),\dv{KInt{}}("25"),\dv{KInt{}}("23")),castToInt{}(\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("10"),\dv{KInt{}}("25"),\dv{KInt{}}("19")),inj{Id{},K{}}(info{Id{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("10"),\dv{KInt{}}("25"),\dv{KInt{}}("19")),rewId{}(V2:Id{},V5:Id{})))),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("10"),\dv{KInt{}}("25"),\dv{KInt{}}("19")),rewK{}(V3:K{},V6:K{})),\bottom{K{}}())))))),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("10"),\dv{KInt{}}("25"),\dv{KInt{}}("24")),rewK{}(V3:K{},info{K{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("18"),\dv{KInt{}}("25"),\dv{KInt{}}("24")),inj{Int{},K{}}(info{Int{}}(input{}(\dv{KInt{}}("25"),\dv{KInt{}}("18"),\dv{KInt{}}("25"),\dv{KInt{}}("23")),castToInt{}(V6:K{})))))),\bottom{K{}}())),V1:K{},V6:K{})))))))))))))))) []
+        \equals{K{},Cell{}}(V3:K{},inj{Id{},K{}}(V2:Id{})),
+cells{}(\or{K{}}(inj{Int{},K{}}(castToInt{}(\or{K{}}(inj{Id{},K{}}(rewId{}(V2:Id{},V5:Id{})),\or{K{}}(rewK{}(V3:K{},V6:K{}),\bottom{K{}}())))),\or{K{}}(rewK{}(V3:K{},inj{Int{},K{}}(castToInt{}(V6:K{}))),\bottom{K{}}())),V1:K{},V6:K{}))))))))))))))) []
+  symbol castToInt{}(K{}):Int{} []
+  symbol rewExp{}(Exp{}, Exp{}):Exp{} []
+  /* input(Cell): <k> A => B </k>        <env> A:Id |-> B:Int </env> */
+  axiom{} 
+\exists{Cell{}}(V0:KBott{},
+\exists{Cell{}}(V4:KBott{},
+\exists{Cell{}}(V1:Id{},
+\exists{Cell{}}(V5:Id{},
+\exists{Cell{}}(V3:K{},
+\exists{Cell{}}(V7:K{},
+\exists{Cell{}}(V2:Int{},
+\exists{Cell{}}(V6:Int{},
+    \and{Cell{}}(
+        \equals{KBott{},Cell{}}(V0:KBott{},inj{Variable{},KBott{}}(\dv{Variable{}}("A"))),
+    \and{Cell{}}(
+        \equals{KBott{},Cell{}}(V4:KBott{},inj{Variable{},KBott{}}(\dv{Variable{}}("B"))),
+    \and{Cell{}}(
+        \equals{Id{},Cell{}}(V1:Id{},inj{KBott{},Id{}}(V0:KBott{})),
+    \and{Cell{}}(
+        \equals{Id{},Cell{}}(V5:Id{},inj{KBott{},Id{}}(V4:KBott{})),
+    \and{Cell{}}(
+        \equals{K{},Cell{}}(V3:K{},\or{K{}}(inj{Int{},K{}}(V2:Int{}),\or{K{}}(inj{Id{},K{}}(V1:Id{}),\bottom{K{}}()))),
+    \and{Cell{}}(
+        \equals{K{},Cell{}}(V7:K{},\or{K{}}(inj{Int{},K{}}(V6:Int{}),\or{K{}}(inj{Id{},K{}}(V5:Id{}),\bottom{K{}}()))),
+    \and{Cell{}}(
+        \equals{Int{},Cell{}}(V2:Int{},inj{KBott{},Int{}}(V0:KBott{})),
+    \and{Cell{}}(
+        \equals{Int{},Cell{}}(V6:Int{},inj{KBott{},Int{}}(V4:KBott{})),
+cells{}(\or{K{}}(inj{Int{},K{}}(rewInt{}(V2:Int{},V6:Int{})),\or{K{}}(inj{Id{},K{}}(rewId{}(V1:Id{},V5:Id{})),\or{K{}}(rewK{}(V3:K{},V7:K{}),\bottom{K{}}()))),inj{Id{},K{}}(castToId{}(V3:K{})),inj{Int{},K{}}(castToInt{}(V7:K{}))))))))))))))))))) []
+  symbol Exp2Int{}(Int{}):Exp{} []
+  symbol rewInt{}(Int{}, Int{}):Int{} []
+  symbol rewK{}(K{}, K{}):K{} []
+  symbol Exp2Id{}(Id{}):Exp{} []
   symbol castToId{}(K{}):Id{} []
 endmodule []

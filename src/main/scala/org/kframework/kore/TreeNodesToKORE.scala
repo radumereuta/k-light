@@ -19,7 +19,9 @@ object TreeNodesToKORE {
       case p:ProductionReference => p.production.sort.localName + "{}"
     }
     val rez = vis.shared.foldRight(
-      vis.shared.foldRight(root) { (i, acc) => "    \\and{" + sort + "}(\n        \\equals{" + i._2.get._3 + "," + sort + "}(" + i._2.get._1 + "," + i._2.get._2 + "),\n" + acc + ")"}
+      vis.shared.foldRight(root) { (i, acc) =>
+        "    \\and{" + sort + "}(\n" +
+        "        \\equals{" + i._2.get._3 + "," + sort + "}(" + i._2.get._1 + "," + i._2.get._2 + "),\n" + acc + ")"}
     ) { (i, acc) => "\\exists{" + sort + "}(" + i._2.get._1 + ",\n" + acc + ")" }
     "\n" + rez
   }
@@ -43,7 +45,7 @@ private class TreeNodesToKOREVisitor {
     }
   }
 
-  // traverse the DAG, if a node is shared, replace it with a variable and store it
+  // traverse the DAG, if a node is shared, mark it with a variable and store it
   def apply(t: Term): String = {
     if (shared.contains(t)) {
       val pair: Option[(String, String, String)] = shared(t)
@@ -75,7 +77,7 @@ private class TreeNodesToKOREVisitor {
   }
   // meta information wrap
   private def printInfo(t: ProductionReference, printedTerm:String): String = {
-    //return printedTerm
+    // return printedTerm // uncomment to not print info - makes it easier to read terms
     "info{" + t.production.sort.localName + "{}}(" +
       "input{}(\\dv{KInt{}}(\"" + t.location.get().startLine +
       "\"),\\dv{KInt{}}(\"" + t.location.get().startColumn +

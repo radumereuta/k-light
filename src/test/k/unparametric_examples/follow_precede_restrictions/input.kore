@@ -24,12 +24,12 @@ module INPUT
   import INJ []
   import COMMON []
 
-  /* input(Decl): int x; */
-  axiom{} 
-info{Decl{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("6"),\dv{KInt{}}("17"),\dv{KInt{}}("12")),typeDecl{}(info{Type{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("6"),\dv{KInt{}}("17"),\dv{KInt{}}("9")),intType{}()),info{Exp{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("10"),\dv{KInt{}}("17"),\dv{KInt{}}("11")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("10"),\dv{KInt{}}("17"),\dv{KInt{}}("11")),\dv{Id{}}("x")))))) []
   /* input(Decl): intx; */
   axiom{} 
-info{Decl{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("6"),\dv{KInt{}}("16"),\dv{KInt{}}("11")),typeDecl{}(info{Type{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("6"),\dv{KInt{}}("16"),\dv{KInt{}}("9")),intType{}()),info{Exp{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("9"),\dv{KInt{}}("16"),\dv{KInt{}}("10")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("9"),\dv{KInt{}}("16"),\dv{KInt{}}("10")),\dv{Id{}}("x")))))) []
+typeDecl{}(intType{}(),inj{Id{},Exp{}}(\dv{Id{}}("x"))) []
+  /* input(Decl): int x; */
+  axiom{} 
+typeDecl{}(intType{}(),inj{Id{},Exp{}}(\dv{Id{}}("x"))) []
 endmodule []
 
 module INPUT2
@@ -42,5 +42,5 @@ module INPUT2
 	Location(23,9,23,10)] []
   /* input(Decl): int x; */
   axiom{} 
-info{Decl{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("6"),\dv{KInt{}}("24"),\dv{KInt{}}("12")),typeDecl{}(info{Type{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("6"),\dv{KInt{}}("24"),\dv{KInt{}}("9")),intType{}()),info{Exp{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("11")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("11")),\dv{Id{}}("x")))))) []
+typeDecl{}(intType{}(),inj{Id{},Exp{}}(\dv{Id{}}("x"))) []
 endmodule []

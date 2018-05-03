@@ -17,8 +17,6 @@ module INPUT
   symbol gt{}(Exp{}, Exp{}):Exp{} []
   symbol it{}(Exp{}, Stmt{}):Stmt{} []
   symbol eq{}(Exp{}, Exp{}):Exp{} []
-  symbol lt{}(Exp{}, Exp{}):Exp{} []
-  symbol ite{}(Exp{}, Stmt{}, Stmt{}):Stmt{} []
   /* input(Stmt): if c1 == c2 then if c3 < c4 then s1 else s2 */
   axiom{} 
 \exists{Stmt{}}(V3:Stmt{},
@@ -26,12 +24,14 @@ module INPUT
 \exists{Stmt{}}(V1:Exp{},
 \exists{Stmt{}}(V0:Exp{},
     \and{Stmt{}}(
-        \equals{Stmt{},Stmt{}}(V3:Stmt{},info{Stmt{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("49"),\dv{KInt{}}("11"),\dv{KInt{}}("51")),inj{Exp{},Stmt{}}(info{Exp{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("49"),\dv{KInt{}}("11"),\dv{KInt{}}("51")),inj{Var{},Exp{}}(info{Var{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("49"),\dv{KInt{}}("11"),\dv{KInt{}}("51")),\dv{Var{}}("s2"))))))),
+        \equals{Stmt{},Stmt{}}(V3:Stmt{},inj{Exp{},Stmt{}}(inj{Var{},Exp{}}(\dv{Var{}}("s2")))),
     \and{Stmt{}}(
-        \equals{Stmt{},Stmt{}}(V2:Stmt{},info{Stmt{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("41"),\dv{KInt{}}("11"),\dv{KInt{}}("44")),inj{Exp{},Stmt{}}(info{Exp{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("41"),\dv{KInt{}}("11"),\dv{KInt{}}("44")),inj{Var{},Exp{}}(info{Var{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("41"),\dv{KInt{}}("11"),\dv{KInt{}}("43")),\dv{Var{}}("s1"))))))),
+        \equals{Stmt{},Stmt{}}(V2:Stmt{},inj{Exp{},Stmt{}}(inj{Var{},Exp{}}(\dv{Var{}}("s1")))),
     \and{Stmt{}}(
-        \equals{Exp{},Stmt{}}(V1:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("28"),\dv{KInt{}}("11"),\dv{KInt{}}("36")),lt{}(info{Exp{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("28"),\dv{KInt{}}("11"),\dv{KInt{}}("31")),inj{Var{},Exp{}}(info{Var{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("28"),\dv{KInt{}}("11"),\dv{KInt{}}("30")),\dv{Var{}}("c3")))),info{Exp{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("33"),\dv{KInt{}}("11"),\dv{KInt{}}("36")),inj{Var{},Exp{}}(info{Var{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("33"),\dv{KInt{}}("11"),\dv{KInt{}}("35")),\dv{Var{}}("c4"))))))),
+        \equals{Exp{},Stmt{}}(V1:Exp{},lt{}(inj{Var{},Exp{}}(\dv{Var{}}("c3")),inj{Var{},Exp{}}(\dv{Var{}}("c4")))),
     \and{Stmt{}}(
-        \equals{Exp{},Stmt{}}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("11"),\dv{KInt{}}("11"),\dv{KInt{}}("20")),eq{}(info{Exp{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("11"),\dv{KInt{}}("11"),\dv{KInt{}}("14")),inj{Var{},Exp{}}(info{Var{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("11"),\dv{KInt{}}("11"),\dv{KInt{}}("13")),\dv{Var{}}("c1")))),info{Exp{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("17"),\dv{KInt{}}("11"),\dv{KInt{}}("20")),inj{Var{},Exp{}}(info{Var{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("17"),\dv{KInt{}}("11"),\dv{KInt{}}("19")),\dv{Var{}}("c2"))))))),
-\or{Stmt{}}(info{Stmt{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("8"),\dv{KInt{}}("11"),\dv{KInt{}}("51")),it{}(V0:Exp{},info{Stmt{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("25"),\dv{KInt{}}("11"),\dv{KInt{}}("51")),ite{}(V1:Exp{},V2:Stmt{},V3:Stmt{})))),\or{Stmt{}}(info{Stmt{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("8"),\dv{KInt{}}("11"),\dv{KInt{}}("51")),ite{}(V0:Exp{},info{Stmt{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("25"),\dv{KInt{}}("11"),\dv{KInt{}}("44")),it{}(V1:Exp{},V2:Stmt{})),V3:Stmt{})),\bottom{Stmt{}}())))))))))) []
+        \equals{Exp{},Stmt{}}(V0:Exp{},eq{}(inj{Var{},Exp{}}(\dv{Var{}}("c1")),inj{Var{},Exp{}}(\dv{Var{}}("c2")))),
+\or{Stmt{}}(it{}(V0:Exp{},ite{}(V1:Exp{},V2:Stmt{},V3:Stmt{})),\or{Stmt{}}(ite{}(V0:Exp{},it{}(V1:Exp{},V2:Stmt{}),V3:Stmt{}),\bottom{Stmt{}}())))))))))) []
+  symbol lt{}(Exp{}, Exp{}):Exp{} []
+  symbol ite{}(Exp{}, Stmt{}, Stmt{}):Stmt{} []
 endmodule []

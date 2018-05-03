@@ -69,7 +69,7 @@ public class Main {
         Definition baseK = defParser.loadDefinition("INPUT", "INPUT", FileUtil.load(f), new Source(f.toString()), Lists.newArrayList());
 
         String str = OuterToKORE.apply(baseK);
-        FileUtil.save(new File(f.getAbsolutePath() + "ore"), str);
+        FileUtil.save(new File(f.getAbsolutePath() + "ore.info"), str);
         try {
             RunProcess.ProcessOutput po = RunProcess.execute(new HashMap<>(), new File(koreParserCWD), "C:\\work\\stack\\bin\\stack.exe", "exec", "--", "kore-parser", f.getAbsolutePath() + "ore");
             return po.exitCode != 0 ? "[Error]" : "[ok]";

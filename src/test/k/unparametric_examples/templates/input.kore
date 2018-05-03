@@ -28,20 +28,20 @@ module INPUT
 \exists{Stmt{}}(V1:Exp{},
 \exists{Stmt{}}(V5:Exp{},
     \and{Stmt{}}(
-        \equals{Exp{},Stmt{}}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("7"),\dv{KInt{}}("15"),\dv{KInt{}}("14")),inj{Var{},Exp{}}(info{Var{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("7"),\dv{KInt{}}("15"),\dv{KInt{}}("14")),\dv{Var{}}("HashSet"))))),
+        \equals{Exp{},Stmt{}}(V0:Exp{},inj{Var{},Exp{}}(\dv{Var{}}("HashSet"))),
     \and{Stmt{}}(
-        \equals{Exp{},Stmt{}}(V2:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("23"),\dv{KInt{}}("15"),\dv{KInt{}}("29")),inj{Var{},Exp{}}(info{Var{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("23"),\dv{KInt{}}("15"),\dv{KInt{}}("29")),\dv{Var{}}("String"))))),
+        \equals{Exp{},Stmt{}}(V2:Exp{},inj{Var{},Exp{}}(\dv{Var{}}("String"))),
     \and{Stmt{}}(
-        \equals{Exp{},Stmt{}}(V3:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("32"),\dv{KInt{}}("15"),\dv{KInt{}}("35")),inj{Var{},Exp{}}(info{Var{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("32"),\dv{KInt{}}("15"),\dv{KInt{}}("35")),\dv{Var{}}("Foo"))))),
+        \equals{Exp{},Stmt{}}(V3:Exp{},inj{Var{},Exp{}}(\dv{Var{}}("Foo"))),
     \and{Stmt{}}(
-        \equals{Exp{},Stmt{}}(V4:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("23"),\dv{KInt{}}("15"),\dv{KInt{}}("35")),rshift{}(V2:Exp{},V3:Exp{}))),
+        \equals{Exp{},Stmt{}}(V4:Exp{},rshift{}(V2:Exp{},V3:Exp{})),
     \and{Stmt{}}(
-        \equals{Type{},Stmt{}}(V6:Type{},info{Type{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("7"),\dv{KInt{}}("15"),\dv{KInt{}}("14")),\dv{Type{}}("HashSet"))),
+        \equals{Type{},Stmt{}}(V6:Type{},\dv{Type{}}("HashSet")),
     \and{Stmt{}}(
-        \equals{Exp{},Stmt{}}(V1:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("7"),\dv{KInt{}}("15"),\dv{KInt{}}("22")),lt{}(V0:Exp{},V0:Exp{}))),
+        \equals{Exp{},Stmt{}}(V1:Exp{},lt{}(V0:Exp{},V0:Exp{})),
     \and{Stmt{}}(
-        \equals{Exp{},Stmt{}}(V5:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("15"),\dv{KInt{}}("15"),\dv{KInt{}}("29")),lt{}(V0:Exp{},V2:Exp{}))),
-\or{Stmt{}}(info{Stmt{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("7"),\dv{KInt{}}("15"),\dv{KInt{}}("36")),tstmt{}(info{Type{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("7"),\dv{KInt{}}("15"),\dv{KInt{}}("31")),ptype{}(V6:Type{},info{Type{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("15"),\dv{KInt{}}("15"),\dv{KInt{}}("30")),ptype{}(V6:Type{},info{Type{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("23"),\dv{KInt{}}("15"),\dv{KInt{}}("29")),\dv{Type{}}("String")))))),V3:Exp{})),\or{Stmt{}}(info{Stmt{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("7"),\dv{KInt{}}("15"),\dv{KInt{}}("36")),stmt{}(\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("7"),\dv{KInt{}}("15"),\dv{KInt{}}("35")),rshift{}(\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("7"),\dv{KInt{}}("15"),\dv{KInt{}}("29")),lt{}(V1:Exp{},V2:Exp{})),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("7"),\dv{KInt{}}("15"),\dv{KInt{}}("29")),lt{}(V0:Exp{},V5:Exp{})),\bottom{Exp{}}())),V3:Exp{})),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("7"),\dv{KInt{}}("15"),\dv{KInt{}}("35")),lt{}(V0:Exp{},\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("15"),\dv{KInt{}}("15"),\dv{KInt{}}("35")),rshift{}(V5:Exp{},V3:Exp{})),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("15"),\dv{KInt{}}("15"),\dv{KInt{}}("35")),lt{}(V0:Exp{},V4:Exp{})),\bottom{Exp{}}())))),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("15"),\dv{KInt{}}("7"),\dv{KInt{}}("15"),\dv{KInt{}}("35")),lt{}(V1:Exp{},V4:Exp{})),\bottom{Exp{}}()))))),\bottom{Stmt{}}())))))))))))))))) []
+        \equals{Exp{},Stmt{}}(V5:Exp{},lt{}(V0:Exp{},V2:Exp{})),
+\or{Stmt{}}(tstmt{}(ptype{}(V6:Type{},ptype{}(V6:Type{},\dv{Type{}}("String"))),V3:Exp{}),\or{Stmt{}}(stmt{}(\or{Exp{}}(rshift{}(\or{Exp{}}(lt{}(V1:Exp{},V2:Exp{}),\or{Exp{}}(lt{}(V0:Exp{},V5:Exp{}),\bottom{Exp{}}())),V3:Exp{}),\or{Exp{}}(lt{}(V0:Exp{},\or{Exp{}}(rshift{}(V5:Exp{},V3:Exp{}),\or{Exp{}}(lt{}(V0:Exp{},V4:Exp{}),\bottom{Exp{}}()))),\or{Exp{}}(lt{}(V1:Exp{},V4:Exp{}),\bottom{Exp{}}())))),\bottom{Stmt{}}())))))))))))))))) []
   symbol lt{}(Exp{}, Exp{}):Exp{} []
   symbol tstmt{}(Type{}, Exp{}):Stmt{} []
   symbol rshift{}(Exp{}, Exp{}):Exp{} []

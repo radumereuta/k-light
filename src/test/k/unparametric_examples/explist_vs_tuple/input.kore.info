@@ -1,0 +1,53 @@
+[]
+module INJ
+  sort String{} []
+  sort KInt{} []
+  symbol inj{Sin,Sout}(Sin):Sout []
+  symbol info{S}(String{}, S) : S []
+  symbol input{}(KInt{}, KInt{}, KInt{}, KInt{}) : String{} []
+endmodule []
+
+module INPUT
+  import INJ []
+  sort Variable{} []
+  sort Exps{} []
+  sort K{} []
+  sort KBott{} []
+  sort Layout{} []
+  sort Stmt{} []
+  sort Id{} []
+  sort Exp{} []
+
+  symbol decl{}(Exps{}, Stmt{}):Stmt{} []
+  symbol bracket{}(K{}):KBott{} []
+  /* input(K): val X; S => (X,S) */
+  axiom{} 
+\exists{K{}}(V0:KBott{},
+\exists{K{}}(V3:KBott{},
+\exists{K{}}(V2:Exp{},
+\exists{K{}}(V7:Exp{},
+\exists{K{}}(V5:KBott{},
+\exists{K{}}(V1:Id{},
+\exists{K{}}(V6:Id{},
+\exists{K{}}(V4:Stmt{},
+    \and{K{}}(
+        \equals{KBott{},K{}}(V0:KBott{},info{KBott{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("10"),\dv{KInt{}}("29"),\dv{KInt{}}("11")),inj{Variable{},KBott{}}(info{Variable{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("10"),\dv{KInt{}}("29"),\dv{KInt{}}("11")),\dv{Variable{}}("X"))))),
+    \and{K{}}(
+        \equals{KBott{},K{}}(V3:KBott{},info{KBott{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("13"),\dv{KInt{}}("29"),\dv{KInt{}}("15")),inj{Variable{},KBott{}}(info{Variable{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("13"),\dv{KInt{}}("29"),\dv{KInt{}}("14")),\dv{Variable{}}("S"))))),
+    \and{K{}}(
+        \equals{Exp{},K{}}(V2:Exp{},\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("10"),\dv{KInt{}}("29"),\dv{KInt{}}("11")),inj{KBott{},Exp{}}(V0:KBott{})),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("10"),\dv{KInt{}}("29"),\dv{KInt{}}("11")),inj{Id{},Exp{}}(V1:Id{})),\bottom{Exp{}}()))),
+    \and{K{}}(
+        \equals{Exp{},K{}}(V7:Exp{},\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("18"),\dv{KInt{}}("29"),\dv{KInt{}}("23")),inj{KBott{},Exp{}}(V5:KBott{})),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("18"),\dv{KInt{}}("29"),\dv{KInt{}}("23")),inj{Id{},Exp{}}(V6:Id{})),\bottom{Exp{}}()))),
+    \and{K{}}(
+        \equals{KBott{},K{}}(V5:KBott{},\or{KBott{}}(info{KBott{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("18"),\dv{KInt{}}("29"),\dv{KInt{}}("23")),bracket{}(info{K{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("19"),\dv{KInt{}}("29"),\dv{KInt{}}("22")),inj{Exps{},K{}}(info{Exps{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("19"),\dv{KInt{}}("29"),\dv{KInt{}}("22")),expList{}(V2:Exp{},\or{Exps{}}(info{Exps{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("21"),\dv{KInt{}}("29"),\dv{KInt{}}("22")),inj{KBott{},Exps{}}(V3:KBott{})),\or{Exps{}}(info{Exps{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("21"),\dv{KInt{}}("29"),\dv{KInt{}}("22")),inj{Exp{},Exps{}}(\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("21"),\dv{KInt{}}("29"),\dv{KInt{}}("22")),inj{KBott{},Exp{}}(V3:KBott{})),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("21"),\dv{KInt{}}("29"),\dv{KInt{}}("22")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("21"),\dv{KInt{}}("29"),\dv{KInt{}}("22")),inj{KBott{},Id{}}(V3:KBott{})))),\bottom{Exp{}}())))),\bottom{Exps{}}())))))))),\or{KBott{}}(info{KBott{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("18"),\dv{KInt{}}("29"),\dv{KInt{}}("23")),tuple{}(V1:Id{},V4:Stmt{})),\bottom{KBott{}}()))),
+    \and{K{}}(
+        \equals{Id{},K{}}(V1:Id{},info{Id{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("10"),\dv{KInt{}}("29"),\dv{KInt{}}("11")),inj{KBott{},Id{}}(V0:KBott{}))),
+    \and{K{}}(
+        \equals{Id{},K{}}(V6:Id{},info{Id{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("18"),\dv{KInt{}}("29"),\dv{KInt{}}("23")),inj{KBott{},Id{}}(V5:KBott{}))),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V4:Stmt{},info{Stmt{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("13"),\dv{KInt{}}("29"),\dv{KInt{}}("15")),inj{KBott{},Stmt{}}(V3:KBott{}))),
+info{K{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("6"),\dv{KInt{}}("29"),\dv{KInt{}}("23")),rew{}(info{K{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("6"),\dv{KInt{}}("29"),\dv{KInt{}}("15")),inj{Stmt{},K{}}(info{Stmt{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("6"),\dv{KInt{}}("29"),\dv{KInt{}}("15")),decl{}(\or{Exps{}}(info{Exps{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("10"),\dv{KInt{}}("29"),\dv{KInt{}}("11")),inj{KBott{},Exps{}}(V0:KBott{})),\or{Exps{}}(info{Exps{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("10"),\dv{KInt{}}("29"),\dv{KInt{}}("11")),inj{Exp{},Exps{}}(V2:Exp{})),\bottom{Exps{}}())),V4:Stmt{})))),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("18"),\dv{KInt{}}("29"),\dv{KInt{}}("23")),inj{Exp{},K{}}(V7:Exp{})),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("18"),\dv{KInt{}}("29"),\dv{KInt{}}("23")),inj{Exps{},K{}}(\or{Exps{}}(info{Exps{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("18"),\dv{KInt{}}("29"),\dv{KInt{}}("23")),inj{KBott{},Exps{}}(V5:KBott{})),\or{Exps{}}(info{Exps{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("18"),\dv{KInt{}}("29"),\dv{KInt{}}("23")),inj{Exp{},Exps{}}(V7:Exp{})),\bottom{Exps{}}())))),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("18"),\dv{KInt{}}("29"),\dv{KInt{}}("23")),inj{Id{},K{}}(V6:Id{})),\or{K{}}(info{K{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("18"),\dv{KInt{}}("29"),\dv{KInt{}}("23")),inj{Stmt{},K{}}(info{Stmt{}}(input{}(\dv{KInt{}}("29"),\dv{KInt{}}("18"),\dv{KInt{}}("29"),\dv{KInt{}}("23")),inj{KBott{},Stmt{}}(V5:KBott{})))),\bottom{K{}}())))))))))))))))))))))) []
+  symbol tuple{}(Id{}, Stmt{}):KBott{} []
+  symbol rew{}(K{}, K{}):K{} []
+  symbol expList{}(Exp{}, Exps{}):Exps{} []
+endmodule []
