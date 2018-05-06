@@ -14,26 +14,30 @@ module COMMON
   sort Exp{} []
 
   symbol app{}(Exp{}, Exp{}):Exp{} []
+  symbol tkLayout{}():Layout{} []
   symbol callcc{}(Exp{}):Exp{} []
 endmodule []
 
 module INPUT
   import INJ []
   import COMMON []
-
+  symbol tkId{}():Id{} []
   /* input(Exp): callcc a */
   axiom{} 
-info{Exp{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("6"),\dv{KInt{}}("16"),\dv{KInt{}}("14")),callcc{}(info{Exp{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("13"),\dv{KInt{}}("16"),\dv{KInt{}}("14")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("13"),\dv{KInt{}}("16"),\dv{KInt{}}("14")),\dv{Id{}}("a")))))) []
+\exists{Exp{}}(V0:Exp{},
+    \and{Exp{}}(
+        \equals{Exp{},Exp{}}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("16,13,16,14")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("16,13,16,14")),tkId{}())))),
+\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("16,6,16,14")),app{}(info{Exp{}}(input{}(\dv{KInt{}}("16,6,16,13")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("16,6,16,12")),tkId{}()))),V0:Exp{})),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("16,6,16,14")),callcc{}(V0:Exp{})),\bottom{Exp{}}())))) []
 endmodule []
 
 module INPUT2
   import INJ []
   import COMMON []
-
+  symbol tkId2{}():Id{} []
   /* input(Exp): callcc a */
   axiom{} 
 \exists{Exp{}}(V0:Exp{},
     \and{Exp{}}(
-        \equals{Exp{},Exp{}}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("13"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("13"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),\dv{Id{}}("a"))))),
-\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),app{}(info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("13")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("12")),\dv{Id{}}("callcc")))),V0:Exp{})),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("22"),\dv{KInt{}}("6"),\dv{KInt{}}("22"),\dv{KInt{}}("14")),callcc{}(V0:Exp{})),\bottom{Exp{}}())))) []
+        \equals{Exp{},Exp{}}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("22,13,22,14")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("22,13,22,14")),tkId2{}())))),
+\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("22,6,22,14")),app{}(info{Exp{}}(input{}(\dv{KInt{}}("22,6,22,13")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("22,6,22,12")),tkId2{}()))),V0:Exp{})),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("22,6,22,14")),callcc{}(V0:Exp{})),\bottom{Exp{}}())))) []
 endmodule []

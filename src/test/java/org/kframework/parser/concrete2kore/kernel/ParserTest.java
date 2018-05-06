@@ -6,17 +6,12 @@ import dk.brics.automaton.RegExp;
 import dk.brics.automaton.RunAutomaton;
 import org.junit.Assert;
 import org.junit.Test;
-import org.kframework.attributes.Att;
 import org.kframework.definition.Production;
 import org.kframework.definition.ProductionItem;
 import org.kframework.frontend.Sort;
-
 import org.kframework.parser.concrete2kore.disambiguation.TreeCleanerVisitor;
 import org.kframework.parser.concrete2kore.kernel.Grammar.NonTerminal;
-import org.kframework.parser.concrete2kore.kernel.Grammar.NonTerminalState;
-import org.kframework.parser.concrete2kore.kernel.Grammar.PrimitiveState;
-import org.kframework.parser.concrete2kore.kernel.Grammar.RegExState;
-import org.kframework.parser.concrete2kore.kernel.Grammar.RuleState;
+import org.kframework.parser.concrete2kore.kernel.Grammar.*;
 import org.kframework.parser.concrete2kore.kernel.Rule.WrapLabelRule;
 import org.kframework.treeNodes.*;
 import org.pcollections.ConsPStack;
@@ -27,8 +22,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.kframework.utils.Collections.*;
 import static org.kframework.definition.Constructors.*;
+import static org.kframework.definition.Constructors.NonTerminal;
+import static org.kframework.utils.Collections.Seq;
+import static org.kframework.utils.Collections.immutable;
 
 public class ParserTest {
     /* public static void main(String[] args) {
@@ -152,7 +149,9 @@ public class ParserTest {
         NonTerminal nt1 = new NonTerminal("StartNT");
 
         RegExState resx = new RegExState("RegExStidx", nt1, regex("x"));
+        RuleState delx = new RuleState("X-Delete", nt1, new Rule.DeleteRule(1));
         RegExState resy = new RegExState("RegExStidy", nt1, regex("y"));
+        RuleState dely = new RuleState("Y-Delete", nt1, new Rule.DeleteRule(1));
         RuleState rs1 = new RuleState("RuleStateId1", nt1, new WrapLabelRule(label("xAy")));
         RuleState rs3 = new RuleState("RuleStateId2", nt1, new WrapLabelRule(label("epsilon")));
 
@@ -161,9 +160,11 @@ public class ParserTest {
         nt1.entryState.next.add(resx);
         nt1.entryState.next.add(rs3);
         rs3.next.add(nt1.exitState);
-        resx.next.add(nts);
+        resx.next.add(delx);
+        delx.next.add(nts);
         nts.next.add(resy);
-        resy.next.add(rs1);
+        resy.next.add(dely);
+        dely.next.add(rs1);
         rs1.next.add(nt1.exitState);
 
         Grammar grammar = new Grammar();
@@ -196,6 +197,7 @@ public class ParserTest {
         NonTerminal nt1 = new NonTerminal("StartNT");
 
         RegExState resy = new RegExState("RegExStidy", nt1, regex("y"));
+        RuleState dely = new RuleState("Y-Delete", nt1, new Rule.DeleteRule(1));
 
         NonTerminalState nts = new NonTerminalState("NT", nt1, nt1);
         RuleState rs1 = new RuleState("RuleStateId1", nt1, new WrapLabelRule(label("Ay")));
@@ -205,7 +207,8 @@ public class ParserTest {
         nt1.entryState.next.add(rs3);
         rs3.next.add(nt1.exitState);
         nts.next.add(resy);
-        resy.next.add(rs1);
+        resy.next.add(dely);
+        dely.next.add(rs1);
         rs1.next.add(nt1.exitState);
         Grammar grammar = new Grammar();
         grammar.add(nt1);
@@ -237,6 +240,7 @@ public class ParserTest {
         NonTerminal nt1 = new NonTerminal("StartNT");
 
         RegExState resx = new RegExState("RegExStidx", nt1, regex("x"));
+        RuleState delx = new RuleState("X-Delete", nt1, new Rule.DeleteRule(1));
 
         NonTerminalState nts = new NonTerminalState("NT", nt1, nt1);
         RuleState rs1 = new RuleState("RuleStateId1", nt1, new WrapLabelRule(label("xA")));
@@ -245,7 +249,8 @@ public class ParserTest {
         nt1.entryState.next.add(resx);
         nt1.entryState.next.add(rs3);
         rs3.next.add(nt1.exitState);
-        resx.next.add(nts);
+        resx.next.add(delx);
+        delx.next.add(nts);
         nts.next.add(rs1);
         rs1.next.add(nt1.exitState);
 
@@ -279,6 +284,7 @@ public class ParserTest {
         NonTerminal nt1 = new NonTerminal("StartNT");
 
         RegExState resx = new RegExState("RegExStidx", nt1,regex("x"));
+        RuleState delx = new RuleState("X-Delete", nt1, new Rule.DeleteRule(1));
 
         NonTerminalState nts1 = new NonTerminalState("NT1", nt1, nt1);
         NonTerminalState nts2 = new NonTerminalState("NT2", nt1, nt1);
@@ -290,7 +296,8 @@ public class ParserTest {
         nt1.entryState.next.add(resx);
         nt1.entryState.next.add(nts1);
 
-        resx.next.add(rs1);
+        resx.next.add(delx);
+        delx.next.add(rs1);
         rs1.next.add(nt1.exitState);
 
         nts1.next.add(nts2);
@@ -342,10 +349,12 @@ public class ParserTest {
         // start symb is An
         NonTerminal baseCase = new NonTerminal("BaseCase");
         RegExState resx = new RegExState("X", baseCase, regex("x"));
+        RuleState delx = new RuleState("X-Delete", baseCase, new Rule.DeleteRule(1));
         RuleState rs1 = new RuleState("RuleStateId1", baseCase, new WrapLabelRule(label("x")));
 
         baseCase.entryState.next.add(resx);
-        resx.next.add(rs1);
+        resx.next.add(delx);
+        delx.next.add(rs1);
         rs1.next.add(baseCase.exitState);
 
         Term expected = amb(klist(kapp("x")));
@@ -385,9 +394,11 @@ public class ParserTest {
         NonTerminal baseCase = new NonTerminal("BaseCase");
         RegExState resx = new RegExState("X", baseCase, regex(""));
         RuleState rs1 = new RuleState("RuleStateId1", baseCase, new WrapLabelRule(label("x")));
+        RuleState delx = new RuleState("X-Delete", baseCase, new Rule.DeleteRule(1));
 
         baseCase.entryState.next.add(resx);
-        resx.next.add(rs1);
+        resx.next.add(delx);
+        delx.next.add(rs1);
         rs1.next.add(baseCase.exitState);
 
         Term expected = amb(klist(kapp("x")));
@@ -439,10 +450,13 @@ public class ParserTest {
 
         { // trm
             RegExState lparen = new RegExState("LParen", trm, regex("\\("));
+            RuleState delLparen = new RuleState("LParen-Delete", trm, new Rule.DeleteRule(1));
             RegExState rparen = new RegExState("RParen", trm, regex("\\)"));
+            RuleState delRparen = new RuleState("RParen-Delete", trm, new Rule.DeleteRule(1));
             RuleState rs1 = new RuleState("RuleStateId1", trm, new WrapLabelRule(label("bracket")));
 
             RegExState star = new RegExState("Star", trm, regex("\\*"));
+            RuleState delStar = new RuleState("Star-Delete", trm, new Rule.DeleteRule(1));
             NonTerminalState expState = new NonTerminalState("Trm->Exp", trm, exp);
             NonTerminalState trmState = new NonTerminalState("Trm->Trm", trm, trm);
             NonTerminalState lit1State = new NonTerminalState("Trm->Lit1", trm, lit);
@@ -451,14 +465,17 @@ public class ParserTest {
             NonTerminalState lit2State = new NonTerminalState("Trm->Lit2", trm, lit);
 
             trm.entryState.next.add(lparen);
-            lparen.next.add(expState);
+            lparen.next.add(delLparen);
+            delLparen.next.add(expState);
             expState.next.add(rparen);
-            rparen.next.add(rs1);
+            rparen.next.add(delRparen);
+            delRparen.next.add(rs1);
             rs1.next.add(trm.exitState);
 
             trm.entryState.next.add(trmState);
             trmState.next.add(star);
-            star.next.add(lit1State);
+            star.next.add(delStar);
+            delStar.next.add(lit1State);
             lit1State.next.add(rs2);
             rs2.next.add(trm.exitState);
 
@@ -468,6 +485,7 @@ public class ParserTest {
 
         { // exp
             RegExState plus = new RegExState("Plus", exp, regex("\\+"));
+            RuleState delPlus = new RuleState("Plus-Delete", exp, new Rule.DeleteRule(1));
             NonTerminalState expState = new NonTerminalState("Exp->Exp", exp, exp);
             NonTerminalState trm1State = new NonTerminalState("Exp->Trm1", exp, trm);
             RuleState rs1 = new RuleState("RuleStateId3", exp, new WrapLabelRule(label("plus")));
@@ -475,7 +493,8 @@ public class ParserTest {
 
             exp.entryState.next.add(expState);
             expState.next.add(plus);
-            plus.next.add(trm1State);
+            plus.next.add(delPlus);
+            delPlus.next.add(trm1State);
             trm1State.next.add(rs1);
             rs1.next.add(exp.exitState);
 
@@ -513,9 +532,9 @@ public class ParserTest {
 
         // Exp
         /**
-         * (|--+---[Int]----<wrap>----------+---|)
-         *     |                            |
-         *     +---("-")-----[Exp]---<'-_>--+
+         * (|-------[Exp]--------------+----<'_,_>-------|)
+         *     |                                  |
+         *     +---("-")---<del>---[Exp]---<'-_>--+
          */
         NonTerminal expNt = new NonTerminal("Exp");
 
@@ -527,28 +546,32 @@ public class ParserTest {
         rs2.next.add(expNt.exitState);
 
         PrimitiveState minus = new RegExState("Minus-State", expNt, regex("\\-"));
+        RuleState deleteToken = new RuleState("Minus-Delete", expNt, new Rule.DeleteRule(1));
         NonTerminalState expExp = new NonTerminalState("Exp-nts(Exp)", expNt, expNt);
         Production p1 = Production(EXP_SORT, Seq(Terminal("-"), NonTerminal(EXP_SORT)), Att().add("klabel", "-_"));
         RuleState rs1 = new RuleState("Exps-wrapMinus", expNt, new WrapLabelRule(p1));
         expNt.entryState.next.add(minus);
-        minus.next.add(expExp);
+        minus.next.add(deleteToken);
+        deleteToken.next.add(expExp);
         expExp.next.add(rs1);
         rs1.next.add(expNt.exitState);
 
         // Exps
         /**
-         * (|-------[Exp]---------+----<'_,_>-------|)
-         *            ^           |
-         *            +----(",")--+
+         * (|-------[Exp]--------------+----<'_,_>-------|)
+         *            ^                |
+         *            +--<del>--(",")--+
          */
         NonTerminal expsNt = new NonTerminal("Exps");
         NonTerminalState expExps = new NonTerminalState("Exp-nts(Exps)", expsNt, expNt);
         Production p2 = Production(Sort("Exps"), Seq(NonTerminal(EXP_SORT)), Att().add("klabel", "_,_"));
         PrimitiveState separator = new RegExState("Sep-State", expsNt, regex("\\,"));
+        RuleState deleteToken2 = new RuleState("Separator-Delete", expsNt, new Rule.DeleteRule(1));
         RuleState labelList = new RuleState("RuleStateExps", expsNt, new WrapLabelRule(p2));
         expsNt.entryState.next.add(expExps);
         expExps.next.add(expExps); // circularity
-        separator.next.add(expExps);
+        separator.next.add(deleteToken2);
+        deleteToken2.next.add(expExps);
         expExps.next.add(labelList);
         labelList.next.add(expsNt.exitState);
 

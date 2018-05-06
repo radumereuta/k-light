@@ -12,40 +12,42 @@ module INPUT
   sort Var{} []
   sort Exp{} []
   sort Int{} []
-  /* input(Exp): 1+2+3 */
-  axiom{} 
-\exists{Exp{}}(V2:Exp{},
-\exists{Exp{}}(V1:Exp{},
-\exists{Exp{}}(V0:Exp{},
-    \and{Exp{}}(
-        \equals{Exp{},Exp{}}(V2:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("12"),\dv{KInt{}}("12"),\dv{KInt{}}("12"),\dv{KInt{}}("13")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("12"),\dv{KInt{}}("12"),\dv{KInt{}}("12"),\dv{KInt{}}("13")),\dv{Int{}}("3"))))),
-    \and{Exp{}}(
-        \equals{Exp{},Exp{}}(V1:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("12"),\dv{KInt{}}("10"),\dv{KInt{}}("12"),\dv{KInt{}}("11")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("12"),\dv{KInt{}}("10"),\dv{KInt{}}("12"),\dv{KInt{}}("11")),\dv{Int{}}("2"))))),
-    \and{Exp{}}(
-        \equals{Exp{},Exp{}}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("12"),\dv{KInt{}}("8"),\dv{KInt{}}("12"),\dv{KInt{}}("9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("12"),\dv{KInt{}}("8"),\dv{KInt{}}("12"),\dv{KInt{}}("9")),\dv{Int{}}("1"))))),
-\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("12"),\dv{KInt{}}("8"),\dv{KInt{}}("12"),\dv{KInt{}}("13")),plus{}(info{Exp{}}(input{}(\dv{KInt{}}("12"),\dv{KInt{}}("8"),\dv{KInt{}}("12"),\dv{KInt{}}("11")),plus{}(V0:Exp{},V1:Exp{})),V2:Exp{})),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("12"),\dv{KInt{}}("8"),\dv{KInt{}}("12"),\dv{KInt{}}("13")),plus{}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("12"),\dv{KInt{}}("10"),\dv{KInt{}}("12"),\dv{KInt{}}("13")),plus{}(V1:Exp{},V2:Exp{})))),\bottom{Exp{}}())))))))) []
 
-  /* input(Exp): 1+2 */
-  axiom{} 
-info{Exp{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("8"),\dv{KInt{}}("11"),\dv{KInt{}}("11")),plus{}(info{Exp{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("8"),\dv{KInt{}}("11"),\dv{KInt{}}("9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("8"),\dv{KInt{}}("11"),\dv{KInt{}}("9")),\dv{Int{}}("1")))),info{Exp{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("10"),\dv{KInt{}}("11"),\dv{KInt{}}("11")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("10"),\dv{KInt{}}("11"),\dv{KInt{}}("11")),\dv{Int{}}("2")))))) []
-  /* input(Int): 1 */
-  axiom{} 
-info{Int{}}(input{}(\dv{KInt{}}("9"),\dv{KInt{}}("8"),\dv{KInt{}}("9"),\dv{KInt{}}("9")),\dv{Int{}}("1")) []
-  /* input(Exp): 1 */
-  axiom{} 
-info{Exp{}}(input{}(\dv{KInt{}}("10"),\dv{KInt{}}("8"),\dv{KInt{}}("10"),\dv{KInt{}}("9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("10"),\dv{KInt{}}("8"),\dv{KInt{}}("10"),\dv{KInt{}}("9")),\dv{Int{}}("1")))) []
-  symbol plus{}(Exp{}, Exp{}):Exp{} []
-  symbol times{}(Exp{}, Exp{}):Exp{} []
+  symbol tkVar{}():Var{} []
   /* input(Exp): 1+2*3 */
   axiom{} 
 \exists{Exp{}}(V2:Exp{},
 \exists{Exp{}}(V1:Exp{},
 \exists{Exp{}}(V0:Exp{},
     \and{Exp{}}(
-        \equals{Exp{},Exp{}}(V2:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("13"),\dv{KInt{}}("12"),\dv{KInt{}}("13"),\dv{KInt{}}("13")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("13"),\dv{KInt{}}("12"),\dv{KInt{}}("13"),\dv{KInt{}}("13")),\dv{Int{}}("3"))))),
+        \equals{Exp{},Exp{}}(V2:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("13,12,13,13")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("13,12,13,13")),tkInt{}())))),
     \and{Exp{}}(
-        \equals{Exp{},Exp{}}(V1:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("13"),\dv{KInt{}}("10"),\dv{KInt{}}("13"),\dv{KInt{}}("11")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("13"),\dv{KInt{}}("10"),\dv{KInt{}}("13"),\dv{KInt{}}("11")),\dv{Int{}}("2"))))),
+        \equals{Exp{},Exp{}}(V1:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("13,10,13,11")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("13,10,13,11")),tkInt{}())))),
     \and{Exp{}}(
-        \equals{Exp{},Exp{}}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("13"),\dv{KInt{}}("8"),\dv{KInt{}}("13"),\dv{KInt{}}("9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("13"),\dv{KInt{}}("8"),\dv{KInt{}}("13"),\dv{KInt{}}("9")),\dv{Int{}}("1"))))),
-\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("13"),\dv{KInt{}}("8"),\dv{KInt{}}("13"),\dv{KInt{}}("13")),plus{}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("13"),\dv{KInt{}}("10"),\dv{KInt{}}("13"),\dv{KInt{}}("13")),times{}(V1:Exp{},V2:Exp{})))),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("13"),\dv{KInt{}}("8"),\dv{KInt{}}("13"),\dv{KInt{}}("13")),times{}(info{Exp{}}(input{}(\dv{KInt{}}("13"),\dv{KInt{}}("8"),\dv{KInt{}}("13"),\dv{KInt{}}("11")),plus{}(V0:Exp{},V1:Exp{})),V2:Exp{})),\bottom{Exp{}}())))))))) []
+        \equals{Exp{},Exp{}}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("13,8,13,9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("13,8,13,9")),tkInt{}())))),
+\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("13,8,13,13")),plus{}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("13,10,13,13")),times{}(V1:Exp{},V2:Exp{})))),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("13,8,13,13")),times{}(info{Exp{}}(input{}(\dv{KInt{}}("13,8,13,11")),plus{}(V0:Exp{},V1:Exp{})),V2:Exp{})),\bottom{Exp{}}())))))))) []
+  /* input(Exp): 1+2 */
+  axiom{} 
+info{Exp{}}(input{}(\dv{KInt{}}("11,8,11,11")),plus{}(info{Exp{}}(input{}(\dv{KInt{}}("11,8,11,9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("11,8,11,9")),tkInt{}()))),info{Exp{}}(input{}(\dv{KInt{}}("11,10,11,11")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("11,10,11,11")),tkInt{}()))))) []
+  symbol tkInt{}():Int{} []
+  /* input(Exp): 1+2+3 */
+  axiom{} 
+\exists{Exp{}}(V2:Exp{},
+\exists{Exp{}}(V1:Exp{},
+\exists{Exp{}}(V0:Exp{},
+    \and{Exp{}}(
+        \equals{Exp{},Exp{}}(V2:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("12,12,12,13")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("12,12,12,13")),tkInt{}())))),
+    \and{Exp{}}(
+        \equals{Exp{},Exp{}}(V1:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("12,10,12,11")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("12,10,12,11")),tkInt{}())))),
+    \and{Exp{}}(
+        \equals{Exp{},Exp{}}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("12,8,12,9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("12,8,12,9")),tkInt{}())))),
+\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("12,8,12,13")),plus{}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("12,10,12,13")),plus{}(V1:Exp{},V2:Exp{})))),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("12,8,12,13")),plus{}(info{Exp{}}(input{}(\dv{KInt{}}("12,8,12,11")),plus{}(V0:Exp{},V1:Exp{})),V2:Exp{})),\bottom{Exp{}}())))))))) []
+  /* input(Exp): 1 */
+  axiom{} 
+info{Exp{}}(input{}(\dv{KInt{}}("10,8,10,9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("10,8,10,9")),tkInt{}()))) []
+  symbol plus{}(Exp{}, Exp{}):Exp{} []
+  /* input(Int): 1 */
+  axiom{} 
+info{Int{}}(input{}(\dv{KInt{}}("9,8,9,9")),tkInt{}()) []
+  symbol times{}(Exp{}, Exp{}):Exp{} []
 endmodule []

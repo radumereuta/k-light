@@ -12,27 +12,28 @@ module INPUT
   sort Exp{} []
   sort Int{} []
 
-  /* input(Exp): +1 */
+  /* input(Exp): 1 */
   axiom{} 
-info{Exp{}}(input{}(\dv{KInt{}}("8"),\dv{KInt{}}("7"),\dv{KInt{}}("8"),\dv{KInt{}}("9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("8"),\dv{KInt{}}("7"),\dv{KInt{}}("8"),\dv{KInt{}}("9")),\dv{Int{}}("+1")))) []
-  /* input(Exp): 1++2 */
-  axiom{} 
-info{Exp{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("7"),\dv{KInt{}}("11"),\dv{KInt{}}("11")),plus{}(info{Exp{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("7"),\dv{KInt{}}("11"),\dv{KInt{}}("8")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("7"),\dv{KInt{}}("11"),\dv{KInt{}}("8")),\dv{Int{}}("1")))),info{Exp{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("9"),\dv{KInt{}}("11"),\dv{KInt{}}("11")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("11"),\dv{KInt{}}("9"),\dv{KInt{}}("11"),\dv{KInt{}}("11")),\dv{Int{}}("+2")))))) []
-  /* input(Exp): -1 */
-  axiom{} 
-info{Exp{}}(input{}(\dv{KInt{}}("9"),\dv{KInt{}}("7"),\dv{KInt{}}("9"),\dv{KInt{}}("9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("9"),\dv{KInt{}}("7"),\dv{KInt{}}("9"),\dv{KInt{}}("9")),\dv{Int{}}("-1")))) []
-  symbol app{}(Exp{}, Exp{}):Exp{} []
-  symbol plus{}(Exp{}, Exp{}):Exp{} []
+info{Exp{}}(input{}(\dv{KInt{}}("7,7,7,8")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("7,7,7,8")),tkInt{}()))) []
   /* input(Int): 1 */
   axiom{} 
-info{Int{}}(input{}(\dv{KInt{}}("6"),\dv{KInt{}}("7"),\dv{KInt{}}("6"),\dv{KInt{}}("8")),\dv{Int{}}("1")) []
+info{Int{}}(input{}(\dv{KInt{}}("6,7,6,8")),tkInt{}()) []
   /* input(Exp): 1+2 */
   axiom{} 
 \exists{Exp{}}(V0:Exp{},
     \and{Exp{}}(
-        \equals{Exp{},Exp{}}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("10"),\dv{KInt{}}("7"),\dv{KInt{}}("10"),\dv{KInt{}}("8")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("10"),\dv{KInt{}}("7"),\dv{KInt{}}("10"),\dv{KInt{}}("8")),\dv{Int{}}("1"))))),
-\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("10"),\dv{KInt{}}("7"),\dv{KInt{}}("10"),\dv{KInt{}}("10")),plus{}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("10"),\dv{KInt{}}("9"),\dv{KInt{}}("10"),\dv{KInt{}}("10")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("10"),\dv{KInt{}}("9"),\dv{KInt{}}("10"),\dv{KInt{}}("10")),\dv{Int{}}("2")))))),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("10"),\dv{KInt{}}("7"),\dv{KInt{}}("10"),\dv{KInt{}}("10")),app{}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("10"),\dv{KInt{}}("8"),\dv{KInt{}}("10"),\dv{KInt{}}("10")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("10"),\dv{KInt{}}("8"),\dv{KInt{}}("10"),\dv{KInt{}}("10")),\dv{Int{}}("+2")))))),\bottom{Exp{}}())))) []
-  /* input(Exp): 1 */
+        \equals{Exp{},Exp{}}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("10,7,10,8")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("10,7,10,8")),tkInt{}())))),
+\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("10,7,10,10")),plus{}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("10,9,10,10")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("10,9,10,10")),tkInt{}()))))),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("10,7,10,10")),app{}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("10,8,10,10")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("10,8,10,10")),tkInt{}()))))),\bottom{Exp{}}())))) []
+  /* input(Exp): 1++2 */
   axiom{} 
-info{Exp{}}(input{}(\dv{KInt{}}("7"),\dv{KInt{}}("7"),\dv{KInt{}}("7"),\dv{KInt{}}("8")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("7"),\dv{KInt{}}("7"),\dv{KInt{}}("7"),\dv{KInt{}}("8")),\dv{Int{}}("1")))) []
+info{Exp{}}(input{}(\dv{KInt{}}("11,7,11,11")),plus{}(info{Exp{}}(input{}(\dv{KInt{}}("11,7,11,8")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("11,7,11,8")),tkInt{}()))),info{Exp{}}(input{}(\dv{KInt{}}("11,9,11,11")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("11,9,11,11")),tkInt{}()))))) []
+  /* input(Exp): +1 */
+  axiom{} 
+info{Exp{}}(input{}(\dv{KInt{}}("8,7,8,9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("8,7,8,9")),tkInt{}()))) []
+  /* input(Exp): -1 */
+  axiom{} 
+info{Exp{}}(input{}(\dv{KInt{}}("9,7,9,9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("9,7,9,9")),tkInt{}()))) []
+  symbol tkInt{}():Int{} []
+  symbol app{}(Exp{}, Exp{}):Exp{} []
+  symbol plus{}(Exp{}, Exp{}):Exp{} []
 endmodule []

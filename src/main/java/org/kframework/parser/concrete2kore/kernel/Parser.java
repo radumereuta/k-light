@@ -7,6 +7,7 @@ import org.kframework.attributes.Location;
 import org.kframework.attributes.Source;
 import org.kframework.definition.Production;
 import org.kframework.treeNodes.Ambiguity;
+import org.kframework.treeNodes.Constant;
 import org.kframework.treeNodes.KList;
 import org.kframework.treeNodes.Term;
 import org.kframework.parser.concrete2kore.kernel.Grammar.*;
@@ -16,8 +17,10 @@ import org.kframework.utils.errorsystem.KException.ExceptionType;
 import org.kframework.utils.errorsystem.KException.KExceptionGroup;
 import org.kframework.utils.errorsystem.ParseFailedException;
 import org.pcollections.ConsPStack;
+import scala.Option;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -485,6 +488,31 @@ public class Parser {
         }
 
         /**
+         * Add to 'this' all mappings formed by adding the token
+         * 'string' of sort 'sort' to the end of the mapping in that.
+         * @param prd      The production of the token. 'null' if intermediate token
+         * @param that      The function from which
+         * @param stateReturn Grab the state return to construct proper location info
+         * @param s           Grab the ParseState to proper construct the location info
+         * @return 'true' iff the mappings in this function changed.
+         */
+        boolean addToken(Function that, StateReturn stateReturn, ParseState s) {
+            Location loc = new Location(s.lines[stateReturn.key.stateCall.key.stateBegin],
+                    s.columns[stateReturn.key.stateCall.key.stateBegin],
+                    s.lines[stateReturn.key.stateEnd],
+                    s.columns[stateReturn.key.stateEnd]);
+            final Constant token = Constant.apply(s.input.subSequence(stateReturn.key.stateCall.key.stateBegin,
+                    stateReturn.key.stateEnd).toString(), null, Optional.of(loc), Optional.empty());
+            return addAux(that, set -> {
+                Set<Term> result = new HashSet<>();
+                for (Term klist : set) {
+                    result.add(((KList) klist).add(token));
+                }
+                return result;
+            });
+        }
+
+        /**
          * Add to this function the mappings resulting from composing mappings in call with the mappings in exit.
          *
          * This is used when the child (a {@link NonTerminal}) of a {@link NonTerminalState} finishes parsing.
@@ -655,7 +683,8 @@ public class Parser {
         } else if (stateReturn.key.stateCall.key.state instanceof ExitState) {
             return stateReturn.function.add(stateReturn.key.stateCall.function);
         } else if (stateReturn.key.stateCall.key.state instanceof PrimitiveState) {
-            return stateReturn.function.add(stateReturn.key.stateCall.function);
+            return stateReturn.function.addToken(
+                    stateReturn.key.stateCall.function, stateReturn, s);
         } else if (stateReturn.key.stateCall.key.state instanceof RuleState) {
             int startPosition = stateReturn.key.stateCall.key.ntCall.key.ntBegin;
             int endPosition = stateReturn.key.stateEnd;

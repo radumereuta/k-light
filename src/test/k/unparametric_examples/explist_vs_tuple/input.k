@@ -5,7 +5,7 @@
  */
 module INPUT
 
-syntax Layout ::= r"([\\ \n\r\t])*" [token]
+syntax Layout ::= r"([\\ \n\r\t])*" [token, klabel(tkLayout)]
 syntax Id
 syntax Exp ::= Id                    [klabel(inj)]
 syntax Exps  ::= Exp "," Exps        [klabel(expList)]
@@ -23,7 +23,7 @@ syntax Id ::= KBott [klabel(inj)]
 syntax Exp ::= KBott [klabel(inj)]
 syntax Exps ::= KBott [klabel(inj)]
 syntax Stmt ::= KBott [klabel(inj)]
-syntax Variable ::= r"[A-Z][A-Za-z0-9]*" [token]
+syntax Variable ::= r"[A-Z][A-Za-z0-9]*" [token, klabel(tkVariable)]
 syntax KBott ::= Variable [klabel(inj)]
 
 rule val X; S => (X,S) [start(K)]

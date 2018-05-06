@@ -34,7 +34,7 @@ private class TreeNodesToKOREVisitor {
 
   // find and mark all the nodes which appear multiple times in the AST
   def visit(t:Term):Unit = {
-    if (visited.contains(t))
+    if (t.isInstanceOf[TermCons] && visited.contains(t))
       shared = shared + (t -> Option.empty)
     else {
       visited = visited + t
@@ -66,10 +66,10 @@ private class TreeNodesToKOREVisitor {
   }
   // cases for the types of nodes - actual printing of the node
   private def doMatch(t:Term): String = t match {
-    case c@Constant(s, p) => printInfo(c, "\\dv{" + p.sort.localName + "{}}(" + StringUtil.enquoteCString(s) + ")")
+    //case c@Constant(s, p) => printInfo(c, "\\dv{" + p.sort.localName + "{}}(" + StringUtil.enquoteCString(s) + ")")
     case tc@TermCons(items, p) => printInfo(tc, p.klabel.get match {
       case "inj" => "inj{" + p.items.iterator.next().asInstanceOf[NonTerminal].sort.localName + "{}," + p.sort.localName + "{}}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
-      case _ => p.klabel.get + "{}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
+      case _ => p.klabel.get + "{}(" + (new util.ArrayList(items).asScala.reverse.filter(p1 => !p1.isInstanceOf[Constant]) map apply).mkString(",") + ")"
     })
     case Ambiguity(items) =>
       val sort: String = items.iterator.next().asInstanceOf[ProductionReference].production.sort.localName
@@ -78,11 +78,13 @@ private class TreeNodesToKOREVisitor {
   // meta information wrap
   private def printInfo(t: ProductionReference, printedTerm:String): String = {
     // return printedTerm // uncomment to not print info - makes it easier to read terms
+    // TODO: print all the children here
+    // TODO: remove production reference from Constant if we are to continue
     "info{" + t.production.sort.localName + "{}}(" +
-      "input{}(\\dv{KInt{}}(\"" + t.location.get().startLine +
-      "\"),\\dv{KInt{}}(\"" + t.location.get().startColumn +
-      "\"),\\dv{KInt{}}(\"" + t.location.get().endLine +
-      "\"),\\dv{KInt{}}(\"" + t.location.get().endColumn + "\"))," +
+      "input{}(\\dv{KInt{}}(\"" + t.location.get().startLine + "," +
+      t.location.get().startColumn + "," +
+      t.location.get().endLine + "," +
+      t.location.get().endColumn + "\"))," +
       printedTerm +
       ")"
   }

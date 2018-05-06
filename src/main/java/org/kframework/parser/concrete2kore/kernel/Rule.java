@@ -87,7 +87,7 @@ public abstract class Rule implements Serializable {
             Term term;
             Location loc = new Location(metaData.start.line, metaData.start.column, metaData.end.line, metaData.end.column);
             Source source = metaData.source;
-            if (label.att().contains("token")) {
+            if (false && label.att().contains("token")) {
                 String value = metaData.input.subSequence(metaData.start.position, metaData.end.position).toString();
                 if (rejectPattern != null && rejectPattern.run(value)) {
                     return null;

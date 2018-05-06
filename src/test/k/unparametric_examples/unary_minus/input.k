@@ -2,9 +2,9 @@
  * This shows the importance of having lexical disambiguation tools.
  */
 module COMMON
-syntax Layout ::= r"([\\ \n\r\t])*" [token]
+syntax Layout ::= r"([\\ \n\r\t])*" [token, klabel(tkLayout)]
 syntax Exp ::= Int     [klabel(inj)]
-syntax Int ::= r"[\\-]?[0-9]+" [token]
+syntax Int ::= r"[\\-]?[0-9]+" [token, klabel(tkInt)]
 endmodule 
  
 module INPUT

@@ -1,6 +1,6 @@
 module INPUT
-  syntax Int ::= r"[0-9]+"   [token]
-  syntax Var ::= r"[A-Z][a-zA-Z0-9]*" [token]
+  syntax Int ::= r"[0-9]+"   [token, klabel(tkInt)]
+  syntax Var ::= r"[A-Z][a-zA-Z0-9]*" [token, klabel(tkVar)]
   syntax Exp ::= Int         [klabel(inj)]
   syntax Exp ::= Var         [klabel(inj)]
   syntax Exp ::= Exp "+" Exp [klabel(plus)] 

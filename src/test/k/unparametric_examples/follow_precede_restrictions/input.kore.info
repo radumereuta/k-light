@@ -18,29 +18,32 @@ module COMMON
   symbol doubleType{}():Type{} []
   symbol intType{}():Type{} []
   symbol typeDecl{}(Type{}, Exp{}):Decl{} []
+  symbol tkLayout{}():Layout{} []
 endmodule []
 
 module INPUT
   import INJ []
   import COMMON []
 
-  /* input(Decl): int x; */
-  axiom{} 
-info{Decl{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("6"),\dv{KInt{}}("17"),\dv{KInt{}}("12")),typeDecl{}(info{Type{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("6"),\dv{KInt{}}("17"),\dv{KInt{}}("9")),intType{}()),info{Exp{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("10"),\dv{KInt{}}("17"),\dv{KInt{}}("11")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("17"),\dv{KInt{}}("10"),\dv{KInt{}}("17"),\dv{KInt{}}("11")),\dv{Id{}}("x")))))) []
   /* input(Decl): intx; */
   axiom{} 
-info{Decl{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("6"),\dv{KInt{}}("16"),\dv{KInt{}}("11")),typeDecl{}(info{Type{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("6"),\dv{KInt{}}("16"),\dv{KInt{}}("9")),intType{}()),info{Exp{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("9"),\dv{KInt{}}("16"),\dv{KInt{}}("10")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("16"),\dv{KInt{}}("9"),\dv{KInt{}}("16"),\dv{KInt{}}("10")),\dv{Id{}}("x")))))) []
+info{Decl{}}(input{}(\dv{KInt{}}("16,6,16,11")),typeDecl{}(info{Type{}}(input{}(\dv{KInt{}}("16,6,16,9")),intType{}()),info{Exp{}}(input{}(\dv{KInt{}}("16,9,16,10")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("16,9,16,10")),tkId{}()))))) []
+  /* input(Decl): int x; */
+  axiom{} 
+info{Decl{}}(input{}(\dv{KInt{}}("17,6,17,12")),typeDecl{}(info{Type{}}(input{}(\dv{KInt{}}("17,6,17,9")),intType{}()),info{Exp{}}(input{}(\dv{KInt{}}("17,10,17,11")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("17,10,17,11")),tkId{}()))))) []
+  symbol tkId{}():Id{} []
 endmodule []
 
 module INPUT2
   import INJ []
   import COMMON []
 
+  symbol tkId2{}():Id{} []
   /* input(Decl): intx; */
   axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character 'x'.
 	Source(generated)
 	Location(23,9,23,10)] []
   /* input(Decl): int x; */
   axiom{} 
-info{Decl{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("6"),\dv{KInt{}}("24"),\dv{KInt{}}("12")),typeDecl{}(info{Type{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("6"),\dv{KInt{}}("24"),\dv{KInt{}}("9")),intType{}()),info{Exp{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("11")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("24"),\dv{KInt{}}("10"),\dv{KInt{}}("24"),\dv{KInt{}}("11")),\dv{Id{}}("x")))))) []
+info{Decl{}}(input{}(\dv{KInt{}}("24,6,24,12")),typeDecl{}(info{Type{}}(input{}(\dv{KInt{}}("24,6,24,9")),intType{}()),info{Exp{}}(input{}(\dv{KInt{}}("24,10,24,11")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("24,10,24,11")),tkId2{}()))))) []
 endmodule []

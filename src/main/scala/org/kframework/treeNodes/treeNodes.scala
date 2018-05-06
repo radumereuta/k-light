@@ -30,7 +30,7 @@ trait HasChildren {
 }
 
 case class Constant private(value: String, production: Production) extends ProductionReference {
-  override def toString = "#token(" + production.sort + ",\"" + StringEscapeUtils.escapeJava(value) + "\")"
+  override def toString = "\"" + StringEscapeUtils.escapeJava(value) + "\""
 }
 
 // note that items is reversed because it is more efficient to generate it this way during parsing
