@@ -4,7 +4,9 @@ module INJ
   sort KInt{} []
   symbol inj{Sin,Sout}(Sin):Sout []
   symbol info{S}(String{}, S) : S []
-  symbol input{}(KInt{}, KInt{}, KInt{}, KInt{}) : String{} []
+  symbol input{}(KInt{}) : String{} []
+  symbol emptyString{}() : String{} []
+  symbol stringAdd{}(String{}, String{}) : String{} []
 endmodule []
 
 module INPUT
@@ -13,27 +15,27 @@ module INPUT
   sort Var{} []
   sort Stmt{} []
   sort Exp{} []
-  /* input(Stmt): if c1 == c2 then if c3 < c4 then s1 else s2 */
-  axiom{} 
-\exists{Stmt{}}(V3:Stmt{},
-\exists{Stmt{}}(V2:Stmt{},
-\exists{Stmt{}}(V1:Exp{},
-\exists{Stmt{}}(V0:Exp{},
-    \and{Stmt{}}(
-        \equals{Stmt{},Stmt{}}(V3:Stmt{},info{Stmt{}}(input{}(\dv{KInt{}}("11,49,11,51")),inj{Exp{},Stmt{}}(info{Exp{}}(input{}(\dv{KInt{}}("11,49,11,51")),inj{Var{},Exp{}}(info{Var{}}(input{}(\dv{KInt{}}("11,49,11,51")),tkVar{}())))))),
-    \and{Stmt{}}(
-        \equals{Stmt{},Stmt{}}(V2:Stmt{},info{Stmt{}}(input{}(\dv{KInt{}}("11,41,11,44")),inj{Exp{},Stmt{}}(info{Exp{}}(input{}(\dv{KInt{}}("11,41,11,44")),inj{Var{},Exp{}}(info{Var{}}(input{}(\dv{KInt{}}("11,41,11,43")),tkVar{}())))))),
-    \and{Stmt{}}(
-        \equals{Exp{},Stmt{}}(V1:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("11,28,11,36")),lt{}(info{Exp{}}(input{}(\dv{KInt{}}("11,28,11,31")),inj{Var{},Exp{}}(info{Var{}}(input{}(\dv{KInt{}}("11,28,11,30")),tkVar{}()))),info{Exp{}}(input{}(\dv{KInt{}}("11,33,11,36")),inj{Var{},Exp{}}(info{Var{}}(input{}(\dv{KInt{}}("11,33,11,35")),tkVar{}())))))),
-    \and{Stmt{}}(
-        \equals{Exp{},Stmt{}}(V0:Exp{},info{Exp{}}(input{}(\dv{KInt{}}("11,11,11,20")),eq{}(info{Exp{}}(input{}(\dv{KInt{}}("11,11,11,14")),inj{Var{},Exp{}}(info{Var{}}(input{}(\dv{KInt{}}("11,11,11,13")),tkVar{}()))),info{Exp{}}(input{}(\dv{KInt{}}("11,17,11,20")),inj{Var{},Exp{}}(info{Var{}}(input{}(\dv{KInt{}}("11,17,11,19")),tkVar{}())))))),
-\or{Stmt{}}(info{Stmt{}}(input{}(\dv{KInt{}}("11,8,11,51")),it{}(V0:Exp{},info{Stmt{}}(input{}(\dv{KInt{}}("11,25,11,51")),ite{}(V1:Exp{},V2:Stmt{},V3:Stmt{})))),\or{Stmt{}}(info{Stmt{}}(input{}(\dv{KInt{}}("11,8,11,51")),ite{}(V0:Exp{},info{Stmt{}}(input{}(\dv{KInt{}}("11,25,11,44")),it{}(V1:Exp{},V2:Stmt{})),V3:Stmt{})),\bottom{Stmt{}}())))))))))) []
 
   symbol gt{}(Exp{}, Exp{}):Exp{} []
   symbol tkVar{}():Var{} []
   symbol it{}(Exp{}, Stmt{}):Stmt{} []
   symbol eq{}(Exp{}, Exp{}):Exp{} []
   symbol lt{}(Exp{}, Exp{}):Exp{} []
+  /* input(Stmt): if c1 == c2 then if c3 < c4 then s1 else s2 */
+  axiom{} 
+\exists{Stmt{}}(V0:Exp{},
+\exists{Stmt{}}(V1:Exp{},
+\exists{Stmt{}}(V2:Stmt{},
+\exists{Stmt{}}(V3:Stmt{},
+    \and{Stmt{}}(
+        \equals{Exp{},Stmt{}}(V0:Exp{},info{Exp{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,14,11,16")),\dv{String{}}("==")),\and{String{}}(input{}(\dv{KInt{}}("11,11,11,20")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,11,11,20")),stringAdd{}(input{}(\dv{KInt{}}("11,11,11,14")),stringAdd{}(input{}(\dv{KInt{}}("11,14,11,16")),stringAdd{}(input{}(\dv{KInt{}}("11,17,11,20")),emptyString{}())))))),eq{}(info{Exp{}}(\and{String{}}(input{}(\dv{KInt{}}("11,11,11,14")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,11,11,14")),stringAdd{}(input{}(\dv{KInt{}}("11,11,11,13")),emptyString{}()))),inj{Var{},Exp{}}(info{Var{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,11,11,13")),\dv{String{}}("c1")),\and{String{}}(input{}(\dv{KInt{}}("11,11,11,13")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,11,11,13")),stringAdd{}(input{}(\dv{KInt{}}("11,11,11,13")),emptyString{}())))),tkVar{}()))),info{Exp{}}(\and{String{}}(input{}(\dv{KInt{}}("11,17,11,20")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,17,11,20")),stringAdd{}(input{}(\dv{KInt{}}("11,17,11,19")),emptyString{}()))),inj{Var{},Exp{}}(info{Var{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,17,11,19")),\dv{String{}}("c2")),\and{String{}}(input{}(\dv{KInt{}}("11,17,11,19")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,17,11,19")),stringAdd{}(input{}(\dv{KInt{}}("11,17,11,19")),emptyString{}())))),tkVar{}())))))),
+    \and{Stmt{}}(
+        \equals{Exp{},Stmt{}}(V1:Exp{},info{Exp{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,31,11,32")),\dv{String{}}("<")),\and{String{}}(input{}(\dv{KInt{}}("11,28,11,36")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,28,11,36")),stringAdd{}(input{}(\dv{KInt{}}("11,28,11,31")),stringAdd{}(input{}(\dv{KInt{}}("11,31,11,32")),stringAdd{}(input{}(\dv{KInt{}}("11,33,11,36")),emptyString{}())))))),lt{}(info{Exp{}}(\and{String{}}(input{}(\dv{KInt{}}("11,28,11,31")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,28,11,31")),stringAdd{}(input{}(\dv{KInt{}}("11,28,11,30")),emptyString{}()))),inj{Var{},Exp{}}(info{Var{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,28,11,30")),\dv{String{}}("c3")),\and{String{}}(input{}(\dv{KInt{}}("11,28,11,30")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,28,11,30")),stringAdd{}(input{}(\dv{KInt{}}("11,28,11,30")),emptyString{}())))),tkVar{}()))),info{Exp{}}(\and{String{}}(input{}(\dv{KInt{}}("11,33,11,36")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,33,11,36")),stringAdd{}(input{}(\dv{KInt{}}("11,33,11,35")),emptyString{}()))),inj{Var{},Exp{}}(info{Var{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,33,11,35")),\dv{String{}}("c4")),\and{String{}}(input{}(\dv{KInt{}}("11,33,11,35")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,33,11,35")),stringAdd{}(input{}(\dv{KInt{}}("11,33,11,35")),emptyString{}())))),tkVar{}())))))),
+    \and{Stmt{}}(
+        \equals{Stmt{},Stmt{}}(V2:Stmt{},info{Stmt{}}(\and{String{}}(input{}(\dv{KInt{}}("11,41,11,44")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,41,11,44")),stringAdd{}(input{}(\dv{KInt{}}("11,41,11,44")),emptyString{}()))),inj{Exp{},Stmt{}}(info{Exp{}}(\and{String{}}(input{}(\dv{KInt{}}("11,41,11,44")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,41,11,44")),stringAdd{}(input{}(\dv{KInt{}}("11,41,11,43")),emptyString{}()))),inj{Var{},Exp{}}(info{Var{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,41,11,43")),\dv{String{}}("s1")),\and{String{}}(input{}(\dv{KInt{}}("11,41,11,43")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,41,11,43")),stringAdd{}(input{}(\dv{KInt{}}("11,41,11,43")),emptyString{}())))),tkVar{}())))))),
+    \and{Stmt{}}(
+        \equals{Stmt{},Stmt{}}(V3:Stmt{},info{Stmt{}}(\and{String{}}(input{}(\dv{KInt{}}("11,49,11,51")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,49,11,51")),stringAdd{}(input{}(\dv{KInt{}}("11,49,11,51")),emptyString{}()))),inj{Exp{},Stmt{}}(info{Exp{}}(\and{String{}}(input{}(\dv{KInt{}}("11,49,11,51")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,49,11,51")),stringAdd{}(input{}(\dv{KInt{}}("11,49,11,51")),emptyString{}()))),inj{Var{},Exp{}}(info{Var{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,49,11,51")),\dv{String{}}("s2")),\and{String{}}(input{}(\dv{KInt{}}("11,49,11,51")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,49,11,51")),stringAdd{}(input{}(\dv{KInt{}}("11,49,11,51")),emptyString{}())))),tkVar{}())))))),
+\or{Stmt{}}(info{Stmt{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,20,11,24")),\dv{String{}}("then")),\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,8,11,10")),\dv{String{}}("if")),\and{String{}}(input{}(\dv{KInt{}}("11,8,11,51")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,8,11,51")),stringAdd{}(input{}(\dv{KInt{}}("11,8,11,10")),stringAdd{}(input{}(\dv{KInt{}}("11,11,11,20")),stringAdd{}(input{}(\dv{KInt{}}("11,20,11,24")),stringAdd{}(input{}(\dv{KInt{}}("11,25,11,51")),emptyString{}())))))))),it{}(V0:Exp{},info{Stmt{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,44,11,48")),\dv{String{}}("else")),\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,36,11,40")),\dv{String{}}("then")),\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,25,11,27")),\dv{String{}}("if")),\and{String{}}(input{}(\dv{KInt{}}("11,25,11,51")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,25,11,51")),stringAdd{}(input{}(\dv{KInt{}}("11,25,11,27")),stringAdd{}(input{}(\dv{KInt{}}("11,28,11,36")),stringAdd{}(input{}(\dv{KInt{}}("11,36,11,40")),stringAdd{}(input{}(\dv{KInt{}}("11,41,11,44")),stringAdd{}(input{}(\dv{KInt{}}("11,44,11,48")),stringAdd{}(input{}(\dv{KInt{}}("11,49,11,51")),emptyString{}()))))))))))),ite{}(V1:Exp{},V2:Stmt{},V3:Stmt{})))),\or{Stmt{}}(info{Stmt{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,44,11,48")),\dv{String{}}("else")),\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,20,11,24")),\dv{String{}}("then")),\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,8,11,10")),\dv{String{}}("if")),\and{String{}}(input{}(\dv{KInt{}}("11,8,11,51")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,8,11,51")),stringAdd{}(input{}(\dv{KInt{}}("11,8,11,10")),stringAdd{}(input{}(\dv{KInt{}}("11,11,11,20")),stringAdd{}(input{}(\dv{KInt{}}("11,20,11,24")),stringAdd{}(input{}(\dv{KInt{}}("11,25,11,44")),stringAdd{}(input{}(\dv{KInt{}}("11,44,11,48")),stringAdd{}(input{}(\dv{KInt{}}("11,49,11,51")),emptyString{}()))))))))))),ite{}(V0:Exp{},info{Stmt{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,36,11,40")),\dv{String{}}("then")),\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("11,25,11,27")),\dv{String{}}("if")),\and{String{}}(input{}(\dv{KInt{}}("11,25,11,44")),\equals{String{},String{}}(input{}(\dv{KInt{}}("11,25,11,44")),stringAdd{}(input{}(\dv{KInt{}}("11,25,11,27")),stringAdd{}(input{}(\dv{KInt{}}("11,28,11,36")),stringAdd{}(input{}(\dv{KInt{}}("11,36,11,40")),stringAdd{}(input{}(\dv{KInt{}}("11,41,11,44")),emptyString{}())))))))),it{}(V1:Exp{},V2:Stmt{})),V3:Stmt{})),\bottom{Stmt{}}())))))))))) []
   symbol ite{}(Exp{}, Stmt{}, Stmt{}):Stmt{} []
   symbol tkLayout{}():Layout{} []
 endmodule []

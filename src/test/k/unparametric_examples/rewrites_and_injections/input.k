@@ -4,7 +4,7 @@
  * rules or use a generic production that takes K (the top sort).
  */
 module INPUT
-syntax Layout ::= r"([\\ \n\r\t])*" [token, klabel(tkLayout)]
+syntax Layout ::= r"([\\ \n\r\t])*" [token2, klabel(tkLayout)]
 syntax Exp ::= Int [klabel(Exp2Int)] | Id [klabel(Exp2Id)]
 syntax K   ::= K   "=>" K   [klabel(rewK)]
 syntax Exp ::= Exp "=>" Exp [klabel(rewExp)]
@@ -17,7 +17,7 @@ syntax K ::= Id      [klabel(inj)]
            | Int     [klabel(inj)]
 syntax Id  ::= KBott [klabel(inj)]
 syntax Int ::= KBott [klabel(inj)]
-syntax Variable ::= r"[A-Z][A-Za-z0-9]*" [token, klabel(tkVariable)]
+syntax Variable ::= r"[A-Z][A-Za-z0-9]*" [token2, klabel(tkVariable)]
 syntax KBott ::= Variable [klabel(inj)]
 syntax Cell ::= "<k>" K "</k>" "<env>" K "|->" K "</env>" [klabel(cells)]
 

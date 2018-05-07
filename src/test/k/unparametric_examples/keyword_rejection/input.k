@@ -3,7 +3,7 @@
  * avoid ambiguities in certain cases.
  */
 module COMMON
-syntax Layout ::= r"([\\ \n\r\t])*" [token, klabel(tkLayout)]
+syntax Layout ::= r"([\\ \n\r\t])*" [token2, klabel(tkLayout)]
 syntax Id
 syntax Exp ::= Id [klabel(inj)]
   | Exp Exp [klabel(app)]
@@ -12,13 +12,13 @@ endmodule
  
 module INPUT
 import COMMON
-syntax Id ::= r"[\\_a-zA-Z][\\_a-zA-Z0-9]*" [token, reject(callcc), autoReject, klabel(tkId)]
+syntax Id ::= r"[\\_a-zA-Z][\\_a-zA-Z0-9]*" [token2, reject(callcc), autoReject, klabel(tkId)]
 rule callcc a [start(Exp)]
 endmodule
 
 module INPUT2
 import COMMON
-syntax Id ::= r"[\\_a-zA-Z][\\_a-zA-Z0-9]*" [token, klabel(tkId2)]
+syntax Id ::= r"[\\_a-zA-Z][\\_a-zA-Z0-9]*" [token2, klabel(tkId2)]
 rule callcc a [start(Exp)]
 endmodule
 

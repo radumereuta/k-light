@@ -4,7 +4,9 @@ module INJ
   sort KInt{} []
   symbol inj{Sin,Sout}(Sin):Sout []
   symbol info{S}(String{}, S) : S []
-  symbol input{}(KInt{}, KInt{}, KInt{}, KInt{}) : String{} []
+  symbol input{}(KInt{}) : String{} []
+  symbol emptyString{}() : String{} []
+  symbol stringAdd{}(String{}, String{}) : String{} []
 endmodule []
 
 module COMMON
@@ -21,13 +23,13 @@ module INPUT
   import INJ []
   import COMMON []
 
-  /* input(Exp): -1 */
-  axiom{} 
-\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("14,6,14,8")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("14,6,14,8")),tkInt{}()))),\or{Exp{}}(info{Exp{}}(input{}(\dv{KInt{}}("14,6,14,8")),uminuss{}(info{Exp{}}(input{}(\dv{KInt{}}("14,7,14,8")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("14,7,14,8")),tkInt{}()))))),\bottom{Exp{}}())) []
-  symbol uminuss{}(Exp{}):Exp{} []
   /* input(Exp): - 1 */
   axiom{} 
-info{Exp{}}(input{}(\dv{KInt{}}("17,6,17,9")),uminuss{}(info{Exp{}}(input{}(\dv{KInt{}}("17,8,17,9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("17,8,17,9")),tkInt{}()))))) []
+info{Exp{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("17,6,17,7")),\dv{String{}}("-")),\and{String{}}(input{}(\dv{KInt{}}("17,6,17,9")),\equals{String{},String{}}(input{}(\dv{KInt{}}("17,6,17,9")),stringAdd{}(input{}(\dv{KInt{}}("17,6,17,7")),stringAdd{}(input{}(\dv{KInt{}}("17,8,17,9")),emptyString{}()))))),uminuss{}(info{Exp{}}(\and{String{}}(input{}(\dv{KInt{}}("17,8,17,9")),\equals{String{},String{}}(input{}(\dv{KInt{}}("17,8,17,9")),stringAdd{}(input{}(\dv{KInt{}}("17,8,17,9")),emptyString{}()))),inj{Int{},Exp{}}(info{Int{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("17,8,17,9")),\dv{String{}}("1")),\and{String{}}(input{}(\dv{KInt{}}("17,8,17,9")),\equals{String{},String{}}(input{}(\dv{KInt{}}("17,8,17,9")),stringAdd{}(input{}(\dv{KInt{}}("17,8,17,9")),emptyString{}())))),tkInt{}()))))) []
+  symbol uminuss{}(Exp{}):Exp{} []
+  /* input(Exp): -1 */
+  axiom{} 
+\or{Exp{}}(info{Exp{}}(\and{String{}}(input{}(\dv{KInt{}}("14,6,14,8")),\equals{String{},String{}}(input{}(\dv{KInt{}}("14,6,14,8")),stringAdd{}(input{}(\dv{KInt{}}("14,6,14,8")),emptyString{}()))),inj{Int{},Exp{}}(info{Int{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("14,6,14,8")),\dv{String{}}("-1")),\and{String{}}(input{}(\dv{KInt{}}("14,6,14,8")),\equals{String{},String{}}(input{}(\dv{KInt{}}("14,6,14,8")),stringAdd{}(input{}(\dv{KInt{}}("14,6,14,8")),emptyString{}())))),tkInt{}()))),\or{Exp{}}(info{Exp{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("14,6,14,7")),\dv{String{}}("-")),\and{String{}}(input{}(\dv{KInt{}}("14,6,14,8")),\equals{String{},String{}}(input{}(\dv{KInt{}}("14,6,14,8")),stringAdd{}(input{}(\dv{KInt{}}("14,6,14,7")),stringAdd{}(input{}(\dv{KInt{}}("14,7,14,8")),emptyString{}()))))),uminuss{}(info{Exp{}}(\and{String{}}(input{}(\dv{KInt{}}("14,7,14,8")),\equals{String{},String{}}(input{}(\dv{KInt{}}("14,7,14,8")),stringAdd{}(input{}(\dv{KInt{}}("14,7,14,8")),emptyString{}()))),inj{Int{},Exp{}}(info{Int{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("14,7,14,8")),\dv{String{}}("1")),\and{String{}}(input{}(\dv{KInt{}}("14,7,14,8")),\equals{String{},String{}}(input{}(\dv{KInt{}}("14,7,14,8")),stringAdd{}(input{}(\dv{KInt{}}("14,7,14,8")),emptyString{}())))),tkInt{}()))))),\bottom{Exp{}}())) []
 endmodule []
 
 module INPUT2
@@ -36,9 +38,9 @@ module INPUT2
 
   /* input(Exp): - 1 */
   axiom{} 
-info{Exp{}}(input{}(\dv{KInt{}}("29,6,29,9")),uminusp{}(info{Exp{}}(input{}(\dv{KInt{}}("29,8,29,9")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("29,8,29,9")),tkInt{}()))))) []
+info{Exp{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("29,6,29,7")),\dv{String{}}("-")),\and{String{}}(input{}(\dv{KInt{}}("29,6,29,9")),\equals{String{},String{}}(input{}(\dv{KInt{}}("29,6,29,9")),stringAdd{}(input{}(\dv{KInt{}}("29,6,29,7")),stringAdd{}(input{}(\dv{KInt{}}("29,8,29,9")),emptyString{}()))))),uminusp{}(info{Exp{}}(\and{String{}}(input{}(\dv{KInt{}}("29,8,29,9")),\equals{String{},String{}}(input{}(\dv{KInt{}}("29,8,29,9")),stringAdd{}(input{}(\dv{KInt{}}("29,8,29,9")),emptyString{}()))),inj{Int{},Exp{}}(info{Int{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("29,8,29,9")),\dv{String{}}("1")),\and{String{}}(input{}(\dv{KInt{}}("29,8,29,9")),\equals{String{},String{}}(input{}(\dv{KInt{}}("29,8,29,9")),stringAdd{}(input{}(\dv{KInt{}}("29,8,29,9")),emptyString{}())))),tkInt{}()))))) []
+  symbol uminusp{}(Exp{}):Exp{} []
   /* input(Exp): -1 */
   axiom{} 
-info{Exp{}}(input{}(\dv{KInt{}}("25,6,25,8")),inj{Int{},Exp{}}(info{Int{}}(input{}(\dv{KInt{}}("25,6,25,8")),tkInt{}()))) []
-  symbol uminusp{}(Exp{}):Exp{} []
+info{Exp{}}(\and{String{}}(input{}(\dv{KInt{}}("25,6,25,8")),\equals{String{},String{}}(input{}(\dv{KInt{}}("25,6,25,8")),stringAdd{}(input{}(\dv{KInt{}}("25,6,25,8")),emptyString{}()))),inj{Int{},Exp{}}(info{Int{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("25,6,25,8")),\dv{String{}}("-1")),\and{String{}}(input{}(\dv{KInt{}}("25,6,25,8")),\equals{String{},String{}}(input{}(\dv{KInt{}}("25,6,25,8")),stringAdd{}(input{}(\dv{KInt{}}("25,6,25,8")),emptyString{}())))),tkInt{}()))) []
 endmodule []

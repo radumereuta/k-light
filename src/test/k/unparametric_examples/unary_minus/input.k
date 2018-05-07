@@ -2,11 +2,11 @@
  * This shows the importance of having lexical disambiguation tools.
  */
 module COMMON
-syntax Layout ::= r"([\\ \n\r\t])*" [token, klabel(tkLayout)]
+syntax Layout ::= r"([\\ \n\r\t])*" [token2, klabel(tkLayout)]
 syntax Exp ::= Int     [klabel(inj)]
-syntax Int ::= r"[\\-]?[0-9]+" [token, klabel(tkInt)]
+syntax Int ::= r"[\\-]?[0-9]+" [token2, klabel(tkInt)]
 endmodule 
- 
+
 module INPUT
 import COMMON
 syntax Exp ::= "-" Exp [klabel(uminuss)]

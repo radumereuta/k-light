@@ -5,7 +5,7 @@ module COMMON
 syntax Top
 syntax A1
 syntax A2
-syntax Var ::= r"[a-z]+" [token, klabel(tkVar)]
+syntax Var ::= r"[a-z]+" [token2, klabel(tkVar)]
 endmodule
 
 module INPUT

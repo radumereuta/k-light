@@ -4,7 +4,9 @@ module INJ
   sort KInt{} []
   symbol inj{Sin,Sout}(Sin):Sout []
   symbol info{S}(String{}, S) : S []
-  symbol input{}(KInt{}, KInt{}, KInt{}, KInt{}) : String{} []
+  symbol input{}(KInt{}) : String{} []
+  symbol emptyString{}() : String{} []
+  symbol stringAdd{}(String{}, String{}) : String{} []
 endmodule []
 
 module COMMON
@@ -25,12 +27,12 @@ module INPUT
   import INJ []
   import COMMON []
 
-  /* input(Decl): intx; */
-  axiom{} 
-info{Decl{}}(input{}(\dv{KInt{}}("16,6,16,11")),typeDecl{}(info{Type{}}(input{}(\dv{KInt{}}("16,6,16,9")),intType{}()),info{Exp{}}(input{}(\dv{KInt{}}("16,9,16,10")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("16,9,16,10")),tkId{}()))))) []
   /* input(Decl): int x; */
   axiom{} 
-info{Decl{}}(input{}(\dv{KInt{}}("17,6,17,12")),typeDecl{}(info{Type{}}(input{}(\dv{KInt{}}("17,6,17,9")),intType{}()),info{Exp{}}(input{}(\dv{KInt{}}("17,10,17,11")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("17,10,17,11")),tkId{}()))))) []
+info{Decl{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("17,11,17,12")),\dv{String{}}(";")),\and{String{}}(input{}(\dv{KInt{}}("17,6,17,12")),\equals{String{},String{}}(input{}(\dv{KInt{}}("17,6,17,12")),stringAdd{}(input{}(\dv{KInt{}}("17,6,17,9")),stringAdd{}(input{}(\dv{KInt{}}("17,10,17,11")),stringAdd{}(input{}(\dv{KInt{}}("17,11,17,12")),emptyString{}())))))),typeDecl{}(info{Type{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("17,6,17,9")),\dv{String{}}("int")),\and{String{}}(input{}(\dv{KInt{}}("17,6,17,9")),\equals{String{},String{}}(input{}(\dv{KInt{}}("17,6,17,9")),stringAdd{}(input{}(\dv{KInt{}}("17,6,17,9")),emptyString{}())))),intType{}()),info{Exp{}}(\and{String{}}(input{}(\dv{KInt{}}("17,10,17,11")),\equals{String{},String{}}(input{}(\dv{KInt{}}("17,10,17,11")),stringAdd{}(input{}(\dv{KInt{}}("17,10,17,11")),emptyString{}()))),inj{Id{},Exp{}}(info{Id{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("17,10,17,11")),\dv{String{}}("x")),\and{String{}}(input{}(\dv{KInt{}}("17,10,17,11")),\equals{String{},String{}}(input{}(\dv{KInt{}}("17,10,17,11")),stringAdd{}(input{}(\dv{KInt{}}("17,10,17,11")),emptyString{}())))),tkId{}()))))) []
+  /* input(Decl): intx; */
+  axiom{} 
+info{Decl{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("16,10,16,11")),\dv{String{}}(";")),\and{String{}}(input{}(\dv{KInt{}}("16,6,16,11")),\equals{String{},String{}}(input{}(\dv{KInt{}}("16,6,16,11")),stringAdd{}(input{}(\dv{KInt{}}("16,6,16,9")),stringAdd{}(input{}(\dv{KInt{}}("16,9,16,10")),stringAdd{}(input{}(\dv{KInt{}}("16,10,16,11")),emptyString{}())))))),typeDecl{}(info{Type{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("16,6,16,9")),\dv{String{}}("int")),\and{String{}}(input{}(\dv{KInt{}}("16,6,16,9")),\equals{String{},String{}}(input{}(\dv{KInt{}}("16,6,16,9")),stringAdd{}(input{}(\dv{KInt{}}("16,6,16,9")),emptyString{}())))),intType{}()),info{Exp{}}(\and{String{}}(input{}(\dv{KInt{}}("16,9,16,10")),\equals{String{},String{}}(input{}(\dv{KInt{}}("16,9,16,10")),stringAdd{}(input{}(\dv{KInt{}}("16,9,16,10")),emptyString{}()))),inj{Id{},Exp{}}(info{Id{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("16,9,16,10")),\dv{String{}}("x")),\and{String{}}(input{}(\dv{KInt{}}("16,9,16,10")),\equals{String{},String{}}(input{}(\dv{KInt{}}("16,9,16,10")),stringAdd{}(input{}(\dv{KInt{}}("16,9,16,10")),emptyString{}())))),tkId{}()))))) []
   symbol tkId{}():Id{} []
 endmodule []
 
@@ -45,5 +47,5 @@ module INPUT2
 	Location(23,9,23,10)] []
   /* input(Decl): int x; */
   axiom{} 
-info{Decl{}}(input{}(\dv{KInt{}}("24,6,24,12")),typeDecl{}(info{Type{}}(input{}(\dv{KInt{}}("24,6,24,9")),intType{}()),info{Exp{}}(input{}(\dv{KInt{}}("24,10,24,11")),inj{Id{},Exp{}}(info{Id{}}(input{}(\dv{KInt{}}("24,10,24,11")),tkId2{}()))))) []
+info{Decl{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("24,11,24,12")),\dv{String{}}(";")),\and{String{}}(input{}(\dv{KInt{}}("24,6,24,12")),\equals{String{},String{}}(input{}(\dv{KInt{}}("24,6,24,12")),stringAdd{}(input{}(\dv{KInt{}}("24,6,24,9")),stringAdd{}(input{}(\dv{KInt{}}("24,10,24,11")),stringAdd{}(input{}(\dv{KInt{}}("24,11,24,12")),emptyString{}())))))),typeDecl{}(info{Type{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("24,6,24,9")),\dv{String{}}("int")),\and{String{}}(input{}(\dv{KInt{}}("24,6,24,9")),\equals{String{},String{}}(input{}(\dv{KInt{}}("24,6,24,9")),stringAdd{}(input{}(\dv{KInt{}}("24,6,24,9")),emptyString{}())))),intType{}()),info{Exp{}}(\and{String{}}(input{}(\dv{KInt{}}("24,10,24,11")),\equals{String{},String{}}(input{}(\dv{KInt{}}("24,10,24,11")),stringAdd{}(input{}(\dv{KInt{}}("24,10,24,11")),emptyString{}()))),inj{Id{},Exp{}}(info{Id{}}(\and{String{}}(\equals{String{},String{}}(input{}(\dv{KInt{}}("24,10,24,11")),\dv{String{}}("x")),\and{String{}}(input{}(\dv{KInt{}}("24,10,24,11")),\equals{String{},String{}}(input{}(\dv{KInt{}}("24,10,24,11")),stringAdd{}(input{}(\dv{KInt{}}("24,10,24,11")),emptyString{}())))),tkId2{}()))))) []
 endmodule []

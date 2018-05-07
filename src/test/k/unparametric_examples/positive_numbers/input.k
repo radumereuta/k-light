@@ -1,5 +1,5 @@
 module INPUT
- syntax Int ::= r"[+-]?[0-9]+"   [token, klabel(tkInt)]
+ syntax Int ::= r"[+-]?[0-9]+"   [token2, klabel(tkInt)]
  syntax Exp ::= Exp "+" Exp [klabel(plus)] 
  syntax Exp ::= Exp Exp     [klabel(app)]
  syntax Exp ::= Int         [klabel(inj)]
