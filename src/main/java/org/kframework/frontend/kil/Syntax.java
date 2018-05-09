@@ -1,7 +1,6 @@
 // Copyright (c) 2012-2016 K Team. All Rights Reserved.
 package org.kframework.frontend.kil;
 
-import com.beust.jcommander.internal.Lists;
 import org.kframework.frontend.kil.visitors.Visitor;
 
 import java.util.ArrayList;
@@ -23,10 +22,6 @@ public class Syntax extends ModuleItem implements Interfaces.MutableParent<NonTe
         super();
         this.sort = sort;
         this.priorityBlocks = priorities;
-    }
-
-    public Syntax(NonTerminal sort, PriorityBlock... priorities) {
-        this(sort, Lists.newArrayList(priorities));
     }
 
     public Syntax(NonTerminal sort) {

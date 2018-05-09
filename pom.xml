@@ -56,11 +56,6 @@
             <version>2.4</version>
         </dependency>
         <dependency>
-            <groupId>org.kframework.dependencies</groupId>
-            <artifactId>jcommander</artifactId>
-            <version>1.35-custom</version>
-        </dependency>
-        <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>4.0-beta5</version>
@@ -74,20 +69,6 @@
             <url>https://mvnrepository.com/artifact/org.scala-tools/maven-scala-plugin</url>
             <snapshots><enabled>false</enabled></snapshots>
             <releases><enabled>true</enabled></releases>
-        </repository>
-        <repository>
-            <id>runtime-verification</id>
-            <name>Runtime Verification Repository</name>
-            <url>http://office.runtimeverification.com:8888/repository/internal</url>
-            <snapshots><enabled>false</enabled></snapshots>
-            <releases><enabled>true</enabled></releases>
-        </repository>
-        <repository>
-            <id>runtime-verification.snapshots</id>
-            <name>Runtime Verification Snapshot Repository</name>
-            <url>http://office.runtimeverification.com:8888/repository/snapshots</url>
-            <snapshots><enabled>true</enabled></snapshots>
-            <releases><enabled>false</enabled></releases>
         </repository>
     </repositories>
 
