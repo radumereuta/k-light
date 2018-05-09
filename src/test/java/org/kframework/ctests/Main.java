@@ -1,6 +1,5 @@
 package org.kframework.ctests;
 
-import com.beust.jcommander.internal.Lists;
 import org.kframework.attributes.Source;
 import org.kframework.definition.Definition;
 import org.kframework.kore.OuterToKORE;
@@ -14,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Main {
@@ -66,7 +66,7 @@ public class Main {
 
     private static String process(File f) {
         String koreParserCWD = "c:\\work\\kore\\src\\main\\haskell\\"; // hardcoded for each machine - for testing only
-        Definition baseK = defParser.loadDefinition("INPUT", "INPUT", FileUtil.load(f), new Source(f.toString()), Lists.newArrayList());
+        Definition baseK = defParser.loadDefinition("INPUT", "INPUT", FileUtil.load(f), new Source(f.toString()), new ArrayList<>());
 
         String str = OuterToKORE.apply(baseK);
         FileUtil.save(new File(f.getAbsolutePath() + "ore.info"), str);
