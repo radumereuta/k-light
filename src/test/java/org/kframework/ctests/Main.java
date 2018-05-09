@@ -1,6 +1,5 @@
 package org.kframework.ctests;
 
-import com.beust.jcommander.internal.Lists;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -25,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Set;
 import static org.kframework.definition.Constructors.Sort;
 
@@ -91,7 +91,7 @@ public class Main {
 
     @Test @Ignore
     public void testTestDotC() {
-        Definition baseK = defParser.loadDefinition(mainModule, mainSyntaxModule, FileUtil.load(definitionFile), new Source("CTests"), Lists.newArrayList());
+        Definition baseK = defParser.loadDefinition(mainModule, mainSyntaxModule, FileUtil.load(definitionFile), new Source("CTests"), new ArrayList<>());
         Module syntaxModule = baseK.getModule(mainSyntaxModule).get();
         ParseInModule parser = RuleGrammarGenerator.getCombinedGrammar(RuleGrammarGenerator.getProgramsGrammar(syntaxModule, baseK));
 
@@ -108,7 +108,7 @@ public class Main {
 
     @Test @Ignore
     public void testTestDotK() {
-        Definition baseK = defParser.loadDefinition("TEST", "TEST", FileUtil.load(new File("c:/work/test/test.k")), new Source("CTests"), Lists.newArrayList());
+        Definition baseK = defParser.loadDefinition("TEST", "TEST", FileUtil.load(new File("c:/work/test/test.k")), new Source("CTests"), new ArrayList<>());
         Module syntaxModule = baseK.getModule("TEST").get();
         ParseInModule parser = RuleGrammarGenerator.getCombinedGrammar(RuleGrammarGenerator.getProgramsGrammar(syntaxModule, baseK));
 
