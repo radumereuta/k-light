@@ -6,11 +6,10 @@ import org.junit.Test;
 import org.kframework.attributes.Source;
 import org.kframework.definition.Definition;
 import org.kframework.definition.Module;
-import org.kframework.kore.ReverseChildren;
-import org.kframework.kore.TreeNodesToKORE2;
 import org.kframework.parser.concrete2kore.ParseInModule;
 import org.kframework.parser.concrete2kore.ParserUtils;
 import org.kframework.parser.concrete2kore.generator.RuleGrammarGenerator;
+import org.kframework.treeNodes.ReverseChildren;
 import org.kframework.treeNodes.Term;
 import org.kframework.utils.FileUtil;
 import org.kframework.utils.GlobalOptions;
@@ -26,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Set;
+
 import static org.kframework.definition.Constructors.Sort;
 
 public class Main {
@@ -44,7 +44,7 @@ public class Main {
         KExceptionManager kem = new KExceptionManager(new GlobalOptions());
 
         try {
-            Definition baseK = defParser.loadDefinition(mainModule, mainSyntaxModule, FileUtil.load(definitionFile), new Source("CTests"), Lists.newArrayList());
+            Definition baseK = defParser.loadDefinition(mainModule, mainSyntaxModule, FileUtil.load(definitionFile), new Source("CTests"), new ArrayList<>());
             Module syntaxModule = baseK.getModule(mainSyntaxModule).get();
             ParseInModule parser = RuleGrammarGenerator.getCombinedGrammar(RuleGrammarGenerator.getProgramsGrammar(syntaxModule, baseK));
 
@@ -120,6 +120,6 @@ public class Main {
 
         Assert.assertTrue(rez1._1.isRight());
 
-        System.out.println("kore: " + TreeNodesToKORE2.apply(rez1._1.right().get()));
+        System.out.println("out: " + rez1._1.right().get());
     }
 }

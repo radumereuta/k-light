@@ -8,6 +8,7 @@ import com.google.common.collect.Sets
 
 import collection.JavaConverters._
 import org.kframework.utils.Collections._
+import org.pcollections.ConsPStack
 
 
 class Ignore
@@ -237,4 +238,8 @@ abstract class SafeTransformer extends ChildrenMapping[Ignore, Ignore] {
   val warningUnit: Ignore.type = Ignore
   def mergeErrors(a: Ignore, b: Ignore): Ignore.type = Ignore
   val errorUnit: Ignore.type = Ignore
+}
+
+object ReverseChildren extends SafeTransformer {
+  override def apply(tc: TermCons): Term = super.apply(TermCons.apply(ConsPStack.from(tc.items.asScala.reverse.asJava), tc.production, tc.location, tc.source))
 }
