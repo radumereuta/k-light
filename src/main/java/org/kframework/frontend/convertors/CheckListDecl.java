@@ -2,6 +2,7 @@
 package org.kframework.frontend.convertors;
 
 import org.kframework.frontend.kil.*;
+import org.kframework.frontend.kil.Module;
 import org.kframework.utils.errorsystem.KExceptionManager;
 
 /**
