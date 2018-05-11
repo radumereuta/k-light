@@ -3,10 +3,16 @@ package org.kframework.frontend.kil.loader;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
-import org.kframework.frontend.kil.*;
+import org.kframework.frontend.kil.Attribute;
+import org.kframework.frontend.kil.Module;
+import org.kframework.frontend.kil.Production;
+import org.kframework.frontend.kil.Sort;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class ModuleContext implements Serializable {
     /** set of imported modules into this module. Should contain the auto included ones */
