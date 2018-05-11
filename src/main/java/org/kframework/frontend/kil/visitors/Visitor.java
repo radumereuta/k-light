@@ -2,6 +2,7 @@
 package org.kframework.frontend.kil.visitors;
 
 import org.kframework.frontend.kil.*;
+import org.kframework.frontend.kil.Module;
 
 public interface Visitor<P, R, E extends Throwable> {
     public R visit(ASTNode node, P p) throws E;

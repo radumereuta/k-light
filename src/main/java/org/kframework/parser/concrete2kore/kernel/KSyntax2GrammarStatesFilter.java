@@ -4,19 +4,21 @@ package org.kframework.parser.concrete2kore.kernel;
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.RegExp;
 import org.apache.commons.lang3.tuple.Pair;
+import org.kframework.definition.Module;
 import org.kframework.definition.*;
 import org.kframework.frontend.Sort;
-import org.kframework.utils.Constants;
 import org.kframework.parser.concrete2kore.kernel.Grammar.NextableState;
 import org.kframework.parser.concrete2kore.kernel.Grammar.NonTerminal;
 import org.kframework.parser.concrete2kore.kernel.Grammar.RuleState;
 import org.kframework.parser.concrete2kore.kernel.Rule.WrapLabelRule;
+import org.kframework.utils.Constants;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.kframework.utils.Collections.*;
+import static org.kframework.utils.Collections.iterable;
+import static org.kframework.utils.Collections.stream;
 
 /**
  * A simple visitor that goes through every accessible production and creates the NFA states for the

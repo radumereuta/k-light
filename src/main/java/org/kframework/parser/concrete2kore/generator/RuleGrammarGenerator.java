@@ -2,20 +2,20 @@
 package org.kframework.parser.concrete2kore.generator;
 
 import org.kframework.attributes.Att;
-import org.kframework.frontend.ADT;
-import org.kframework.utils.Collections;
 import org.kframework.definition.*;
+import org.kframework.definition.Definition;
+import org.kframework.definition.Module;
 import org.kframework.frontend.kil.loader.Constants;
 import org.kframework.parser.concrete2kore.ParseInModule;
+import org.kframework.utils.Collections;
 import org.kframework.utils.UserList;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.kframework.utils.Collections.*;
-import static org.kframework.definition.Constructors.NonTerminal;
-import static org.kframework.definition.Constructors.SyntaxSort;
-import static org.kframework.definition.Constructors.Sort;
+import static org.kframework.definition.Constructors.*;
+import static org.kframework.utils.Collections.immutable;
+import static org.kframework.utils.Collections.mutable;
 
 
 /**
