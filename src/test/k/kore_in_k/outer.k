@@ -83,7 +83,7 @@ module OUTER-KORE
                     | Bubble KAttributesDeclaration [klabel(#Attrs), prefer]
   // The following can still change
   syntax KModuleName ::= r"[A-Z][A-Z\\-]*"    [token]
-  syntax KSort       ::= r"[A-Z][A-Za-z0-9]*" [token]
+  syntax KSort       ::= r"[#]?[A-Z][A-Za-z0-9]*" [token]
                        | KSort "{" KSortList "}"
   syntax KSortList   ::= KSortList "," KSort  [klabel(KSortList)]
                        | KSort
