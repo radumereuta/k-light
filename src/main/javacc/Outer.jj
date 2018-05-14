@@ -105,7 +105,7 @@ States:
    - TAG_STATE: used in body of Tags
 
  - Tertiary States: (switch for one token)
-   - MODNAME_STATE: used after "module", "interface" or "imports"
+   - MODNAME_STATE: used after "module" or "imports"
 
 To avoid clutter we make separate token declarations for only those
 tokens that are used in multiple places (in the DEFAULT state).
@@ -440,14 +440,12 @@ PARSER_END(Outer)
 
 | <SYNTAX: "syntax">
 | <ENDMODULE: "endmodule">
-| <ENDINTERFACE: "endinterface">
 
 | <PRIORITY: "priority"> : KLABEL_STATE
 | <PRIORITIES: "priorities"> : KLABEL_STATE
 | <NON_ASSOC: "non-assoc"> // : KLABEL_STATE
 
 | <MODULE: "module"> : MODNAME_STATE
-| <INTERFACE: "interface"> : MODNAME_STATE
 | <IMPORTS: "imports"> : MODNAME_STATE
 | <IMPORTS2: "import"> : MODNAME_STATE
 
@@ -477,8 +475,6 @@ PARSER_END(Outer)
 
 | "List"
 | "NeList"
-| "Lexer"
-| "Token"
 
 | "require"
 | "requires"
@@ -487,12 +483,11 @@ PARSER_END(Outer)
 | <LOWER_ID: ("#")?["a"-"z"](["a"-"z", "A"-"Z", "0"-"9"])*>
 }
 
-/** Parses an UPPER_ID token, but also allows List, NeList, Lexer, and
-Token unlike the default UPPER_ID.
+/** Parses an UPPER_ID token, but also allows List, NeList, unlike the default UPPER_ID.
 */
 void UpperId() : {}
 {
-  <UPPER_ID> | "List" | "NeList" | "Lexer" | "Token"
+  <UPPER_ID> | "List" | "NeList"
 }
 
 /** Parses a string literal and returns the decoded value of that string. */
@@ -521,7 +516,7 @@ String StringRegex() : {}
   }
 }
 
-/** Parses and returns a NonTerminal but not a List, NeList, Lexer, or Token */
+/** Parses and returns a NonTerminal but not a List or NeList */
 NonTerminal SimpleSortID() : { Location loc = startLoc(); String str; }
 {
   <UPPER_ID> { str = image(); }
@@ -535,7 +530,7 @@ NonTerminal SimpleSortID() : { Location loc = startLoc(); String str; }
 NonTerminal SortID() : { NonTerminal nonTerminal; }
 {
   nonTerminal = SimpleSortID() { return nonTerminal; }
-  | ("List" | "NeList" | "Lexer" | "Token")
+  | ("List" | "NeList")
     { return tokenLoc(new NonTerminal(Sort.of(image()))); }
 }
 
@@ -562,7 +557,6 @@ NonTerminal SortID() : { NonTerminal nonTerminal; }
 {
   "syntax"        { matchedToken.kind = SYNTAX; } : DEFAULT
 | "endmodule"     { matchedToken.kind = ENDMODULE; } : DEFAULT
-| "endinterface"  { matchedToken.kind = ENDINTERFACE; } : DEFAULT
 
 | "rule"          { matchedToken.kind = RULE;    } : BUBBLE_STATE
 | "configuration" { matchedToken.kind = CONFIGURATION;  } : BUBBLE_STATE
@@ -598,7 +592,6 @@ StringSentence Bubble(String type) :
 {
   "syntax"        { matchedToken.kind = SYNTAX; } : DEFAULT
 | "endmodule"     { matchedToken.kind = ENDMODULE; } : DEFAULT
-| "endinterface"  { matchedToken.kind = ENDINTERFACE; } : DEFAULT
 
 | "rule"          { matchedToken.kind = RULE;    } : BUBBLE_STATE
 | "configuration" { matchedToken.kind = CONFIGURATION;  } : BUBBLE_STATE
