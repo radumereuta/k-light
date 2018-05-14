@@ -1,10 +1,7 @@
 // Copyright (c) 2014-2016 K Team. All Rights Reserved.
 package org.kframework.utils;
 
-import com.beust.jcommander.JCommander;
 import org.apache.commons.lang3.StringUtils;
-import org.kframework.frontend.kil.NonTerminal;
-import org.kframework.frontend.kil.Sort;
 
 public class StringUtil {
     /**
@@ -371,51 +368,6 @@ public class StringUtil {
     }
 
     /**
-     * Creates an SDF safe representation of a Sort name.
-     * @param nonTerminal String representation of the sort.
-     * @return textual representation of the Sort name.
-     */
-    public static String escapeSort(NonTerminal nonTerminal) {
-        return escapeSort(nonTerminal.getSort());
-    }
-
-    /**
-     * Creates an SDF safe representation of a Sort name.
-     * @param sort String representation of the sort.
-     * @return textual representation of the Sort name.
-     */
-    public static String escapeSort(Sort sort) {
-        return escapeSort(sort.toString());
-    }
-
-    /**
-     * Creates an SDF safe representation of a Sort name.
-     * @param str String representation of the sort.
-     * @return textual representation of the Sort name.
-     */
-    public static String escapeSort(String str) {
-        str = str.replace("D", "Dd");
-        str = str.replace("#", "Dz");
-        return str;
-    }
-
-    public static String unEscapeSortName(String str) {
-        str = str.replace("Dz", "#");
-        str = str.replace("Dd", "D");
-        return str;
-    }
-
-    public static String getSortNameFromCons(String str) {
-        String ret = "";
-        int idx = str.lastIndexOf("1");
-
-        if (idx > 0) {
-            ret = str.substring(0, idx);
-        }
-        return StringUtil.unEscapeSortName(ret);
-    }
-
-    /**
      * Takes a string as input and creates a continuous token for the maude lexer.
      * Adds a backquote character to the following characters: ( ) [ ] { } , `
      * @param tag Input string.
@@ -546,44 +498,6 @@ public class StringUtil {
 
         // string has no spaces to split
         return str;
-    }
-
-    /**
-     * Finesse the JCommander usage output to make it more readable to the user.
-     *
-     * This function does two things. First, it reworks the indentation to fix a
-     * bug where different commands are indented differently. Second, it
-     * separates out experimental and non-experimental options in order to print
-     * their usage separately.
-     * @param string The unfiltered output from JCommander's usage
-     * @return An array of strings. If the command has experimental options, they
-     * are in the second string, and the main options are in the first string.
-     * Otherwise, there will only be one string outputted.
-     */
-    public static String[] finesseJCommanderUsage(String string, JCommander jc) {
-        //for some reason the usage pattern indents commands inconsistently, so we need to adjust it
-        string = string.replaceAll("        ", "    ");
-        String lastLine = "";
-        StringBuilder mainOptions = new StringBuilder();
-        StringBuilder experimentalOptions = new StringBuilder();
-        experimentalOptions.append("  Experimental Options:\n");
-        boolean inExperimentalOptions = false;
-        for (String line : string.split("\n")) {
-            if (line.startsWith("    --")) {
-                if (lastLine.compareTo(line) > 0) {
-                    inExperimentalOptions = true;
-                }
-                lastLine = line;
-            }
-            if (inExperimentalOptions) {
-                experimentalOptions.append(line);
-                experimentalOptions.append("\n");
-            } else {
-                mainOptions.append(line);
-                mainOptions.append("\n");
-            }
-        }
-        return new String[] {mainOptions.toString(), experimentalOptions.toString()};
     }
 
     public static String escapeShell(String arg, OS os) {
