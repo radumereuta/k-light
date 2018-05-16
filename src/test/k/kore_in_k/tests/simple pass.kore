@@ -1,0 +1,6 @@
+[]
+module TEST
+  sort S{} []
+  symbol smb{}(): S{} []
+  symbol inj{Sin,Sout}(Sin): Sout []
+endmodule []

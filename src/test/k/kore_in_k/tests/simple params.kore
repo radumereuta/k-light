@@ -1,0 +1,8 @@
+[]
+module TEST
+  symbol inj{Sin,Sout}(Sin): Sout []
+  symbol inj2{Sin,Sout}(Sin): Sout []
+  symbol terminal{A}(A,B{A}): B{A} []
+  symbol c{}(): C []
+  symbol inj{B{C},#A}(B{C}): #A []
+endmodule []

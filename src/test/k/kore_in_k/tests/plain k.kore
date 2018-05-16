@@ -1,0 +1,4 @@
+[]
+module TEST
+  symbol inj(): S []
+endmodule []
