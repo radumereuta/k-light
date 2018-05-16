@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.kframework.attributes.Source;
 import org.kframework.definition.Definition;
 import org.kframework.definition.Module;
+import org.kframework.kore.TreeNodesToOuterKORE;
 import org.kframework.parser.concrete2kore.ParseInModule;
 import org.kframework.parser.concrete2kore.ParserUtils;
 import org.kframework.parser.concrete2kore.generator.RuleGrammarGenerator;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 
 import static org.kframework.definition.Constructors.Sort;
@@ -35,56 +37,69 @@ public class OuterTests {
     private String mainSyntaxModule = "OUTER";
     private String startSymbol = "KDefinition";
     private ParserUtils defParser = new ParserUtils(FileUtil.testFileUtil()::resolveWorkingDirectory, new KExceptionManager(new GlobalOptions()));
+    private String koreParserCWD = "c:\\work\\kore\\src\\main\\haskell\\"; // hardcoded for each machine - for testing only
+    Definition baseK = defParser.loadDefinition(mainModule, mainSyntaxModule, FileUtil.load(definitionFile), new Source("OuterTests"), new ArrayList<>());
+    Module syntaxModule = baseK.getModule(mainSyntaxModule).get();
+    ParseInModule parser = RuleGrammarGenerator.getCombinedGrammar(RuleGrammarGenerator.getProgramsGrammar(syntaxModule, baseK));
 
     @Test @Ignore
     public void testOuter() {
-        int total = 0, warnings = 0, ok = 0, error = 0, others = 0;
+        int warnings = 0, ok = 0, error = 0;
         Stopwatch sw = new Stopwatch(new GlobalOptions(true, GlobalOptions.Warnings.ALL, true));
-        KExceptionManager kem = new KExceptionManager(new GlobalOptions());
 
         try {
-            Definition baseK = defParser.loadDefinition(mainModule, mainSyntaxModule, FileUtil.load(definitionFile), new Source("OuterTests"), new ArrayList<>());
-            Module syntaxModule = baseK.getModule(mainSyntaxModule).get();
-            ParseInModule parser = RuleGrammarGenerator.getCombinedGrammar(RuleGrammarGenerator.getProgramsGrammar(syntaxModule, baseK));
-
             Object[] results = Files.find(Paths.get(startPath), Integer.MAX_VALUE,
                     (filePath, fileAttr) -> fileAttr.isRegularFile() && filePath.toString().endsWith(".k"))
                     .parallel()
                     .map(fp -> {
-                        long startTime = System.currentTimeMillis();
-                        //RunProcess.ProcessOutput po = RunProcess.execute(new HashMap<String, String>(), new File(kastPath), "kast.bat", fp.toString());
-                        //String err = new String(po.stderr);
-                        //System.out.println("[S]       " + fp.toString());
-                        Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> rez =
-                                parser.parseString(FileUtil.load(fp.toFile()), Sort(startSymbol), Source.apply(fp.toString()));
-                        long totalTime = System.currentTimeMillis() - startTime;
-                        if (rez._1().isLeft()) {
-                            System.out.println("[Error]   " + fp.toString() + "   (" + totalTime + " ms)   " + rez._1.left().get().iterator().next().getKException().getLocation() + ":" + rez._1.left().get().iterator().next().getKException().getMessage());
-                            return "[Error]";
-                        } else if (rez._2().size() != 0) {
-                            System.out.println("[Warning] " + fp.toString() + "   (" + totalTime + " ms)   " + rez._2.size());
-                            return "[Warning]";
-                        }
-                        System.out.println("[ok]      " + fp.toString() + " (" + totalTime + " ms)   ");
-                        return "[ok]";
+                        String rez = process(fp.toFile());
+                        return rez;
                     }).toArray();
             for (Object obj : results) {
                 String str = (String) obj;
                 switch (str) {
                     case "[ok]": ok++; break;
-                    case "[Error]": error++; break;
                     case "[Warning]": warnings++; break;
-                    case "[?????]": others++; break;
+                    default: error++;
                 }
             }
             System.out.println("Ok: " + ok);
             System.out.println("Error: " + error);
             System.out.println("Warning: " + warnings);
-            System.out.println("Others: " + others);
-            System.out.println("Total: " + (ok + error + warnings + others));
+            System.out.println("Total: " + (ok + error + warnings));
             sw.printTotal("Time: ");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    private String process(File f) {
+        long startTime = System.currentTimeMillis();
+        Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> rez =
+                parser.parseString(FileUtil.load(f), Sort(startSymbol), Source.apply(f.toString()));
+        long totalTime = System.currentTimeMillis() - startTime;
+
+        if (rez._1.isLeft()) {
+            System.out.println("[Error]   " + f.getAbsolutePath() + "   (" + totalTime + " ms) " + rez._1.left().toString());
+            return "[Error]";
+        } else if (!rez._2.isEmpty()) {
+            System.out.println("[Warning] " + f.getAbsolutePath() + "   (" + totalTime + " ms)");
+            return "[Warning]";
+        }
+        String str = TreeNodesToOuterKORE.apply(rez._1.right().get());
+        String termination = "ore";
+        FileUtil.save(new File(f.getAbsolutePath() + termination), str);
+        try {
+            RunProcess.ProcessOutput po = RunProcess.execute(new HashMap<>(), new File(koreParserCWD), "C:\\work\\stack\\bin\\stack.exe", "exec", "--", "kore-parser", f.getAbsolutePath() + termination);
+            if (po.exitCode != 0)
+                System.out.println("[KoreErr] " + f.getAbsolutePath() + "   (" + totalTime + " ms)");
+            else
+                System.out.println("[Ok]      " + f.getAbsolutePath() + "   (" + totalTime + " ms)");
+            return po.exitCode != 0 ? "[KoreErr]" : "[ok]";
+        } catch (InterruptedException | IOException e) {
+            e.printStackTrace();
+            return "[IOError]";
+        }
+    }
+
 }

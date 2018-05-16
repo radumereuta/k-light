@@ -84,10 +84,10 @@ module OUTER-KORE
   // The following can still change
   syntax KModuleName ::= r"[A-Z][A-Z\\-]*"    [token]
   syntax KSort       ::= r"[#]?[A-Z][A-Za-z0-9]*" [token]
-                       | KSort "{" KSortList "}"
-  syntax KSortList   ::= KSortList "," KSort  [klabel(KSortList)]
+                       | KSort "{" KSortList "}"  [klabel(#paramSort)]
+  syntax KSortList   ::= KSortList "," KSort  [klabel(#KSortList)]
                        | KSort
-                       | ""                   [klabel(emptyKSortList)]
+                       | ""                   [klabel(#emptyKSortList)]
 endmodule
 
 module OUTER
