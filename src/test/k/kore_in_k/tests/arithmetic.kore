@@ -1,0 +1,9 @@
+[]
+module INPUT
+  sort Int{} []
+  sort Var{} []
+  sort Exp{} []
+  symbol inj{Sin,Sout}(Sin): Sout []
+  symbol times{}(Exp{},Exp{}): Exp{} []
+  symbol plus{}(Exp{},Exp{}): Exp{} []
+endmodule []

@@ -3,6 +3,7 @@ package org.kframework.kore
 import java.util
 
 import org.kframework.treeNodes.{Term, _}
+import org.kframework.utils.StringUtil
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
@@ -56,7 +57,13 @@ object TreeNodesToOuterKORE {
 
   def applySyntax(paramList:String, prodSort:String, t:Term): String = t match {
     case tc@TermCons(items, p) => p.klabel.get match {
-      case "#KProductionWAttr" => "  symbol " + getKLabel(tc).get + paramList + "(" + collectPItems(items.get(1)).mkString(",") + "): " + prodSort + " []\n"
+      case "#KProductionWAttr" =>
+        val klabel = getKLabel(tc)
+        val parsingOnly = getTagValue(tc, "parsingOnly")
+        if (klabel.isDefined && parsingOnly.isEmpty)
+          "  symbol " + klabel.get + paramList + "(" + collectPItems(items.get(1)).mkString(",") + "): " + prodSort + " []\n"
+        else
+          ""
       case _ => (items.asScala map { (i) => applySyntax(paramList, prodSort, i)}).mkString("")
     }
     case Constant(value, _) =>
@@ -66,16 +73,30 @@ object TreeNodesToOuterKORE {
   def getKLabel(t:Term): Option[String] = getTagValue(t, "klabel")
   def getTagValue(t:Term, tag:String): Option[String] = t match {
     case Constant(_, _) => Option.empty
-    case TermCons(items, p) =>
-      if (p.klabel.get.equals("#TagContent")) {
+    case TermCons(items, p) => p.klabel.get match {
+      case "#TagSimple" =>
+        val key:Constant = items.get(0).asInstanceOf[Constant]
+        if (key.value.equals(tag))
+          Option.apply("")
+        else
+          Option.empty
+      case "#TagContent" =>
         val value:Constant = items.get(0).asInstanceOf[Constant]
         val key:Constant = items.get(1).asInstanceOf[Constant]
         if (key.value.equals(tag))
-          return Option.apply(value.value)
+          Option.apply(value.value)
         else
-          return Option.empty
-      }
-      // find first node that defines a klabel
-      (items.asScala map getKLabel).foldRight(Option.empty[String]){(i, acc) => { if (acc.isDefined) acc else if (i.isDefined) i else Option.empty}}
+          Option.empty
+      case "#TagString" =>
+        val value:Constant = items.get(0).asInstanceOf[Constant]
+        val key:Constant = items.get(1).asInstanceOf[Constant]
+        if (key.value.equals(tag))
+          Option.apply(StringUtil.unquoteCString(value.value))
+        else
+          Option.empty
+      case _ =>
+        // find first node that defines a klabel
+        (items.asScala map {(a) => getTagValue(a, tag)}).foldRight(Option.empty[String]){(i, acc) => { if (acc.isDefined) acc else if (i.isDefined) i else Option.empty}}
+    }
   }
 }
