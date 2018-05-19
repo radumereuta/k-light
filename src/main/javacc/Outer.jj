@@ -785,8 +785,8 @@ void Production(List<Production> prods) :
 | (ProductionItem(items))+
 ) { Production prod = new Production(new NonTerminal(Sort.of("")), items); }
   (Attributes(prod))?
-  { if (klabel != null && prod.getAttribute("klabel") == null) {
-      prod.addAttribute("klabel", klabel);
+  { if (klabel != null && prod.getAttribute("symbol") == null) {
+      prod.addAttribute("symbol", klabel);
     }
     prods.add(markLoc(loc, prod)); }
 }

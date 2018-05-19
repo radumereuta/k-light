@@ -27,7 +27,7 @@ public class NonTerminal extends ProductionItem {
     }
 
     public Sort getSort() {
-        return sort.isCellSort() ? Sort.BAG : sort;
+        return sort;
     }
 
     public Sort getRealSort() {

@@ -11,8 +11,8 @@ module COMMON
   import INJ []
   sort A1{} []
   sort A2{} []
-  sort Top{} []
   sort Var{} []
+  sort Top{} []
 
 endmodule []
 

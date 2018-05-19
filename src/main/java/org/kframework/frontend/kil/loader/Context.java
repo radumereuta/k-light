@@ -30,9 +30,9 @@ public class Context implements Serializable {
 
     public void addProduction(Production p) {
         productions.add(p);
-        if (p.getKLabel() != null) {
-            klabels.put(p.getKLabel(), p);
-            tags.put(p.getKLabel(), p);
+        if (p.getSymbol() != null) {
+            klabels.put(p.getSymbol(), p);
+            tags.put(p.getSymbol(), p);
             if (p.isListDecl()) {
                 listKLabels.put(p.getTerminatorKLabel(), p);
             }

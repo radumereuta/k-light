@@ -67,9 +67,9 @@ private class TreeNodesToKOREVisitor {
   // cases for the types of nodes - actual printing of the node
   private def doMatch(t:Term): String = t match {
     case c@Constant(s, p) => printInfo(c, "\\dv{" + p.sort.localName + "{}}(" + StringUtil.enquoteCString(s) + ")")
-    case tc@TermCons(items, p) => printInfo(tc, p.klabel.get match {
+    case tc@TermCons(items, p) => printInfo(tc, p.symbol.get match {
       case "inj" => "inj{" + p.items.iterator.next().asInstanceOf[NonTerminal].sort.localName + "{}," + p.sort.localName + "{}}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
-      case _ => p.klabel.get + "{}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
+      case _ => p.symbol.get + "{}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
     })
     case Ambiguity(items) =>
       val sort: String = items.iterator.next().asInstanceOf[ProductionReference].production.sort.localName

@@ -18,8 +18,8 @@ public class UserList {
     public Sort sort = null;
     public Sort childSort = null;
     public String separator = null;
-    public String terminatorKLabel = null;
-    public String klabel = null;
+    public String terminatorSymbol = null;
+    public String symbol = null;
     public boolean nonEmpty = false;
     public Production pList = null, pTerminator = null;
     public org.kframework.attributes.Att attrs = null;
@@ -30,8 +30,8 @@ public class UserList {
 
     // find all productions annotated with 'userList'
     // expecting to always find 2 of them of the form:
-    // Es ::= E "," Es  [right, userList, klabel(...)]
-    // Es ::= ".Es"     [userList, klabel(...)]
+    // Es ::= E "," Es  [right, userList, symbol(...)]
+    // Es ::= ".Es"     [userList, symbol(...)]
     public static List<UserList> getLists(Set<Sentence> sentences) {
         Map<Boolean, List<Sentence>> separatedProds
                 = sentences.stream().collect(Collectors.groupingBy(p -> p instanceof Production && p.att().contains(Att.userList())));
@@ -48,21 +48,21 @@ public class UserList {
                 if (p.items().size() == 3) {
                     Terminal t = (Terminal) p.items().tail().head();
                     ul.separator = t.value();
-                    ul.klabel = p.klabel().get();
-                    ul.attrs = p.att().remove("klabel");
+                    ul.symbol = p.symbol().get();
+                    ul.attrs = p.att().remove(Constants.SYMBOL);
                     // should work without the Att.userList() att, i.e. for any list -- see #1892
                     ul.nonEmpty = ul.attrs.get(Att.userList()).get().get().equals("+");
                     ul.childSort = ((NonTerminal) p.items().head()).sort();
                     ul.pList = p;
                 } else if (p.items().size() == 1 && p.items().head() instanceof Terminal) {
-                    ul.terminatorKLabel = p.klabel().get();
+                    ul.terminatorSymbol = p.symbol().get();
                     ul.pTerminator = p;
                 } else
                     throw new AssertionError("Didn't expect this type of production when recognizing userList patterns!");
             }
             assert ul.attrs != null;
-            assert ul.klabel != null;
-            assert ul.terminatorKLabel != null;
+            assert ul.symbol != null;
+            assert ul.terminatorSymbol != null;
             assert ul.childSort != null;
             res.add(ul);
         }

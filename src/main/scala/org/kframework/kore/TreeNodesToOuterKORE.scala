@@ -3,7 +3,7 @@ package org.kframework.kore
 import java.util
 
 import org.kframework.treeNodes.{Term, _}
-import org.kframework.utils.StringUtil
+import org.kframework.utils.{Constants, StringUtil}
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
@@ -19,7 +19,7 @@ object TreeNodesToOuterKORE {
     case Constant(s, p) => s
     case tc@TermCons(items, p) =>
       val itms = new util.ArrayList(items).asScala.reverse
-      p.klabel.get match {
+      p.symbol.get match {
       case "#KDefinition" => "[]\n" + apply(itms)
       case "#KModule" =>
         "module " + apply(items.get(2)) + "\n" +
@@ -47,7 +47,7 @@ object TreeNodesToOuterKORE {
 
   // collect production items
   def collectPItems(t:Term): List[String] = t match {
-    case TermCons(items, p) => p.klabel.get match {
+    case TermCons(items, p) => p.symbol.get match {
       case "#KProduction" => collectPItems(items.get(1)) ++ collectPItems(items.get(0))
       case "#nonTerminal" => List(apply(items.get(0)))
       case "#regularTermina" => List.empty
@@ -56,12 +56,12 @@ object TreeNodesToOuterKORE {
   }
 
   def applySyntax(paramList:String, prodSort:String, t:Term): String = t match {
-    case tc@TermCons(items, p) => p.klabel.get match {
+    case tc@TermCons(items, p) => p.symbol.get match {
       case "#KProductionWAttr" =>
-        val klabel = getKLabel(tc)
+        val symbol = getSymbol(tc)
         val parsingOnly = getTagValue(tc, "parsingOnly")
-        if (klabel.isDefined && parsingOnly.isEmpty)
-          "  symbol " + klabel.get + paramList + "(" + collectPItems(items.get(1)).mkString(",") + "): " + prodSort + " []\n"
+        if (symbol.isDefined && parsingOnly.isEmpty)
+          "  symbol " + symbol.get + paramList + "(" + collectPItems(items.get(1)).mkString(",") + "): " + prodSort + " []\n"
         else
           ""
       case _ => (items.asScala map { (i) => applySyntax(paramList, prodSort, i)}).mkString("")
@@ -70,10 +70,10 @@ object TreeNodesToOuterKORE {
       value
   }
 
-  def getKLabel(t:Term): Option[String] = getTagValue(t, "klabel")
+  def getSymbol(t:Term): Option[String] = getTagValue(t, Constants.SYMBOL)
   def getTagValue(t:Term, tag:String): Option[String] = t match {
     case Constant(_, _) => Option.empty
-    case TermCons(items, p) => p.klabel.get match {
+    case TermCons(items, p) => p.symbol.get match {
       case "#TagSimple" =>
         val key:Constant = items.get(0).asInstanceOf[Constant]
         if (key.value.equals(tag))
@@ -95,7 +95,7 @@ object TreeNodesToOuterKORE {
         else
           Option.empty
       case _ =>
-        // find first node that defines a klabel
+        // find first node that defines a symbol
         (items.asScala map {(a) => getTagValue(a, tag)}).foldRight(Option.empty[String]){(i, acc) => { if (acc.isDefined) acc else if (i.isDefined) i else Option.empty}}
     }
   }

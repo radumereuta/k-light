@@ -1,8 +1,8 @@
 module TEST
 
 syntax S{}
-syntax S{} ::= "" [klabel(smb{})]
+syntax S{} ::= "" [symbol(smb{})]
 
-syntax {Sin, Sout} Sout ::= Sin [klabel(inj)]
+syntax {Sin, Sout} Sout ::= Sin [symbol(inj)]
 
 endmodule

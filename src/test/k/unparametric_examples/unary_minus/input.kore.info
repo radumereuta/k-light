@@ -9,9 +9,9 @@ endmodule []
 
 module COMMON
   import INJ []
-  sort Layout{} []
   sort Exp{} []
   sort Int{} []
+  sort Layout{} []
 
 endmodule []
 

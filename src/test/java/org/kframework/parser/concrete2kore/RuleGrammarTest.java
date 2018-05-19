@@ -97,10 +97,10 @@ public class RuleGrammarTest {
     public void test20() {
         String def = "" +
                 "module TEST " +
-                "syntax Exp ::= Int \"(\" Ints  \")\" " +
-                "syntax Exp ::= Int \"[\" Ints2 \"]\" " +
-                "syntax Ints  ::=   List{Int, \",\"} " +
-                "syntax Ints2 ::= NeList{Int, \".\"} " +
+                "syntax Exp ::= Int \"(\" Ints  \")\" [symbol(_(_))] " +
+                "syntax Exp ::= Int \"[\" Ints2 \"]\"  [symbol(_[_])] " +
+                "syntax Ints  ::=   List{Int, \",\"}  [symbol(_,_)] " +
+                "syntax Ints2 ::= NeList{Int, \".\"}  [symbol(_,_)] " +
                 "syntax Int ::= r\"[0-9]+\" [token] " +
                 "endmodule";
         parseProgram("0,1,2", def, "Ints", 0, false);
@@ -114,7 +114,7 @@ public class RuleGrammarTest {
         String def = "" +
                 "module TEST " +
                 "syntax Id  ::=  r\"[a-z]+\" [token, reject2(int)] " +
-                "syntax Id  ::=  \"int\" " +
+                "syntax Id  ::=  \"int\"  [symbol(int)] " +
                 "endmodule";
         parseProgram("int", def, "Id", 0, false);
     }
@@ -125,8 +125,8 @@ public class RuleGrammarTest {
         String def = "" +
                 "module TEST " +
                 "syntax Layout ::= r\"([\\\\ \\n\\r\\t])*\" " +
-                "syntax Ids ::= List{Id, \",\"} " +
-                "syntax Id  ::=  \"a\" " +
+                "syntax Ids ::= List{Id, \",\"}  [symbol(_,_)] " +
+                "syntax Id  ::=  \"a\"  [symbol(a)] " +
                 "endmodule";
         parseProgram("  a ", def, "Id", 0, false);
         parseProgram("a,a", def, "Ids", 0, false);
@@ -145,8 +145,8 @@ public class RuleGrammarTest {
                 "syntax LayoutItem ::= r\"/\\\\*([^\\\\*]|(\\\\*+([^\\\\*/])))*\\\\*+/\" " + // "/\\*([^\\*]|(\\*+([^\\*/])))*\\*+/"
                 "syntax LayoutItem ::= r\"//[^\\n\\r]*\" " +                                 // "//[^\n\r]*"
                 "syntax LayoutItem ::= r\"[\\\\ \\n\\r\\t]*\" " +                            // "[\\ \n\r\t]*"
-                "syntax Ids ::= List{Id, \",\"} " +
-                "syntax Id  ::=  \"a\" " +
+                "syntax Ids ::= List{Id, \",\"}  [symbol(_,_)] " +
+                "syntax Id  ::=  \"a\"  [symbol(a)] " +
                 "endmodule";
         parseProgram("  a ", def, "Id", 0, false);
         parseProgram("//a", def, "Ids", 0, false);
@@ -173,8 +173,8 @@ public class RuleGrammarTest {
                 "syntax LayoutItem  ::= \"__attribute__\" r\"[\\\\ \\n\\r\\t]*\"  \"((\" LayoutInner \"))\"\n" +
                 "syntax LayoutItem2 ::= r\"[^\\\\(\\\\)]*\"\n" +
                 "syntax LayoutItem2 ::= \"(\" LayoutInner \")\" \n" +
-                "syntax Ids ::= \"(\" Ids \")\"\n" +
-                "syntax Ids ::= \"\"\n" +
+                "syntax Ids ::= \"(\" Ids \")\" [symbol((_))]\n" +
+                "syntax Ids ::= \"\"\n [symbol(.)]" +
                 "endmodule\n";
         parseProgram("  __attribute__ (()) ", def, "Ids", 0, false);
         parseProgram("  ((__attribute__ ((asdf(a  ), ()))))", def, "Ids", 0, false);

@@ -30,7 +30,7 @@ object Constructors {
   def Production(sort: Sort, items: Seq[ProductionItem]) = definition.Production(sort, items, Att(), Option.empty, Source("generated"))
   def Production(sort: Sort, items: Seq[ProductionItem], att: attributes.Att) = definition.Production(sort, items, att, Option.empty, Source("generated"))
   def Production(klabel: String, sort: Sort, items: Seq[ProductionItem]) = definition.Production(sort, items, Att().add(klabel), Option.empty, Source("generated"))
-  def Production(klabel: String, sort: Sort, items: Seq[ProductionItem], att: attributes.Att) = definition.Production(sort, items, att.add("klabel", klabel), Option.empty, Source("generated"))
+  def Production(klabel: String, sort: Sort, items: Seq[ProductionItem], att: attributes.Att) = definition.Production(sort, items, att.add("symbol", klabel), Option.empty, Source("generated"))
 
   def Terminal(s: String) = definition.Terminal(s, Seq(), Option.empty, Source("generated"))
   def NonTerminal(sort: Sort) = definition.NonTerminal(sort, Option.empty, Source("generated"))

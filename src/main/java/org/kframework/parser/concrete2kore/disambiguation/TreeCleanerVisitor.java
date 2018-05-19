@@ -24,15 +24,15 @@ public class TreeCleanerVisitor extends SetsTransformerWithErrors<ParseFailedExc
             Either<Set<ParseFailedException>, Term> rez = new TreeCleanerVisitor2(tc).apply(tc.get(0));
             if (rez.isLeft())
                 return rez;
-            if (tc.production().klabel().isEmpty())
+            if (tc.production().symbol().isEmpty())
                 return apply(rez.right().get());
         } else {
             int a = 1 + 2;
         }
-        if (!tc.production().att().contains("bracket") && tc.production().klabel().isEmpty()) {
+        if (!tc.production().att().contains("bracket") && tc.production().symbol().isEmpty()) {
             return Left.apply(Sets.newHashSet(new ParseFailedException(new KException(
                     KException.ExceptionType.ERROR, KException.KExceptionGroup.INNER_PARSER,
-                    "Only subsort productions are allowed to have no #klabel attribute", tc.source().get(), tc.location().get()))));
+                    "Only subsort productions are allowed to have no #symbol attribute", tc.source().get(), tc.location().get()))));
         }
         return super.apply(tc);
     }
@@ -51,7 +51,7 @@ public class TreeCleanerVisitor extends SetsTransformerWithErrors<ParseFailedExc
     }
 
     /**
-     * Remove duplicate chain productions from the AST like K ::= Exp -> Exp ::= Int [klabel(exp2int)] -> Int ::= KBott.
+     * Remove duplicate chain productions from the AST like K ::= Exp -> Exp ::= Int [symbol(exp2int)] -> Int ::= KBott.
      * Some of productions are excepted though, and are annotated with 'allowChainSubsort'.
      */
     private static class TreeCleanerVisitor2 extends SetsTransformerWithErrors<ParseFailedException> {

@@ -61,7 +61,7 @@ case class Definition(
 trait Sorting {
   def computeSubsortPOSet(sentences: Set[Sentence]): POSet[Sort] = {
     val subsortRelations: Set[(Sort, Sort)] = sentences collect {
-      case Production(endSort, Seq(NonTerminal(startSort, _, _)), att, _, _) if !att.contains("klabel") => (startSort, endSort)
+      case Production(endSort, Seq(NonTerminal(startSort, _, _)), att, _, _) if !att.contains("symbol") => (startSort, endSort)
     }
 
     POSet(subsortRelations)
@@ -78,7 +78,7 @@ trait GeneratingListSubsortProductions extends Sorting {
     val listProductions =
       for (l1 <- userLists;
            l2 <- userLists
-           if l1 != l2 && l1.klabel == l2.klabel &&
+           if l1 != l2 && l1.symbol == l2.symbol &&
              subsorts.>(l1.childSort, l2.childSort)) yield {
         new Production(l1.sort, Seq(new NonTerminal(l2.sort, Option.empty, Source(Att.generatedByListSubsorting))), Att().add(Att.generatedByListSubsorting), Option.empty, Source(Att.generatedByListSubsorting))
       }
@@ -181,8 +181,8 @@ case class Module(name: String, imports: Set[Module], unresolvedLocalSentences: 
 
   lazy val productionsFor: Map[String, Set[Production]] =
     productions
-      .collect({ case p if p.klabel.isDefined => p })
-      .groupBy(_.klabel.get)
+      .collect({ case p if p.symbol.isDefined => p })
+      .groupBy(_.symbol.get)
       .map { case (l, ps) => (l, ps) }
 
   lazy val productionsForSort: Map[Sort, Set[Production]] =
@@ -208,7 +208,7 @@ case class Module(name: String, imports: Set[Module], unresolvedLocalSentences: 
 
   @transient lazy val sortFor: Map[String, Sort] = productionsFor mapValues {_.head.sort}
 
-  def isSort(klabel: String, s: Sort):Boolean = subsorts.<(sortFor(klabel), s)
+  def isSort(symbol: String, s: Sort):Boolean = subsorts.<(sortFor(symbol), s)
 
 
   @transient lazy val attributesFor: Map[String, Set[(String, Option[String])]] = productionsFor mapValues mergeAttributes
@@ -327,14 +327,14 @@ case class SyntaxSort(sort: Sort, att: Att = Att(), location: Option[Location], 
 
 case class Production(sort: Sort, items: Seq[ProductionItem], att: Att, location: Option[Location], source: Source)
   extends SyntaxSentence with ProductionToString {
-  lazy val klabel: Option[String] = att.get("klabel").flatten
+  lazy val symbol: Option[String] = att.get("symbol").flatten
 
   override def equals(that: Any): Boolean = that match {
-    case p@Production(`sort`, `items`, _, _, _) => this.klabel == p.klabel
+    case p@Production(`sort`, `items`, _, _, _) => this.symbol == p.symbol
     case _ => false
   }
 
-  override lazy val hashCode: Int = (sort.hashCode() * 31 + items.hashCode()) * 31 + klabel.hashCode()
+  override lazy val hashCode: Int = (sort.hashCode() * 31 + items.hashCode()) * 31 + symbol.hashCode()
 
   def isSyntacticSubsort: Boolean =
     items.size == 1 && items.head.isInstanceOf[NonTerminal]
@@ -345,8 +345,8 @@ case class Production(sort: Sort, items: Seq[ProductionItem], att: Att, location
 }
 
 //object Production {
-//  def apply(klabel: String, sort: Sort, items: Seq[ProductionItem], att: Att = Att()): Production = {
-//    Production(sort, items, att + (Att.kLabelAttribute -> klabel))
+//  def apply(symbol: String, sort: Sort, items: Seq[ProductionItem], att: Att = Att()): Production = {
+//    Production(sort, items, att + (Att.kLabelAttribute -> symbol))
 //  }
 //}
 

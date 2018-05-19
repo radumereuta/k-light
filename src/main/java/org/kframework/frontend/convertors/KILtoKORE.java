@@ -8,7 +8,6 @@ import org.kframework.attributes.Location;
 import org.kframework.attributes.Source;
 import org.kframework.definition.*;
 import org.kframework.definition.ProductionItem;
-import org.kframework.frontend.ADT;
 import org.kframework.frontend.kil.*;
 import org.kframework.frontend.kil.Definition;
 import org.kframework.frontend.kil.Module;
@@ -205,7 +204,7 @@ public class KILtoKORE extends KILTransformation<Object> {
             Set<Production> productions = context.tags.get(l.getLabel());
             if(productions.isEmpty())
                 throw KEMException.outerParserError("Could not find any productions for tag: "+l.getLabel(), l.getSource(), l.getLocation());
-            return productions.stream().map(p -> Tag(p.getKLabel()));
+            return productions.stream().map(p -> Tag(p.getSymbol()));
         }).collect(Collectors.toSet()));
     }
 
@@ -221,7 +220,7 @@ public class KILtoKORE extends KILTransformation<Object> {
         }
 
         Function<PriorityBlock, scala.collection.Set<Tag>> applyToTags = (PriorityBlock b) -> immutable(b
-                .getProductions().stream().filter(p -> p.getKLabel() != null).map(p -> Tag(p.getKLabel()))
+                .getProductions().stream().filter(p -> p.getSymbol() != null).map(p -> Tag(p.getSymbol()))
                 .collect(Collectors.toSet()));
 
         if (s.getPriorityBlocks().size() > 1) {
@@ -261,14 +260,14 @@ public class KILtoKORE extends KILTransformation<Object> {
                     org.kframework.attributes.Att attrs = convertAttributes(p);
 
                     org.kframework.definition.Production prod;
-                    if (p.getKLabel() == null)
+                    if (p.getSymbol() == null)
                         prod = Constructors.Production(
                                 sort,
                                 immutable(items),
                                 attrs.add(PRODUCTION_ID, "" + System.identityHashCode(p)));
                     else
                         prod = Constructors.Production(
-                                p.getKLabel(),
+                                p.getSymbol(),
                                 sort,
                                 immutable(items),
                                 attrs.add(PRODUCTION_ID, "" + System.identityHashCode(p)));
@@ -276,11 +275,11 @@ public class KILtoKORE extends KILTransformation<Object> {
                     res.add(prod);
                     // handle associativity for the production
                     if (p.containsAttribute("left"))
-                        res.add(SyntaxAssociativity(applyAssoc("left"), Set(Tag(p.getKLabel()))));
+                        res.add(SyntaxAssociativity(applyAssoc("left"), Set(Tag(p.getSymbol()))));
                     else if (p.containsAttribute("right"))
-                        res.add(SyntaxAssociativity(applyAssoc("right"), Set(Tag(p.getKLabel()))));
+                        res.add(SyntaxAssociativity(applyAssoc("right"), Set(Tag(p.getSymbol()))));
                     else if (p.containsAttribute("non-assoc"))
-                        res.add(SyntaxAssociativity(applyAssoc("non-assoc"), Set(Tag(p.getKLabel()))));
+                        res.add(SyntaxAssociativity(applyAssoc("non-assoc"), Set(Tag(p.getSymbol()))));
                 }
             }
         }
@@ -330,12 +329,12 @@ public class KILtoKORE extends KILTransformation<Object> {
         // Es ::= E "," Es
         prod1 = Constructors.Production(sort,
                 Seq(Constructors.NonTerminal(elementSort), Constructors.Terminal(userList.getSeparator()), Constructors.NonTerminal(sort)),
-                attrsWithKilProductionId.remove("klabel").add("klabel", p.getKLabel()).add("right"));
+                attrsWithKilProductionId.remove("symbol").add("symbol", p.getSymbol()).add("right"));
 
 
         // Es ::= ".Es"
         prod3 = Constructors.Production(sort, Seq(Constructors.Terminal("." + sort.toString())),
-                attrsWithKilProductionId.remove("strict").remove("klabel").add("klabel", p.getTerminatorKLabel()));
+                attrsWithKilProductionId.remove("strict").remove("symbol").add("symbol", p.getTerminatorKLabel()));
 
         res.add(prod1);
         res.add(prod3);

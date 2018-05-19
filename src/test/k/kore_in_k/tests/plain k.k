@@ -1,5 +1,5 @@
 module TEST
 
-syntax S ::= "" [klabel(inj)]
+syntax S ::= "" [symbol(inj)]
 
 endmodule
