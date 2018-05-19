@@ -2,7 +2,7 @@ module BUBBLE
 
   syntax Bubble ::= Bubble BubbleItem [token]
                   | BubbleItem        [token]
-  syntax BubbleItem ::= r"[^ \t\n\r]+" [token, reject("rule|syntax|endmodule|configuration|context|let")]
+  syntax BubbleItem ::= r"[^ \t\n\r]+" [token, reject("rule|syntax|endmodule|configuration|context")]
 
 endmodule
 
@@ -58,7 +58,6 @@ module OUTER-KORE
   syntax KSentence ::= "syntax" KSort OptionalAttributes [symbol(#KSyntaxSort)]
                      | "syntax" KSort "::=" ProdBlock [symbol(#KSyntaxProduction)]
                      | "syntax" "{" KSortList "}" KSort "::=" ProdBlock [symbol(#KSyntaxProductionWParam)]
-                     | "let"   KSortList "in" KSort "::=" ProdBlock [symbol(#KSyntaxProductionWParam)]
 
   syntax KProduction ::= KProductionItem
                        | KProduction KProductionItem [symbol(#KProduction)]
