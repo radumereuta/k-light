@@ -1,6 +1,5 @@
 package org.kframework.ctests;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.kframework.attributes.Source;
 import org.kframework.definition.Definition;
@@ -28,7 +27,7 @@ import java.util.Set;
 
 import static org.kframework.definition.Constructors.Sort;
 
-public class OuterTests {
+public class OuterTest {
 
     private String startPath = "src/test/k/kore_in_k/tests";
     private String kastPath = "src/test/k/kore_in_k";
@@ -37,12 +36,11 @@ public class OuterTests {
     private String mainSyntaxModule = "OUTER";
     private String startSymbol = "KDefinition";
     private ParserUtils defParser = new ParserUtils(FileUtil.testFileUtil()::resolveWorkingDirectory, new KExceptionManager(new GlobalOptions()));
-    private String koreParserCWD = "c:\\work\\kore\\src\\main\\haskell\\"; // hardcoded for each machine - for testing only
-    Definition baseK = defParser.loadDefinition(mainModule, mainSyntaxModule, FileUtil.load(definitionFile), new Source("OuterTests"), new ArrayList<>());
+    Definition baseK = defParser.loadDefinition(mainModule, mainSyntaxModule, FileUtil.load(definitionFile), new Source("OuterTest"), new ArrayList<>());
     Module syntaxModule = baseK.getModule(mainSyntaxModule).get();
     ParseInModule parser = RuleGrammarGenerator.getCombinedGrammar(RuleGrammarGenerator.getProgramsGrammar(syntaxModule, baseK));
 
-    @Test @Ignore
+    @Test
     public void testOuter() {
         int warnings = 0, ok = 0, error = 0;
         Stopwatch sw = new Stopwatch(new GlobalOptions(true, GlobalOptions.Warnings.ALL, true));
@@ -90,7 +88,7 @@ public class OuterTests {
         String termination = "ore";
         FileUtil.save(new File(f.getAbsolutePath() + termination), str);
         try {
-            RunProcess.ProcessOutput po = RunProcess.execute(new HashMap<>(), new File(koreParserCWD), "C:\\work\\stack\\bin\\stack.exe", "exec", "--", "kore-parser", f.getAbsolutePath() + termination);
+            RunProcess.ProcessOutput po = RunProcess.execute(new HashMap<>(), new File(startPath), "kore-parser", f.getAbsolutePath() + termination);
             if (po.exitCode != 0)
                 System.out.println("[KoreErr] " + f.getAbsolutePath() + "   (" + totalTime + " ms)");
             else
