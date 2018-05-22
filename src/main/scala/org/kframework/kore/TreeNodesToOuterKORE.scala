@@ -29,7 +29,7 @@ object TreeNodesToOuterKORE {
       case "#KImport" => "  import " + apply(itms) + " []\n"
       case "#KSyntaxSort" => "  sort " + apply(itms) + " []\n"
       case "#KSyntaxProduction" => applySyntax("", apply(tc.items.get(1)), tc.items.get(0))
-      case "#KSyntaxProductionWParam" => applySyntax("{" + apply(tc.items.get(2)) + "}", apply(tc.items.get(1)), tc.items.get(0))
+      case "#KSyntaxProductionWParam" => applySyntax("", apply(tc.items.get(1)), tc.items.get(0)) //applySyntax("{" + apply(tc.items.get(2)) + "}", apply(tc.items.get(1)), tc.items.get(0))
 
       // print sorts
       case "#emptyKSortList" => ""

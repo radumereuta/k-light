@@ -78,7 +78,7 @@ public class OuterTest {
         long totalTime = System.currentTimeMillis() - startTime;
 
         if (rez._1.isLeft()) {
-            System.out.println("[Error]   " + f.getAbsolutePath() + "   (" + totalTime + " ms) " + rez._1.left().toString());
+            System.out.println("[Error]   " + f.getAbsolutePath() + "   (" + totalTime + " ms)\n" + rez._1.left().get().iterator().next().toString());
             return "[Error]";
         } else if (!rez._2.isEmpty()) {
             System.out.println("[Warning] " + f.getAbsolutePath() + "   (" + totalTime + " ms)");
