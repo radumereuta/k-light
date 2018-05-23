@@ -30,6 +30,7 @@ object TreeNodesToOuterKORE {
       case "#KSyntaxSort" => "  sort " + apply(itms) + " []\n"
       case "#KSyntaxProduction" => applySyntax("", apply(tc.items.get(1)), tc.items.get(0))
       case "#KSyntaxProductionWParam" => applySyntax("", apply(tc.items.get(1)), tc.items.get(0)) //applySyntax("{" + apply(tc.items.get(2)) + "}", apply(tc.items.get(1)), tc.items.get(0))
+      case "#KAxiom" => "  axiom" + apply(itms)
 
       // print sorts
       case "#emptyKSortList" => ""

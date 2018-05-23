@@ -1,5 +1,5 @@
 module TEST 
-syntax #Layout ::= r"(/\\*([^\\*]|(\\*+([^\\*/])))*\\*+/|//[^\n\r]*|[\\ \n\r\t])*"
+syntax Layout ::= r"(/\\*([^\\*]|(\\*+([^\\*/])))*\\*+/|//[^\n\r]*|[\\ \n\r\t])*"
 
 syntax SortName ::= r"[A-Z][a-zA-Z0-9]*" [token]
 syntax Sort ::= SortName "{" SortList "}" [symbol(sort)]

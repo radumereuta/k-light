@@ -2,7 +2,7 @@ module BUBBLE
 
   syntax Bubble ::= Bubble BubbleItem [token]
                   | BubbleItem        [token]
-  syntax BubbleItem ::= r"[^ \t\n\r]+" [token, reject("rule|syntax|endmodule|configuration|context")]
+  syntax BubbleItem ::= r"[^ \t\n\r]+" [token, reject2("axiom|syntax|endmodule")]
 
 endmodule
 
@@ -76,9 +76,7 @@ module OUTER-KORE
   syntax AttrList ::= AttrList "," Attr [symbol(#KAttributesList)]
                     | Attr
 
-  syntax KSentence ::= "configuration" Contents [symbol(#KConfiguration)]
-                     | "rule"    Contents [symbol(#KRule)]
-                     | "context" Contents [symbol(#KContext)]
+  syntax KSentence ::= "axiom" Contents [symbol(#KAxiom)]
   syntax Contents ::= Bubble                        [symbol(#NoAttrs)]
                     | Bubble KAttributesDeclaration [symbol(#Attrs), prefer]
   // The following can still change
