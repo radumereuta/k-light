@@ -16,9 +16,10 @@ module INPUT
   syntax Exp{} ::= Exp{} "+" Exp{} [symbol(plus{})]
   syntax Exp{} ::= Exp{} "*" Exp{} [symbol(times{})]
 
+  /* input(Int): 1 */
   axiom {} \dv{Int{}}("1") []
-  axiom {} \dv{Int{}}("1") []
-axiom {} 
+  /* input(Exp): 1+2*3 */
+  axiom {} 
 \exists{Exp{}}(V2:Exp{},
 \exists{Exp{}}(V1:Exp{},
 \exists{Exp{}}(V0:Exp{},

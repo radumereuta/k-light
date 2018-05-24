@@ -21,9 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 import static org.kframework.definition.Constructors.Sort;
 
@@ -36,7 +34,13 @@ public class OuterTest {
     private String mainSyntaxModule = "OUTER";
     private String startSymbol = "KDefinition";
     private ParserUtils defParser = new ParserUtils(FileUtil.testFileUtil()::resolveWorkingDirectory, new KExceptionManager(new GlobalOptions()));
-    Definition baseK = defParser.loadDefinition(mainModule, mainSyntaxModule, FileUtil.load(definitionFile), new Source("OuterTest"), new ArrayList<>());
+    Definition baseK =
+            defParser.loadDefinition(
+                    mainModule,
+                    mainSyntaxModule,
+                    FileUtil.load(definitionFile),
+                    new Source(definitionFile.getAbsolutePath()),
+                    Arrays.asList(new File(kastPath)));
     Module syntaxModule = baseK.getModule(mainSyntaxModule).get();
     ParseInModule parser = RuleGrammarGenerator.getCombinedGrammar(RuleGrammarGenerator.getProgramsGrammar(syntaxModule, baseK));
 

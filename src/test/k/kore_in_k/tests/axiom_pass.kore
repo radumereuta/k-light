@@ -9,10 +9,8 @@ module INPUT
   sort Exp{} []
   symbol plus{}(Exp{},Exp{}): Exp{} []
   symbol times{}(Exp{},Exp{}): Exp{} []
-  axiom{} \dv{Int{}}("1") []
-    axiom{} \dv{Int{}}("1") []
-  axiom{} 
-\exists{Exp{}}(V2:Exp{},
+  axiom{} \dv{Int{}}("1")  []
+  axiom{} \exists{Exp{}}(V2:Exp{},
 \exists{Exp{}}(V1:Exp{},
 \exists{Exp{}}(V0:Exp{},
     \and{Exp{}}(
@@ -21,6 +19,5 @@ module INPUT
         \equals{Exp{},Exp{}}(V1:Exp{},inj{Int{},Exp{}}(\dv{Int{}}("2"))),
     \and{Exp{}}(
         \equals{Exp{},Exp{}}(V0:Exp{},inj{Int{},Exp{}}(\dv{Int{}}("1"))),
-\or{Exp{}}(plus{}(V0:Exp{},times{}(V1:Exp{},V2:Exp{})),\or{Exp{}}(times{}(plus{}(V0:Exp{},V1:Exp{}),V2:Exp{}),\bottom{Exp{}}())))))))) []
-
+\or{Exp{}}(plus{}(V0:Exp{},times{}(V1:Exp{},V2:Exp{})),\or{Exp{}}(times{}(plus{}(V0:Exp{},V1:Exp{}),V2:Exp{}),\bottom{Exp{}}()))))))))  []
 endmodule []

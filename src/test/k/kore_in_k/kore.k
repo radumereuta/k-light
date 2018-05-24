@@ -1,33 +1,25 @@
-module TEST 
-syntax Layout ::= r"(/\\*([^\\*]|(\\*+([^\\*/])))*\\*+/|//[^\n\r]*|[\\ \n\r\t])*"
+module BUILTIN
+  syntax KString ::= r"[\\\"](([^\\\"\n\r\\\\])|([\\\\][nrtf\\\"\\\\])|([\\\\][x][0-9a-fA-F]{2})|([\\\\][u][0-9a-fA-F]{4})|([\\\\][U][0-9a-fA-F]{8}))*[\\\"]" [token]
+  syntax KSort       ::= r"[#]?[A-Z][A-Za-z0-9]*" [token]
+                       | KSort "{" KSortList "}"  [symbol(#paramSort)]
+  syntax KSortList   ::= KSortList "," KSort  [symbol(#KSortList)]
+                       | KSort
+                       | ""                   [symbol(#emptyKSortList)]
+endmodule
 
-syntax SortName ::= r"[A-Z][a-zA-Z0-9]*" [token]
-syntax Sort ::= SortName "{" SortList "}" [symbol(sort)]
-syntax SortList ::= "" [symbol(empty)]
-                  | NeSortList
-syntax NeSortList ::= Sort
-                    | Sort "," NeSortList
+module KORE 
+imports BUILTIN
 
-syntax Int ::= r"[\\+\\-]?[0-9]+" [token]
-syntax String ::= r"[\\\"](([^\\\"\n\r\\\\])|([\\\\][nrtf\\\"\\\\]))*[\\\"]" [token]
-                | String "+String" String [right, symbol(stringAdd)]
-                | "input" "(" Int "," Int ")" [symbol(input)]
 syntax VarName ::= r"[a-zA-Z][a-zA-Z0-9]*" [token]
 
-syntax Exp ::= String
-             | VarName ":" Sort [symbol(var)]
-             | SymbolName "{" SortList "}" "(" ExpList ")" [symbol(symbol)]
-             | "(" Exp ")" [bracket]
-             | Exp "="   Exp [symbol(\equals), non-assoc]
-             > Exp "/\\" Exp [symbol(\and), right]
-             > Exp "\\/" Exp [symbol(\or), right]
+syntax Param ::= KString
+               | VarName ":" KSort [symbol(var)]
+               | SymbolName "{" KSortList "}" "(" ParamList ")" [symbol(#symbolDecl)]
 
-syntax ExpList ::= "" [symbol(empty)]
-                 | NeExpList
-syntax NeExpList ::= Exp
-                   | Exp "," NeExpList
-syntax SymbolName ::= r"[\\\\]?[a-z][a-zA-Z0-9]*" [token]
-
-syntax Start ::= Exp // start symbol
+syntax ParamList ::= "" [symbol(empty)]
+                 | NeParamList
+syntax NeParamList ::= Param
+                   | Param "," NeParamList [symbol(#paramList)]
+syntax SymbolName ::= r"[\\\\]?[a-z][a-zA-Z0-9\\-']*" [token]
 
 endmodule

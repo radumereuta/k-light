@@ -1,17 +1,15 @@
+require "kore.k"
+
 module BUBBLE
 
   syntax Bubble ::= Bubble BubbleItem [token]
                   | BubbleItem        [token]
-  syntax BubbleItem ::= r"[^ \t\n\r]+" [token, reject2("axiom|syntax|endmodule")]
+  syntax BubbleItem ::= r"[^ \t\n\r]+" [token, reject2("rule|axiom|syntax|endmodule")]
 
-endmodule
-
-module KSTRING
-  syntax KString ::= r"[\\\"](([^\\\"\n\r\\\\])|([\\\\][nrtf\\\"\\\\])|([\\\\][x][0-9a-fA-F]{2})|([\\\\][u][0-9a-fA-F]{4})|([\\\\][U][0-9a-fA-F]{8}))*[\\\"]" [token]
 endmodule
 
 module ATTRIBUTES
-  imports KSTRING
+  imports BUILTIN
 
   syntax KEY        ::= r"[a-z][A-Za-z\\-0-9]*" [token]
   syntax TAGList    ::= TAGCONTENT              [token]
@@ -30,9 +28,10 @@ endmodule
 // definitions, where the K terms are put in bubbles.  A similar, but
 // larger OUTER module can be defined for arbitrary K definitions.
 module OUTER-KORE
-  imports KSTRING
+  imports BUILTIN
   imports BUBBLE
   imports ATTRIBUTES
+  imports KORE
 
   syntax KDefinition   ::= KRequireList KModuleList [symbol(#KDefinition)]
   syntax KRequire      ::= "require" KString        [symbol(#KRequire)]
@@ -76,16 +75,14 @@ module OUTER-KORE
   syntax AttrList ::= AttrList "," Attr [symbol(#KAttributesList)]
                     | Attr
 
-  syntax KSentence ::= "axiom" Contents [symbol(#KAxiom)]
+  syntax KSentence ::= "axiom" "{" "}" AxiomContent "[" "]" [symbol(#KAxiom)]
+                     | "rule" Contents [symbol(#KRule)]
+  syntax AxiomContent ::= Param [token]
   syntax Contents ::= Bubble                        [symbol(#NoAttrs)]
                     | Bubble KAttributesDeclaration [symbol(#Attrs), prefer]
   // The following can still change
   syntax KModuleName ::= r"[A-Z][A-Z\\-]*"    [token]
-  syntax KSort       ::= r"[#]?[A-Z][A-Za-z0-9]*" [token]
-                       | KSort "{" KSortList "}"  [symbol(#paramSort)]
-  syntax KSortList   ::= KSortList "," KSort  [symbol(#KSortList)]
-                       | KSort
-                       | ""                   [symbol(#emptyKSortList)]
+
 endmodule
 
 module OUTER
