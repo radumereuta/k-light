@@ -1,4 +1,4 @@
-// should parse and fail during kore-parser because of improperly defined labels
+// should parse and pass kore-parser
 
 module TEST
 

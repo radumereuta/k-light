@@ -75,7 +75,7 @@ module OUTER-KORE
   syntax AttrList ::= AttrList "," Attr [symbol(#KAttributesList)]
                     | Attr
 
-  syntax KSentence ::= "axiom" "{" "}" AxiomContent "[" "]" [symbol(#KAxiom)]
+  syntax KSentence ::= "axiom" "{" KSortList "}" AxiomContent "[" "]" [symbol(#KAxiomWParam)]
                      | "rule" Contents [symbol(#KRule)]
   syntax AxiomContent ::= Param [token]
   syntax Contents ::= Bubble                        [symbol(#NoAttrs)]

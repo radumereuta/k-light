@@ -31,7 +31,7 @@ object TreeNodesToOuterKORE {
       case "#KSyntaxProduction" => applySyntax("", apply(tc.items.get(1)), tc.items.get(0))
       case "#KSyntaxProductionWParam" => applySyntax("", apply(tc.items.get(1)), tc.items.get(0)) //applySyntax("{" + apply(tc.items.get(2)) + "}", apply(tc.items.get(1)), tc.items.get(0))
       case "#KRule" =>  "  axiom" + apply(itms)
-      case "#KAxiom" => "  axiom{} " + apply(itms) + " []\n"
+      case "#KAxiomWParam" => "  axiom{" + apply(items.get(1)) + "} " + apply(items.get(0)) + " []\n"
 
       // print sorts
       case "#emptyKSortList" => ""
