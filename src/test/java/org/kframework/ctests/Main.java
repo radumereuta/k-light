@@ -65,14 +65,13 @@ public class Main {
     }
 
     private static String process(File f) {
-        String koreParserCWD = "c:\\work\\kore\\src\\main\\haskell\\"; // hardcoded for each machine - for testing only
         Definition baseK = defParser.loadDefinition("INPUT", "INPUT", FileUtil.load(f), new Source(f.toString()), new ArrayList<>());
 
         String str = OuterToKORE.apply(baseK);
         String termination = "ore.info";
         FileUtil.save(new File(f.getAbsolutePath() + termination), str);
         try {
-            RunProcess.ProcessOutput po = RunProcess.execute(new HashMap<>(), new File(koreParserCWD), "C:\\work\\stack\\bin\\stack.exe", "exec", "--", "kore-parser", f.getAbsolutePath() + termination);
+            RunProcess.ProcessOutput po = RunProcess.execute(new HashMap<>(), new File(startPath), "kore-parser", f.getAbsolutePath() + termination);
             return po.exitCode != 0 ? "[Error]" : "[ok]";
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
