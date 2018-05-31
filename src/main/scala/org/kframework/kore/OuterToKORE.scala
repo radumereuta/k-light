@@ -39,16 +39,18 @@ object OuterToKORE {
       val sin = (items.filter((i) => i.isInstanceOf[NonTerminal]) map apply).mkString(", ")
       val inType = if (p.symbol.get == "inj") sin + "," + sort.localName + "{}" else ""
       "  symbol " + p.symbol.get + "{" + inType + "}(" + sin + "):" + sort.localName + "{} []"
-    case b@Bubble(_, _, _, _, _) => "  /* input(" + b.att.get("start").get.get + "): " + b.contents + "*/\n" +
+    case b@Bubble(_, _, _, _, _) => "  /* input(" + b.att.get("start").orElse(Some(Some("K"))).get.get + "): " + b.contents + "*/\n" +
       "  axiom{} " + parseToKORE(b, m, d) + " []"
     case ModuleComment(_, _, _, _) => ""
+    case SyntaxAssociativity(_, _, _, _, _) => ""
+    case SyntaxPriority(_, _, _, _) => ""
   }
 
   def parseToKORE(b:Bubble, m:Module, d:Definition): String = {
     val parser = RuleGrammarGenerator.getCombinedGrammar(RuleGrammarGenerator.getProgramsGrammar(m, d))
     val rez = parser.parseStringTerm(
       b.contents.trim,
-      ADT.SortLookup(b.att.get("start").get.get),
+      ADT.SortLookup(b.att.get("start").flatten.orElse(Some("K")).get),
       b.source,
       Integer.parseInt(b.att.get("contentStartLine").get.get),
       Integer.parseInt(b.att.get("contentStartColumn").get.get),

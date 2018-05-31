@@ -65,7 +65,8 @@ public class Main {
     }
 
     private static String process(File f) {
-        Definition baseK = defParser.loadDefinition("INPUT", "INPUT", FileUtil.load(f), new Source(f.toString()), new ArrayList<>());
+        String modName = f.getName().substring(0, f.getName().length() - 2).toUpperCase();
+        Definition baseK = defParser.loadDefinition(modName, modName, FileUtil.load(f), new Source(f.toString()), new ArrayList<>());
 
         String str = OuterToKORE.apply(baseK);
         String termination = "ore.info";
