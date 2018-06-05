@@ -1,0 +1,149 @@
+[]
+module INJ
+  sort String{} []
+  sort KInt{} []
+  symbol inj{Sin,Sout}(Sin):Sout []
+  symbol info{S}(String{}, S) : S []
+  symbol input{}(KInt{}, KInt{}, KInt{}, KInt{}) : String{} []
+endmodule []
+
+module IMP-RULES
+  import INJ []
+  import RULE-CELLS []
+  import IMP-SYNTAX []
+  sort Param{} []
+
+  /* input(K): {} => .   */
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character '{'.
+	Source(generated)
+	Location(101,8,101,9)] []
+  /* input(K): I1 <= I2 => I1 <=Int I2*/
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character '<'.
+	Source(generated)
+	Location(96,11,96,12)] []
+  /* input(K): S1:Stmt S2:Stmt => S1 ~> S2  */
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character ':'.
+	Source(generated)
+	Location(105,10,105,11)] []
+  /* input(K): if (true)  S else _ => S*/
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character 'i'.
+	Source(generated)
+	Location(106,8,106,9)] []
+  /* input(K): ! T => notBool T*/
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character '!'.
+	Source(generated)
+	Location(97,8,97,9)] []
+  /* input(K): <k> X = I:Int; => . ...</k> <state>... X |-> (_ => I) ...</state>*/
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character '='.
+	Source(generated)
+	Location(104,14,104,15)] []
+  /* input(K): int .Ids; S => S  */
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character 'S'.
+	Source(generated)
+	Location(112,18,112,19)] []
+  /* input(K): <k> int (X,Xs => Xs);_ </k> <state> Rho:Map (.Map => X|->0) </state>
+    requires notBool (X in keys(Rho))*/
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character '('.
+	Source(generated)
+	Location(110,16,110,17)] []
+  /* input(K): while (B) S => if (B) {S while (B) S} else {}  */
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character 'w'.
+	Source(generated)
+	Location(108,8,108,9)] []
+  /* input(K): if (false) _ else S => S*/
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character 'i'.
+	Source(generated)
+	Location(107,8,107,9)] []
+  /* input(K): I1 / I2 => I1 /Int I2  requires I2 =/=Int 0*/
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character '/'.
+	Source(generated)
+	Location(93,11,93,12)] []
+  /* input(K): false && _ => false*/
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character 'f'.
+	Source(generated)
+	Location(99,8,99,9)] []
+  /* input(K): true && B => B*/
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character 't'.
+	Source(generated)
+	Location(98,8,98,9)] []
+  /* input(K): <k> X:Id => I ...</k> <state>... X |-> I ...</state>*/
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character ':'.
+	Source(generated)
+	Location(92,13,92,14)] []
+  /* input(K): I1 + I2 => I1 +Int I2*/
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character '+'.
+	Source(generated)
+	Location(94,11,94,12)] []
+  /* input(K): {S} => S  */
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character '{'.
+	Source(generated)
+	Location(102,8,102,9)] []
+endmodule []
+
+module PREDEF
+  import INJ []
+  sort KResult{} []
+  sort K{} []
+  sort KBott{} []
+  sort Bool{} []
+  sort Layout{} []
+  sort Map{} []
+  sort Id{} []
+  sort Int{} []
+  sort KVariable{} []
+
+  symbol emptyMap{}():Map{} []
+  symbol kSequence{}(K{}, K{}):KBott{} []
+  symbol consMap{}(Map{}, Map{}):Map{} []
+  symbol mapElement{}(K{}, K{}):Map{} []
+  symbol kRewrite{}(K{}, K{}):KBott{} []
+  symbol kBracket{}(K{}):KBott{} []
+endmodule []
+
+module KCELLS
+  import INJ []
+  import PREDEF []
+  sort Bag{} []
+  sort Cell{} []
+
+  symbol consCells{}(Bag{}, Bag{}):Bag{} []
+  symbol emptyCells{}():Bag{} []
+endmodule []
+
+module IMP-SYNTAX
+  import INJ []
+  import PREDEF []
+  sort BExp{} []
+  sort Ids{} []
+  sort Pgm{} []
+  sort AExp{} []
+  sort Stmt{} []
+  sort Block{} []
+  symbol emptyIds{}():Ids{} []
+
+  symbol plus{}(AExp{}, AExp{}):AExp{} []
+  symbol not{}(BExp{}):BExp{} []
+  symbol program{}(Ids{}, Stmt{}):Pgm{} []
+  symbol aExpBracket{}(AExp{}):AExp{} []
+  symbol bExpBracket{}(BExp{}):BExp{} []
+  symbol while{}(BExp{}, Block{}):Stmt{} []
+  symbol lte{}(AExp{}, AExp{}):BExp{} []
+  symbol consIds{}(Id{}, Ids{}):Ids{} []
+  symbol if{}(BExp{}, Block{}, Block{}):Stmt{} []
+  symbol assignment{}(Id{}, AExp{}):Stmt{} []
+  symbol block{}(Stmt{}):Block{} []
+  symbol consStmt{}(Stmt{}, Stmt{}):Stmt{} []
+  symbol div{}(AExp{}, AExp{}):AExp{} []
+  symbol emptyBlock{}():Block{} []
+  symbol and{}(BExp{}, BExp{}):BExp{} []
+endmodule []
+
+module RULE-CELLS
+  import INJ []
+  import KCELLS []
+  sort OptionalDots{} []
+
+  symbol tCell{}(OptionalDots{}, K{}, OptionalDots{}):Cell{} []
+  symbol kCell{}(OptionalDots{}, K{}, OptionalDots{}):Cell{} []
+  symbol stateCell{}(OptionalDots{}, K{}, OptionalDots{}):Cell{} []
+endmodule []

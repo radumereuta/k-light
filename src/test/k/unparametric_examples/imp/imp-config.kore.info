@@ -45,9 +45,33 @@ module IMP-SYNTAX
   symbol and{}(BExp{}, BExp{}):BExp{} []
 endmodule []
 
+module PREDEF
+  import INJ []
+  sort KResult{} []
+  sort K{} []
+  sort KBott{} []
+  sort Bool{} []
+  sort Layout{} []
+  sort Map{} []
+  sort Id{} []
+  sort Int{} []
+  sort KVariable{} []
+
+  symbol emptyMap{}():Map{} []
+endmodule []
+
+module GENERATED
+  import INJ []
+  import CONFIG-CELLS []
+  import IMP-SYNTAX []
+
+  symbol castToPgm{}(Pgm{}):Pgm{} []
+endmodule []
+
 module IMP-CONFIG
   import INJ []
   import CONFIG-CELLS []
+  import GENERATED []
   import IMP-SYNTAX []
   /* input(K): <T>
                   <k> $PGM:Pgm </k>
@@ -63,34 +87,7 @@ module IMP-CONFIG
         \equals{CellName{},K{}}(V1:CellName{},\dv{CellName{}}("k")),
     \and{K{}}(
         \equals{CellName{},K{}}(V0:CellName{},\dv{CellName{}}("T")),
-inj{Bag{},K{}}(inj{Cell{},Bag{}}(configCell{}(V0:CellName{},inj{Bag{},K{}}(consCells{}(inj{Cell{},Bag{}}(configCell{}(V1:CellName{},inj{Param{},K{}}(var{}(\dv{VarName{}}("$PGM"),\dv{KSort{}}("Pgm"))),V1:CellName{})),inj{Cell{},Bag{}}(configCell{}(V2:CellName{},inj{Map{},K{}}(emptyMap{}()),V2:CellName{})))),V0:CellName{}))))))))) []
-
-endmodule []
-
-module PREDEF
-  import INJ []
-  import KORE []
-  sort KResult{} []
-  sort K{} []
-  sort KBott{} []
-  sort Bool{} []
-  sort Layout{} []
-  sort Map{} []
-  sort Id{} []
-  sort Int{} []
-
-  symbol emptyMap{}():Map{} []
-endmodule []
-
-module BUILTIN
-  import INJ []
-  sort KSort{} []
-  sort KString{} []
-  sort KSortList{} []
-
-  symbol emptyKSortList{}():KSortList{} []
-  symbol paramSort{}(KSort{}, KSortList{}):KSort{} []
-  symbol kSortList{}(KSortList{}, KSort{}):KSortList{} []
+inj{Bag{},K{}}(inj{Cell{},Bag{}}(configCell{}(V0:CellName{},inj{Bag{},K{}}(consCells{}(inj{Cell{},Bag{}}(configCell{}(V1:CellName{},inj{Pgm{},K{}}(castToPgm{}(inj{KBott{},Pgm{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("$PGM"))))),V1:CellName{})),inj{Cell{},Bag{}}(configCell{}(V2:CellName{},inj{Map{},K{}}(emptyMap{}()),V2:CellName{})))),V0:CellName{}))))))))) []
 endmodule []
 
 module CONFIG-CELLS
@@ -100,19 +97,4 @@ module CONFIG-CELLS
 
   symbol externalCell{}(CellName{}):Cell{} []
   symbol configCell{}(CellName{}, K{}, CellName{}):Cell{} []
-endmodule []
-
-module KORE
-  import INJ []
-  import BUILTIN []
-  sort SymbolName{} []
-  sort ParamList{} []
-  sort VarName{} []
-  sort Param{} []
-  sort NeParamList{} []
-
-  symbol paramList{}(Param{}, NeParamList{}):NeParamList{} []
-  symbol empty{}():ParamList{} []
-  symbol symbolDecl{}(SymbolName{}, KSortList{}, ParamList{}):Param{} []
-  symbol var{}(VarName{}, KSort{}):Param{} []
 endmodule []
