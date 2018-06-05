@@ -8,6 +8,7 @@ module PREDEF
   syntax KResult
   syntax Map
   syntax KBott
+  syntax Set
   syntax KVariable
   syntax Layout ::= r"[\\ \n\r\t]*" [token]
 
@@ -17,11 +18,32 @@ module PREDEF
   syntax KBott ::= "(" K ")" [symbol(kBracket), bracket]
   syntax KBott ::= KVariable [symbol(inj)]
   syntax KVariable ::= r"[A-Z][A-Za-z0-9'_]*|_" [token]
+  syntax K ::= KBott [symbol(inj)]
+  syntax KBott ::= "." [symbol(dotK)]
+  
+  syntax K ::= K "requires" K [symbol(kRequires)]
 
   // Map  
   syntax Map ::= K "|->" K [symbol(mapElement)]
   syntax Map ::= Map Map [symbol(consMap)]
   syntax Map ::= ".Map" [symbol(emptyMap)]
+  
+  // Int
+  syntax Int ::= Int "+Int" Int [symbol(plusInt)]
+  syntax Int ::= Int "/Int" Int [symbol(divInt)]
+  syntax Int ::= Int "<=Int" Int [symbol(lteInt)]
+  syntax Int ::= Int "=/=Int" Int [symbol(neInt)]
+  syntax Int ::= r"[0-9]+" [token]
+  
+  // Bool
+  syntax Bool ::= "true" [symbol(boolTrue)]
+  syntax Bool ::= "false" [symbol(boolFalse)]
+  syntax Bool ::= Bool "&&" Bool [symbol(boolAnd)]
+  syntax Bool ::= "notBool" Bool [symbol(notBool)]
+  
+  // Set
+  syntax Bool ::= K "in_keys" "(" Map ")" [symbol(inKeys)]
+  
 
 endmodule
 
@@ -38,8 +60,8 @@ endmodule
 
 module RULE-CELLS
   imports KCELLS
-  syntax OptionalDots ::= "..." [klabel(dots)]
-                        | ""    [klabel(noDots)]
+  syntax OptionalDots ::= "..." [symbol(dots)]
+                        | ""    [symbol(noDots)]
 
   // should be automatically generated:
   syntax Cell ::= "<T>" OptionalDots K OptionalDots "</top>" [symbol(tCell)]
@@ -48,7 +70,7 @@ module RULE-CELLS
 
 endmodule
 
-module IMP-SYNTAX
+module IMP-SYNTAX // mostly untouched
   imports PREDEF
   syntax AExp  ::= Int [symbol(inj)] | Id [symbol(inj)]
                  | AExp "/" AExp              [left, strict, symbol(div)]
@@ -72,21 +94,56 @@ module IMP-SYNTAX
                | Id "," Ids  [symbol(consIds)]
 endmodule
 
-module IMP-RULES
+module GENERATED
   imports IMP-SYNTAX
   imports RULE-CELLS
 
-  syntax K ::= Param [symbol(inj)]
-  syntax Param ::= KBott [symbol(inj)]
-
+  // subsort diamond
   syntax K ::= Map [symbol(inj)]
   syntax Map ::= KBott [symbol(inj)]
-  
+
+  // casts
+  syntax Int  ::= Int  ":Int"  [symbol(castToInt)]
+  syntax Id   ::= Id   ":Id"   [symbol(castToId)]
+  syntax Stmt ::= Stmt ":Stmt" [symbol(castToStmt)]
+  syntax Map  ::= Map  ":Map"  [symbol(castToMap)]
+
   syntax K ::= Pgm [symbol(inj)]
   syntax Pgm ::= KBott [symbol(inj)]
+
+  syntax Id ::= KBott [symbol(inj)]
+  syntax K ::= Id [symbol(inj)]
   
+  syntax Int ::= KBott [symbol(inj)]
+  syntax K ::= Int [symbol(inj)]
 
+  syntax Bool ::= KBott [symbol(inj)]
+  syntax K ::= Bool [symbol(inj)]
+  
+  syntax Stmt ::= KBott [symbol(inj)]
+  syntax K ::= Stmt [symbol(inj)]
+  
+  syntax Stmt ::= KBott [symbol(inj)]
+  syntax K ::= Stmt  [symbol(inj)]
+  
+  syntax AExp ::= KBott [symbol(inj)]
+  syntax K ::= AExp [symbol(inj)]
 
+  syntax BExp ::= KBott [symbol(inj)]
+  syntax K ::= BExp [symbol(inj)]
+  
+  syntax Block ::= KBott [symbol(inj)]
+  syntax K ::= Block [symbol(inj)]
+
+  syntax Ids ::= KBott [symbol(inj)]
+  syntax K ::= Ids [symbol(inj)]
+
+endmodule
+
+module IMP-RULES
+  imports IMP-SYNTAX
+  imports RULE-CELLS
+  imports GENERATED
 
 // AExp
   rule <k> X:Id => I ...</k> <state>... X |-> I ...</state>
@@ -108,8 +165,7 @@ module IMP-RULES
   rule while (B) S => if (B) {S while (B) S} else {}  [structural]
 // Pgm
   rule <k> int (X,Xs => Xs);_ </k> <state> Rho:Map (.Map => X|->0) </state>
-    requires notBool (X in keys(Rho))
+    requires notBool (X in_keys(Rho))
   rule int .Ids; S => S  [structural]
-
 
 endmodule
