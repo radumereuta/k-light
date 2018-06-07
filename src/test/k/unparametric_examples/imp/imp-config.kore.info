@@ -45,6 +45,28 @@ module IMP-SYNTAX
   symbol and{}(BExp{}, BExp{}):BExp{} []
 endmodule []
 
+module IMP-CONFIG
+  import INJ []
+  import CONFIG-CELLS []
+  import GENERATED []
+  import IMP-SYNTAX []
+  /* input(K): <T>
+                  <k> $PGM:Pgm </k>
+                  <state> .Map </state>
+                </T>*/
+  axiom{} 
+\exists{K{}}(V2:CellName{},
+\exists{K{}}(V1:CellName{},
+\exists{K{}}(V0:CellName{},
+    \and{K{}}(
+        \equals{CellName{},K{}}(V2:CellName{},info{CellName{}}(input{}(\dv{KInt{}}("87"),\dv{KInt{}}("20"),\dv{KInt{}}("87"),\dv{KInt{}}("25")),\dv{CellName{}}("state"))),
+    \and{K{}}(
+        \equals{CellName{},K{}}(V1:CellName{},info{CellName{}}(input{}(\dv{KInt{}}("86"),\dv{KInt{}}("20"),\dv{KInt{}}("86"),\dv{KInt{}}("21")),\dv{CellName{}}("k"))),
+    \and{K{}}(
+        \equals{CellName{},K{}}(V0:CellName{},info{CellName{}}(input{}(\dv{KInt{}}("85"),\dv{KInt{}}("18"),\dv{KInt{}}("85"),\dv{KInt{}}("19")),\dv{CellName{}}("T"))),
+info{K{}}(input{}(\dv{KInt{}}("85"),\dv{KInt{}}("17"),\dv{KInt{}}("88"),\dv{KInt{}}("21")),inj{Bag{},K{}}(info{Bag{}}(input{}(\dv{KInt{}}("85"),\dv{KInt{}}("17"),\dv{KInt{}}("88"),\dv{KInt{}}("21")),inj{Cell{},Bag{}}(info{Cell{}}(input{}(\dv{KInt{}}("85"),\dv{KInt{}}("17"),\dv{KInt{}}("88"),\dv{KInt{}}("21")),configCell{}(V0:CellName{},info{K{}}(input{}(\dv{KInt{}}("86"),\dv{KInt{}}("19"),\dv{KInt{}}("88"),\dv{KInt{}}("17")),inj{Bag{},K{}}(info{Bag{}}(input{}(\dv{KInt{}}("86"),\dv{KInt{}}("19"),\dv{KInt{}}("88"),\dv{KInt{}}("17")),consCells{}(info{Bag{}}(input{}(\dv{KInt{}}("86"),\dv{KInt{}}("19"),\dv{KInt{}}("87"),\dv{KInt{}}("19")),inj{Cell{},Bag{}}(info{Cell{}}(input{}(\dv{KInt{}}("86"),\dv{KInt{}}("19"),\dv{KInt{}}("86"),\dv{KInt{}}("36")),configCell{}(V1:CellName{},info{K{}}(input{}(\dv{KInt{}}("86"),\dv{KInt{}}("23"),\dv{KInt{}}("86"),\dv{KInt{}}("32")),inj{Pgm{},K{}}(info{Pgm{}}(input{}(\dv{KInt{}}("86"),\dv{KInt{}}("23"),\dv{KInt{}}("86"),\dv{KInt{}}("31")),castToPgm{}(info{Pgm{}}(input{}(\dv{KInt{}}("86"),\dv{KInt{}}("23"),\dv{KInt{}}("86"),\dv{KInt{}}("27")),inj{KBott{},Pgm{}}(info{KBott{}}(input{}(\dv{KInt{}}("86"),\dv{KInt{}}("23"),\dv{KInt{}}("86"),\dv{KInt{}}("27")),inj{KVariable{},KBott{}}(info{KVariable{}}(input{}(\dv{KInt{}}("86"),\dv{KInt{}}("23"),\dv{KInt{}}("86"),\dv{KInt{}}("27")),\dv{KVariable{}}("$PGM")))))))))),V1:CellName{})))),info{Bag{}}(input{}(\dv{KInt{}}("87"),\dv{KInt{}}("19"),\dv{KInt{}}("88"),\dv{KInt{}}("17")),inj{Cell{},Bag{}}(info{Cell{}}(input{}(\dv{KInt{}}("87"),\dv{KInt{}}("19"),\dv{KInt{}}("87"),\dv{KInt{}}("40")),configCell{}(V2:CellName{},info{K{}}(input{}(\dv{KInt{}}("87"),\dv{KInt{}}("27"),\dv{KInt{}}("87"),\dv{KInt{}}("32")),inj{Map{},K{}}(info{Map{}}(input{}(\dv{KInt{}}("87"),\dv{KInt{}}("27"),\dv{KInt{}}("87"),\dv{KInt{}}("31")),emptyMap{}()))),V2:CellName{})))))))),V0:CellName{})))))))))))) []
+endmodule []
+
 module PREDEF
   import INJ []
   sort KResult{} []
@@ -66,28 +88,6 @@ module GENERATED
   import IMP-SYNTAX []
 
   symbol castToPgm{}(Pgm{}):Pgm{} []
-endmodule []
-
-module IMP-CONFIG
-  import INJ []
-  import CONFIG-CELLS []
-  import GENERATED []
-  import IMP-SYNTAX []
-  /* input(K): <T>
-                  <k> $PGM:Pgm </k>
-                  <state> .Map </state>
-                </T>*/
-  axiom{} 
-\exists{K{}}(V2:CellName{},
-\exists{K{}}(V1:CellName{},
-\exists{K{}}(V0:CellName{},
-    \and{K{}}(
-        \equals{CellName{},K{}}(V2:CellName{},\dv{CellName{}}("state")),
-    \and{K{}}(
-        \equals{CellName{},K{}}(V1:CellName{},\dv{CellName{}}("k")),
-    \and{K{}}(
-        \equals{CellName{},K{}}(V0:CellName{},\dv{CellName{}}("T")),
-inj{Bag{},K{}}(inj{Cell{},Bag{}}(configCell{}(V0:CellName{},inj{Bag{},K{}}(consCells{}(inj{Cell{},Bag{}}(configCell{}(V1:CellName{},inj{Pgm{},K{}}(castToPgm{}(inj{KBott{},Pgm{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("$PGM"))))),V1:CellName{})),inj{Cell{},Bag{}}(configCell{}(V2:CellName{},inj{Map{},K{}}(emptyMap{}()),V2:CellName{})))),V0:CellName{}))))))))) []
 endmodule []
 
 module CONFIG-CELLS

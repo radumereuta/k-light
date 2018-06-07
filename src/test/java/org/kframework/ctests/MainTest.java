@@ -1,5 +1,6 @@
 package org.kframework.ctests;
 
+import org.junit.Test;
 import org.kframework.attributes.Source;
 import org.kframework.definition.Definition;
 import org.kframework.kore.OuterToKORE;
@@ -7,6 +8,7 @@ import org.kframework.parser.concrete2kore.ParserUtils;
 import org.kframework.utils.FileUtil;
 import org.kframework.utils.GlobalOptions;
 import org.kframework.utils.Stopwatch;
+import org.kframework.utils.RunProcess;
 import org.kframework.utils.errorsystem.KExceptionManager;
 
 import java.io.File;
@@ -16,12 +18,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Main {
+public class MainTest {
 
     private static final String startPath = "src/test/k/unparametric_examples";
     private static ParserUtils defParser = new ParserUtils(FileUtil.testFileUtil()::resolveWorkingDirectory, new KExceptionManager(new GlobalOptions()));
 
-    public static void main(String[] args) {
+    @Test
+    public void testMain() {
         int total = 0, warnings = 0, ok = 0, error = 0, others = 0;
         Stopwatch sw = new Stopwatch(new GlobalOptions(true, GlobalOptions.Warnings.ALL, true));
         KExceptionManager kem = new KExceptionManager(new GlobalOptions());
