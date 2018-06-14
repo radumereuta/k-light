@@ -122,6 +122,17 @@ public class CastTests {
     }
 
     @Test @Ignore
+    public void testGenGuardedPostfixCasts() {
+        int count = 1000;
+        for (int i = 0; i < count; i++) {
+            System.out.println("  syntax S" + i + " ::= \"{\" S" + i + "  \"}:S" + i + "\" [symbol(semanticCastToS" + i + ")]");
+            System.out.println("  syntax S" + i + " ::= \"{\" S" + i + " \"}::S" + i + "\" [symbol(syntacticCastToS" + i + ")]");
+            System.out.println("  syntax S" + i + " ::= \"{\" K \"}:>S" + i + "\" [symbol(outerCastToS" + i + ")]");
+            System.out.println("  syntax KBott ::= \"{\" S" + i + " \"}<:S" + i + "\" [symbol(innerCastToS" + i + ")]");
+        }
+    }
+
+    @Test @Ignore
     public void testGenPrefixCasts() {
         int count = 1000;
         for (int i = 0; i < count; i++) {

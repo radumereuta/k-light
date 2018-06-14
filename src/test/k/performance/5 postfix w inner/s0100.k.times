@@ -1,12 +1,12 @@
-768:8 K - 16ms
-765:8 K - 3ms
-771:8 K - 5ms
-770:8 K - 5ms
-769:8 K - 4ms
-766:8 K - 5ms
-773:8 K - 5ms
-767:8 K - 5ms
-772:8 K - 6ms
-764:8 K - 9ms
-Total: 70 ms
-Average: 6 ms
+768:8 K - 22ms
+765:8 K - 5ms
+771:8 K - 6ms
+770:8 K - 3ms
+769:8 K - 2ms
+766:8 K - 3ms
+773:8 K - 2ms
+767:8 K - 2ms
+772:8 K - 2ms
+764:8 K - 2ms
+Total: 52 ms
+Average: 4 ms

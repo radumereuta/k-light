@@ -1,12 +1,12 @@
-417:8 K - 11ms
-410:8 K - 4ms
+417:8 K - 9ms
+410:8 K - 3ms
 414:8 K - 3ms
-416:8 K - 4ms
+416:8 K - 3ms
 411:8 K - 3ms
-413:8 K - 4ms
+413:8 K - 3ms
 409:8 K - 3ms
-412:8 K - 3ms
+412:8 K - 2ms
 408:8 K - 3ms
 415:8 K - 3ms
-Total: 43 ms
-Average: 4 ms
+Total: 37 ms
+Average: 3 ms
