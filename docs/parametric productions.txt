@@ -1,0 +1,41 @@
+-- K - parametric -- // list pattern for parsing programs
+syntax {Sin,Sout} Sout ::= Sin [symbol(inj)]
+syntax{S} NeList{S} ::= S "," NeList{S} [symbol(cons)]
+                      | S Terminator{S} [symbol(cons)]
+syntax{S} List{S} ::= Terminator{S} [symbol(inj)]
+                    | NeList{S} [symbol(inj)]
+syntax{S} Terminator{S} ::= "" [symbol(nil)] // this should be associated to cons
+
+// list pttern for parsing rules
+
+syntax{S} List{S} ::= S "," List{S}          [symbol(cons)]
+                    | S                      [symbol(inj)]
+                    | ".List{" SortName "}"  [symbol(nil)]  // could this even work now?
+                    | "."                    [symbol(nil)]  // I think Grigore would like this
+
+
+
+-- K - instances --
+syntax Val ::= Int    [symbol(inj)]
+             | Bool   [symbol(inj)]
+             | String [symbol(inj)]
+syntax Exp ::= Val [symbol(inj)]
+             | Id  [symbol(inj)]
+             | "function" Id "(" List{Id} ")"
+                             "{" Stmt "}" [symbol(fdecl)]
+syntax Pgm ::= "int" NeList{Exp} ";" [cons(decl)]
+
+-- KORE --
+sort List{S} []
+sort NeList{S} []
+sort Terminator{S} []
+sort Int{} []
+sort Bool{} []
+sort String{} []
+sort Exp{} []
+symbol inj{Sin,Sout}(Sin):Sout []
+symbol cons{S}(S,NeList{S}):NeList{S} []
+symbol nil{S}():Terminator{S}
+symbol fdecl{}(Id{}, List{Id{}}, Stmt{}):Exp{}
+symbol decl{}(NeList{Exp{}}):Pgm{}
+axiom{} inj{Val{},Exp{}}(inj{Int{},Val{}}(x:Int{}) = inj{Int{},Exp{}}(X:Int{}) [] // transitivity: Exp -> Val -> Int | same for Bool and Id
