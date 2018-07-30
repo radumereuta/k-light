@@ -1,0 +1,100 @@
+[]
+module INJ
+  sort String{} []
+  sort KInt{} []
+  symbol inj{Sin,Sout}(Sin):Sout []
+  symbol info{S}(String{}, S) : S []
+  symbol input{}(KInt{}, KInt{}, KInt{}, KInt{}) : String{} []
+endmodule []
+
+module KCELLS
+  import INJ []
+  import PREDEF []
+  sort Bag{} []
+  sort Cell{} []
+
+  symbol consCells{}(Bag{}, Bag{}):Bag{} []
+  symbol emptyCells{}():Bag{} []
+endmodule []
+
+module IMP-SYNTAX
+  import INJ []
+  import PREDEF []
+  sort BExp{} []
+  sort Ids{} []
+  sort Pgm{} []
+  sort AExp{} []
+  sort Stmt{} []
+  sort Block{} []
+  symbol emptyIds{}():Ids{} []
+
+  symbol plus{}(AExp{}, AExp{}):AExp{} []
+  symbol not{}(BExp{}):BExp{} []
+  symbol program{}(Ids{}, Stmt{}):Pgm{} []
+  symbol aExpBracket{}(AExp{}):AExp{} []
+  symbol bExpBracket{}(BExp{}):BExp{} []
+  symbol while{}(BExp{}, Block{}):Stmt{} []
+  symbol lte{}(AExp{}, AExp{}):BExp{} []
+  symbol consIds{}(Id{}, Ids{}):Ids{} []
+  symbol if{}(BExp{}, Block{}, Block{}):Stmt{} []
+  symbol assignment{}(Id{}, AExp{}):Stmt{} []
+  symbol block{}(Stmt{}):Block{} []
+  symbol consStmt{}(Stmt{}, Stmt{}):Stmt{} []
+  symbol div{}(AExp{}, AExp{}):AExp{} []
+  symbol emptyBlock{}():Block{} []
+  symbol and{}(BExp{}, BExp{}):BExp{} []
+endmodule []
+
+module PREDEF
+  import INJ []
+  sort KResult{} []
+  sort K{} []
+  sort KBott{} []
+  sort Bool{} []
+  sort Layout{} []
+  sort Map{} []
+  sort Id{} []
+  sort Int{} []
+  sort KVariable{} []
+
+  symbol emptyMap{}():Map{} []
+endmodule []
+
+module GENERATED
+  import INJ []
+  import CONFIG-CELLS []
+  import IMP-SYNTAX []
+
+  symbol castToPgm{}(Pgm{}):Pgm{} []
+endmodule []
+
+module IMP-CONFIG
+  import INJ []
+  import CONFIG-CELLS []
+  import GENERATED []
+  import IMP-SYNTAX []
+  /* input(K): <T>
+                  <k> $PGM:Pgm </k>
+                  <state> .Map </state>
+                </T>*/
+  axiom{} 
+\exists{K{}}(V2:CellName{},
+\exists{K{}}(V1:CellName{},
+\exists{K{}}(V0:CellName{},
+    \and{K{}}(
+        \equals{CellName{},K{}}(V2:CellName{},\dv{CellName{}}("state")),
+    \and{K{}}(
+        \equals{CellName{},K{}}(V1:CellName{},\dv{CellName{}}("k")),
+    \and{K{}}(
+        \equals{CellName{},K{}}(V0:CellName{},\dv{CellName{}}("T")),
+inj{Bag{},K{}}(inj{Cell{},Bag{}}(configCell{}(V0:CellName{},inj{Bag{},K{}}(consCells{}(inj{Cell{},Bag{}}(configCell{}(V1:CellName{},inj{Pgm{},K{}}(castToPgm{}(inj{KBott{},Pgm{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("$PGM"))))),V1:CellName{})),inj{Cell{},Bag{}}(configCell{}(V2:CellName{},inj{Map{},K{}}(emptyMap{}()),V2:CellName{})))),V0:CellName{}))))))))) []
+endmodule []
+
+module CONFIG-CELLS
+  import INJ []
+  import KCELLS []
+  sort CellName{} []
+
+  symbol externalCell{}(CellName{}):Cell{} []
+  symbol configCell{}(CellName{}, K{}, CellName{}):Cell{} []
+endmodule []
