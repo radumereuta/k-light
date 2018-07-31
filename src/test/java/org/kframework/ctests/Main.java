@@ -74,7 +74,7 @@ public class Main {
         String termination = "ore.info";
         FileUtil.save(new File(f.getAbsolutePath() + termination), str);
         try {
-            RunProcess.ProcessOutput po = RunProcess.execute(new HashMap<>(), new File(startPath), "kore-parser", f.getAbsolutePath() + termination);
+            RunProcess.ProcessOutput po = RunProcess.execute(new HashMap<>(), new File(startPath), "kore-parser", "--no-print-definition", f.getAbsolutePath() + termination);
             return po.exitCode != 0 ? "[Error]" : "[ok]";
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
