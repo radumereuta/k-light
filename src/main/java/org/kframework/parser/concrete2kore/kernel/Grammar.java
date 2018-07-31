@@ -9,6 +9,7 @@ import org.kframework.utils.algorithms.SCCTarjan;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.kframework.utils.Constants.LAYOUT;
 
@@ -144,22 +145,43 @@ public class Grammar implements Serializable {
     /**
      * Add a pair of whitespace-remove whitespace rule to the given state.
      * All children of the given state are moved to the remove whitespace rule.
-     * (|-- gets transformed into (|-->(white)--
+     * Start NT (|-- gets transformed into (|-->(white)--
      * @param start NextableState to which to attach the whitespaces
      */
     private void addWhitespace(NextableState start, NonTerminal whitespaceNT) {
-        // usually a terminal may be followed by AddLocationRule and WrapLabelRule.
+        // usually a terminal may be followed by WrapLabelRule.
         // we want to add the whitespce after these, so we iterate over them
-        while (start.next.iterator().hasNext() && start.next.iterator().next() instanceof RuleState) {
-            start = (NextableState) start.next.iterator().next();
-        }
-        NextableState whitespace = new NonTerminalState("whitespace", start.nt, whitespaceNT);
-        NextableState delState = new RuleState("delWhitespace", start.nt, new Rule.DeleteRule(1));
 
-        whitespace.next.add(delState);
-        delState.next.addAll(start.next);
-        start.next.clear();
-        start.next.add(whitespace);
+        // because of sharing we may have this case:
+        // (a)-+--<label>--------
+        //     |
+        //     +--(b)--<label>---
+        // then we need to add two whitespaces
+
+        Set<State> rs = start.next.stream().filter(a -> a instanceof RuleState).collect(Collectors.toSet());
+        if (!rs.isEmpty()) {
+            assert rs.size() == 1; // because productions are unique, we don't expect to have more than one rule after a terminal
+            RuleState ruleState = (RuleState) rs.iterator().next();
+            NextableState whitespace = new NonTerminalState("whitespace", start.nt, whitespaceNT);
+            NextableState delState = new RuleState("delWhitespace", start.nt, new Rule.DeleteRule(1));
+
+            whitespace.next.add(delState);
+            delState.next.addAll(ruleState.next);
+            ruleState.next.clear();
+            ruleState.next.add(whitespace);
+        }
+
+        Set<State> nrs = start.next.stream().filter(a -> !(a instanceof RuleState)).collect(Collectors.toSet());
+        if (!nrs.isEmpty()) {
+            NextableState whitespace = new NonTerminalState("whitespace", start.nt, whitespaceNT);
+            NextableState delState = new RuleState("delWhitespace", start.nt, new Rule.DeleteRule(1));
+
+            whitespace.next.add(delState);
+            delState.next.addAll(nrs);
+            start.next.clear();
+            start.next.add(whitespace);
+            start.next.addAll(rs);
+        }
     }
 
     /**

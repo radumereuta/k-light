@@ -6,7 +6,7 @@ syntax{S} List{S} ::= Terminator{S} [symbol(inj)]
                     | NeList{S} [symbol(inj)]
 syntax{S} Terminator{S} ::= "" [symbol(nil)] // this should be associated to cons
 
-// list pttern for parsing rules
+// list pattern for parsing rules
 
 syntax{S} List{S} ::= S "," List{S}          [symbol(cons)]
                     | S                      [symbol(inj)]

@@ -180,4 +180,16 @@ public class RuleGrammarTest {
         parseProgram("  ((__attribute__ ((asdf(a  ), ()))))", def, "Ids", 0, false);
         parseProgram("  ((__attribute__ ((()(())))))", def, "Ids", 0, false);
     }
+
+    // test how whitespaces is added to prefix productions
+    @Test
+    public void test31() {
+        String def = "module TEST \n" +
+                "syntax Layout ::= r\"([\\\\ \\n\\r\\t])*\" \n" +
+                "syntax Cell ::= \"a\" \"b\" [symbol(ab)]\n" +
+                "              | \"a\"     [symbol(a)] \n" +
+                "endmodule\n";
+        parseProgram(" a ", def, "Cell", 0, false);
+        parseProgram(" a b ", def, "Cell", 0, false);
+    }
 }
