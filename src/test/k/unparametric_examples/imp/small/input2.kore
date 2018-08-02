@@ -1,0 +1,89 @@
+[]
+module INJ
+  sort String{} []
+  sort KInt{} []
+  symbol inj{Sin,Sout}(Sin):Sout []
+  symbol cast{C}(C):C []
+  symbol info{S}(String{}, S) : S []
+  symbol input{}(KInt{}, KInt{}, KInt{}, KInt{}) : String{} []
+endmodule []
+
+module INPUT2
+  import INJ []
+  sort Variable{} []
+  sort K{} []
+  sort KBott{} []
+  sort Layout{} []
+  sort Id{} []
+  sort Exp{} []
+  sort Int{} []
+  sort Cell{} []
+
+  symbol rew{}(K{}, K{}):KBott{} []
+  symbol kcell{}(K{}):Cell{} []
+  symbol castToInt{}(Int{}):Int{} []
+  /* input(Cell): <a> A:Int => B:Int </a>                     */
+  axiom{} 
+\exists{Cell{}}(V2:KBott{},
+\exists{Cell{}}(V8:Int{},
+\exists{Cell{}}(V6:Id{},
+\exists{Cell{}}(V7:Id{},
+\exists{Cell{}}(V1:K{},
+\exists{Cell{}}(V5:KBott{},
+\exists{Cell{}}(V3:Int{},
+\exists{Cell{}}(V0:Int{},
+\exists{Cell{}}(V4:Int{},
+    \and{Cell{}}(
+        \equals{KBott{},Cell{}}(V2:KBott{},inj{Variable{},KBott{}}(\dv{Variable{}}("B"))),
+    \and{Cell{}}(
+        \equals{Int{},Cell{}}(V8:Int{},\or{Int{}}(castToInt{}(inj{KBott{},Int{}}(rew{}(V1:K{},\or{K{}}(inj{KBott{},K{}}(V2:KBott{}),\or{K{}}(inj{Int{},K{}}(V3:Int{}),\or{K{}}(inj{Exp{},K{}}(\or{Exp{}}(inj{Int{},Exp{}}(V3:Int{}),\or{Exp{}}(inj{KBott{},Exp{}}(V2:KBott{}),\or{Exp{}}(inj{Id{},Exp{}}(V7:Id{}),\bottom{Exp{}}())))),\or{K{}}(inj{Id{},K{}}(V7:Id{}),\bottom{K{}}()))))))),\or{Int{}}(inj{KBott{},Int{}}(V5:KBott{}),\bottom{Int{}}()))),
+    \and{Cell{}}(
+        \equals{Id{},Cell{}}(V6:Id{},inj{KBott{},Id{}}(V5:KBott{})),
+    \and{Cell{}}(
+        \equals{Id{},Cell{}}(V7:Id{},inj{KBott{},Id{}}(V2:KBott{})),
+    \and{Cell{}}(
+        \equals{K{},Cell{}}(V1:K{},\or{K{}}(inj{Int{},K{}}(V0:Int{}),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(V0:Int{})),\bottom{K{}}()))),
+    \and{Cell{}}(
+        \equals{KBott{},Cell{}}(V5:KBott{},rew{}(V1:K{},\or{K{}}(inj{Int{},K{}}(V4:Int{}),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(V4:Int{})),\bottom{K{}}())))),
+    \and{Cell{}}(
+        \equals{Int{},Cell{}}(V3:Int{},inj{KBott{},Int{}}(V2:KBott{})),
+    \and{Cell{}}(
+        \equals{Int{},Cell{}}(V0:Int{},castToInt{}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))))),
+    \and{Cell{}}(
+        \equals{Int{},Cell{}}(V4:Int{},castToInt{}(V3:Int{})),
+kcell{}(\or{K{}}(inj{KBott{},K{}}(V5:KBott{}),\or{K{}}(inj{Int{},K{}}(V8:Int{}),\or{K{}}(inj{Exp{},K{}}(\or{Exp{}}(inj{Int{},Exp{}}(V8:Int{}),\or{Exp{}}(inj{KBott{},Exp{}}(V5:KBott{}),\or{Exp{}}(inj{Id{},Exp{}}(V6:Id{}),\bottom{Exp{}}())))),\or{K{}}(inj{Id{},K{}}(V6:Id{}),\bottom{K{}}()))))))))))))))))))))))) []
+  /* input(Cell): <a> D:Int </a>                              */
+  axiom{} 
+\exists{Cell{}}(V0:Int{},
+    \and{Cell{}}(
+        \equals{Int{},Cell{}}(V0:Int{},castToInt{}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("D"))))),
+kcell{}(\or{K{}}(inj{Int{},K{}}(V0:Int{}),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(V0:Int{})),\bottom{K{}}()))))) []
+  symbol mul{}(Exp{}, Exp{}):Exp{} []
+  /* input(Cell): <a> C </a>                                  */
+  axiom{} 
+\exists{Cell{}}(V0:KBott{},
+\exists{Cell{}}(V2:Int{},
+\exists{Cell{}}(V1:Id{},
+    \and{Cell{}}(
+        \equals{KBott{},Cell{}}(V0:KBott{},inj{Variable{},KBott{}}(\dv{Variable{}}("C"))),
+    \and{Cell{}}(
+        \equals{Int{},Cell{}}(V2:Int{},inj{KBott{},Int{}}(V0:KBott{})),
+    \and{Cell{}}(
+        \equals{Id{},Cell{}}(V1:Id{},inj{KBott{},Id{}}(V0:KBott{})),
+kcell{}(\or{K{}}(inj{KBott{},K{}}(V0:KBott{}),\or{K{}}(inj{Int{},K{}}(V2:Int{}),\or{K{}}(inj{Exp{},K{}}(\or{Exp{}}(inj{Int{},Exp{}}(V2:Int{}),\or{Exp{}}(inj{KBott{},Exp{}}(V0:KBott{}),\or{Exp{}}(inj{Id{},Exp{}}(V1:Id{}),\bottom{Exp{}}())))),\or{K{}}(inj{Id{},K{}}(V1:Id{}),\bottom{K{}}()))))))))))) []
+  /* input(Cell): <a> 1 + 2 * 3 </a>                          */
+  axiom{} 
+\exists{Cell{}}(V2:Exp{},
+\exists{Cell{}}(V1:Exp{},
+\exists{Cell{}}(V0:Exp{},
+    \and{Cell{}}(
+        \equals{Exp{},Cell{}}(V2:Exp{},inj{Int{},Exp{}}(\dv{Int{}}("3"))),
+    \and{Cell{}}(
+        \equals{Exp{},Cell{}}(V1:Exp{},inj{Int{},Exp{}}(\dv{Int{}}("2"))),
+    \and{Cell{}}(
+        \equals{Exp{},Cell{}}(V0:Exp{},inj{Int{},Exp{}}(\dv{Int{}}("1"))),
+kcell{}(inj{Exp{},K{}}(\or{Exp{}}(mul{}(plus{}(V0:Exp{},V1:Exp{}),V2:Exp{}),\or{Exp{}}(plus{}(V0:Exp{},mul{}(V1:Exp{},V2:Exp{})),\bottom{Exp{}}())))))))))) []
+  symbol plus{}(Exp{}, Exp{}):Exp{} []
+  symbol castToExp{}(Exp{}):Exp{} []
+  symbol castToId{}(Id{}):Id{} []
+endmodule []

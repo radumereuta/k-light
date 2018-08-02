@@ -1,0 +1,17 @@
+[]
+module TEST
+
+  /* input(Cell): <a> 1 + 2 * 3 </a>                          */
+  axiom{} 
+\exists{Cell{}}(V2:Exp{},
+\exists{Cell{}}(V1:Exp{},
+\exists{Cell{}}(V0:Exp{},
+    \and{Cell{}}(
+        \equals{Exp{},Cell{}}(V2:Exp{},inj{Int{},Exp{}}(\dv{Int{}}("3"))),
+    \and{Cell{}}(
+        \equals{Exp{},Cell{}}(V1:Exp{},inj{Int{},Exp{}}(\dv{Int{}}("2"))),
+    \and{Cell{}}(
+        \equals{Exp{},Cell{}}(V0:Exp{},inj{Int{},Exp{}}(\dv{Int{}}("1"))),
+kcell{}(inj{Exp{},K{}}(\or{Exp{}}(mul{}(plus{}(V0:Exp{},V1:Exp{}),V2:Exp{}),\or{Exp{}}(plus{}(V0:Exp{},mul{}(V1:Exp{},V2:Exp{})),\bottom{Exp{}}())))))))))) [] 
+
+endmodule []

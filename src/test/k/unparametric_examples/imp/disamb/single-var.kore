@@ -1,0 +1,10 @@
+[]
+module TEST
+
+/* input(Cell): <a> D:Int </a>                              */
+axiom{} \exists{Cell{}}(V0:Int{},
+    \and{Cell{}}(
+        \equals{Int{},Cell{}}(V0:Int{},castToInt{}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("D"))))),
+kcell{}(\or{K{}}(inj{Int{},K{}}(V0:Int{}),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(V0:Int{})),\bottom{K{}}()))))) []
+
+endmodule []
