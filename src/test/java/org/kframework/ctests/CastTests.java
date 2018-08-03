@@ -31,7 +31,7 @@ public class CastTests {
     private static final String startPath = "src/test/k/performance";
     private static ParserUtils defParser = new ParserUtils(FileUtil.testFileUtil()::resolveWorkingDirectory, new KExceptionManager(new GlobalOptions()));
 
-    @Test
+    @Test @Ignore
     public void testCasts() {
         int total = 0, warnings = 0, ok = 0, error = 0, others = 0;
         Stopwatch sw = new Stopwatch(new GlobalOptions(true, GlobalOptions.Warnings.ALL, true));

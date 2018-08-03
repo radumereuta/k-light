@@ -28,8 +28,7 @@ import static org.kframework.definition.Constructors.Sort;
 
 public class OuterTest {
 
-    //private String startPath = "src/test/k/kore_in_k/tests";
-    private String startPath = "src/test/k/unparametric_examples/imp";
+    private String startPath = "src/test/k/kore_in_k/tests";
     private String kastPath = "src/test/k/kore_in_k";
     private File definitionFile = new File(kastPath + "/outer.k");
     private String mainModule = "OUTER";
