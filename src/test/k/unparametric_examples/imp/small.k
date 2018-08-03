@@ -1,4 +1,4 @@
-module INPUT2
+module SMALL
 syntax Layout ::= r"([\\ \n\r\t])*" [token]
 syntax Int ::= r"[0-9]+" [token]
 syntax Exp ::= Int [symbol(inj)]
@@ -8,9 +8,9 @@ syntax Exp ::= Int [symbol(inj)]
 
 syntax KBott ::= K "=>" K   [symbol(rew)]
 
-syntax Int ::= Int ":Int"     [symbol(castToInt)]
-syntax Id  ::= Id  ":Id"      [symbol(castToId)]
-syntax Exp ::= Exp ":Exp"     [symbol(castToExp)]
+syntax Int ::= Int ":Int"     [symbol(cast)]
+syntax Id  ::= Id  ":Id"      [symbol(cast)]
+syntax Exp ::= Exp ":Exp"     [symbol(cast)]
 
 syntax K ::= KBott   [symbol(inj)]
            | Exp     [symbol(inj)]
@@ -28,5 +28,6 @@ rule <a> C </a>                                  [start(Cell)]
 rule <a> D:Int </a>                              [start(Cell)]
 rule <a> A:Int => B:Int </a>                     [start(Cell)]
 rule <a> 1 + 2 * 3 </a>                          [start(Cell)]
+rule <a> 1 + 2 * 3 + 4 </a>                      [start(Cell)]
 
 endmodule
