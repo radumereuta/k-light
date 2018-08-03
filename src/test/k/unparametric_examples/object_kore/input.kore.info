@@ -49,7 +49,7 @@ module INPUT
   axiom{} 
 \exists{BottomSort{}}(V0:Stmt{},
     \and{BottomSort{}}(
-        \equals{Stmt{},BottomSort{}}(V0:Stmt{},skip{}()),
-cast{}(\dv{KSort{}}("Stmt"),ite{}(var{}(\dv{VarName{}}("A"),\dv{KSort{}}("Exp")),V0:Stmt{},V0:Stmt{})))) []
+        \equals{Stmt{},BottomSort{}}(V0:Stmt{},info{Stmt{}}(input{}(\dv{KInt{}}("47"),\dv{KInt{}}("28"),\dv{KInt{}}("47"),\dv{KInt{}}("32")),skip{}())),
+info{BottomSort{}}(input{}(\dv{KInt{}}("47"),\dv{KInt{}}("6"),\dv{KInt{}}("47"),\dv{KInt{}}("43")),cast{}(info{KSort{}}(input{}(\dv{KInt{}}("47"),\dv{KInt{}}("7"),\dv{KInt{}}("47"),\dv{KInt{}}("11")),\dv{KSort{}}("Stmt")),info{Stmt{}}(input{}(\dv{KInt{}}("47"),\dv{KInt{}}("14"),\dv{KInt{}}("47"),\dv{KInt{}}("42")),ite{}(info{Variable{}}(input{}(\dv{KInt{}}("47"),\dv{KInt{}}("17"),\dv{KInt{}}("47"),\dv{KInt{}}("23")),var{}(info{VarName{}}(input{}(\dv{KInt{}}("47"),\dv{KInt{}}("17"),\dv{KInt{}}("47"),\dv{KInt{}}("18")),\dv{VarName{}}("A")),info{KSort{}}(input{}(\dv{KInt{}}("47"),\dv{KInt{}}("19"),\dv{KInt{}}("47"),\dv{KInt{}}("22")),\dv{KSort{}}("Exp")))),V0:Stmt{},V0:Stmt{})))))) []
   symbol cast{}(KSortList{}, TopSort{}):BottomSort{} []
 endmodule []

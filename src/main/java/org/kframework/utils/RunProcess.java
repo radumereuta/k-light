@@ -1,4 +1,4 @@
-package org.kframework.ctests;
+package org.kframework.utils;
 
 import java.io.*;
 import java.util.Map;

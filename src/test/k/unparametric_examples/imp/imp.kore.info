@@ -58,11 +58,6 @@ module IMP
   axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character 't'.
 	Source(generated)
 	Location(54,8,54,9)] []
-  /* input(K): <k> int (X,Xs => Xs);_ </k> <state> Rho:Map (.Map => X|->0) </state>
-    requires notBool (X in keys(Rho))*/
-  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character '<'.
-	Source(generated)
-	Location(66,8,66,9)] []
   /* input(K): I1 + I2 => I1 +Int I2*/
   axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character 'I'.
 	Source(generated)
@@ -75,13 +70,6 @@ module IMP
   axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character 'i'.
 	Source(generated)
 	Location(63,8,63,9)] []
-  /* input(K): <T color="yellow">
-                  <k color="green"> $PGM:Pgm </k>
-                  <state color="red"> .Map </state>
-                </T>*/
-  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character '<'.
-	Source(generated)
-	Location(42,17,42,18)] []
   /* input(K): while (B) S => if (B) {S while (B) S} else {}  */
   axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character 'w'.
 	Source(generated)
@@ -90,10 +78,22 @@ module IMP
   axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character 'f'.
 	Source(generated)
 	Location(55,8,55,9)] []
+  /* input(K): <T color="yellow">
+                  <k color="green"> $PGM:Pgm </k>
+                  <state color="red"> .Map </state>
+                </T>*/
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character '<'.
+	Source(generated)
+	Location(42,17,42,18)] []
   /* input(K): ! T => notBool T*/
   axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character '!'.
 	Source(generated)
 	Location(53,8,53,9)] []
+  /* input(K): <k> int (X,Xs => Xs);_ </k> <state> Rho:Map (.Map => X|->0) </state>
+    requires notBool (X in keys(Rho))*/
+  axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character '<'.
+	Source(generated)
+	Location(66,8,66,9)] []
   /* input(K): I1 <= I2 => I1 <=Int I2*/
   axiom{} [org.kframework.utils.errorsystem.ParseFailedException: [Error] Inner Parser: Parse error: unexpected character 'I'.
 	Source(generated)

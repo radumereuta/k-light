@@ -11,6 +11,7 @@ import org.kframework.parser.concrete2kore.generator.RuleGrammarGenerator;
 import org.kframework.treeNodes.Term;
 import org.kframework.utils.FileUtil;
 import org.kframework.utils.GlobalOptions;
+import org.kframework.utils.RunProcess;
 import org.kframework.utils.Stopwatch;
 import org.kframework.utils.errorsystem.KExceptionManager;
 import org.kframework.utils.errorsystem.ParseFailedException;
@@ -27,7 +28,8 @@ import static org.kframework.definition.Constructors.Sort;
 
 public class OuterTest {
 
-    private String startPath = "src/test/k/kore_in_k/tests";
+    //private String startPath = "src/test/k/kore_in_k/tests";
+    private String startPath = "src/test/k/unparametric_examples/imp";
     private String kastPath = "src/test/k/kore_in_k";
     private File definitionFile = new File(kastPath + "/outer.k");
     private String mainModule = "OUTER";
