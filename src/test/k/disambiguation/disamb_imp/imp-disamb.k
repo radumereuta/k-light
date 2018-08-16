@@ -50,6 +50,4 @@ rule mul {_}(_,mul {_}(_)) => \bottom{Exp{.Sorts}}() [anywhere]
 // injection propagation over parametric symbols
 rule rew{S2}(inj{S1,S2}(A),inj{S1,S2}(B)) => inj{S1,S2}(rew{S1}(A, B)) [anywhere] // the agressive axiom implemented as a rule
 
-// TODO: disambiguate casts and rewrites
-
 endmodule
