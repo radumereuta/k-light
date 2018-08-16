@@ -1,0 +1,20 @@
+[]
+module TEST
+
+  /* input(Cell): <a> 1 + 2 [ 3 + 4 * 5 ] </a>                */
+  axiom{} 
+kcell{}(inj{Exp{},K{}}(
+\or{Exp{}}(
+    plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),array{}(inj{Int{},Exp{}}(\dv{Int{}}("2")),
+        \or{Exp{}}(
+            mul{}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("3")),inj{Int{},Exp{}}(\dv{Int{}}("4"))),inj{Int{},Exp{}}(\dv{Int{}}("5"))),
+        \or{Exp{}}(
+            plus{}(inj{Int{},Exp{}}(\dv{Int{}}("3")),mul{}(inj{Int{},Exp{}}(\dv{Int{}}("4")),inj{Int{},Exp{}}(\dv{Int{}}("5")))),\bottom{Exp{}}())))),
+\or{Exp{}}(array{}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("2"))),
+    \or{Exp{}}(
+        mul{}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("3")),inj{Int{},Exp{}}(\dv{Int{}}("4"))),inj{Int{},Exp{}}(\dv{Int{}}("5"))),
+    \or{Exp{}}(
+        plus{}(inj{Int{},Exp{}}(\dv{Int{}}("3")),mul{}(inj{Int{},Exp{}}(\dv{Int{}}("4")),inj{Int{},Exp{}}(\dv{Int{}}("5")))),\bottom{Exp{}}()))),\bottom{Exp{}}())))) []
+
+
+endmodule []

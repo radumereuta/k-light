@@ -1,0 +1,45 @@
+[]
+module INJ
+  sort String{} []
+  sort KInt{} []
+  symbol inj{Sin,Sout}(Sin):Sout []
+  symbol cast{C}(C):C []
+  symbol info{S}(String{}, S) : S []
+  symbol input{}(KInt{}, KInt{}, KInt{}, KInt{}) : String{} []
+endmodule []
+
+module SMALL
+  import INJ []
+  sort Variable{} []
+  sort K{} []
+  sort KBott{} []
+  sort Layout{} []
+  sort Id{} []
+  sort Exp{} []
+  sort Int{} []
+  sort Cell{} []
+
+  /* input(Cell): <a> D:Int </a>                              */
+  axiom{} 
+kcell{}(\or{K{}}(inj{Int{},K{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("D"))))),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("D")))))),\bottom{K{}}()))) []
+  symbol rew{}(K{}, K{}):KBott{} []
+  symbol kcell{}(K{}):Cell{} []
+  /* input(Cell): <a> C </a>                                  */
+  axiom{} 
+kcell{}(\or{K{}}(inj{KBott{},K{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("C"))),\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("C")))),\or{K{}}(inj{Exp{},K{}}(\or{Exp{}}(inj{Int{},Exp{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("C")))),\or{Exp{}}(inj{KBott{},Exp{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("C"))),\or{Exp{}}(inj{Id{},Exp{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("C")))),\bottom{Exp{}}())))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("C")))),\bottom{K{}}()))))) []
+  symbol array{}(Exp{}, Exp{}):Exp{} []
+  symbol mul{}(Exp{}, Exp{}):Exp{} []
+  /* input(Cell): <a> 1 + 2 * 3 + 4 </a>                      */
+  axiom{} 
+kcell{}(inj{Exp{},K{}}(\or{Exp{}}(mul{}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("2"))),plus{}(inj{Int{},Exp{}}(\dv{Int{}}("3")),inj{Int{},Exp{}}(\dv{Int{}}("4")))),\or{Exp{}}(plus{}(\or{Exp{}}(mul{}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("2"))),inj{Int{},Exp{}}(\dv{Int{}}("3"))),\or{Exp{}}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),mul{}(inj{Int{},Exp{}}(\dv{Int{}}("2")),inj{Int{},Exp{}}(\dv{Int{}}("3")))),\bottom{Exp{}}())),inj{Int{},Exp{}}(\dv{Int{}}("4"))),\or{Exp{}}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),\or{Exp{}}(mul{}(inj{Int{},Exp{}}(\dv{Int{}}("2")),plus{}(inj{Int{},Exp{}}(\dv{Int{}}("3")),inj{Int{},Exp{}}(\dv{Int{}}("4")))),\or{Exp{}}(plus{}(mul{}(inj{Int{},Exp{}}(\dv{Int{}}("2")),inj{Int{},Exp{}}(\dv{Int{}}("3"))),inj{Int{},Exp{}}(\dv{Int{}}("4"))),\bottom{Exp{}}()))),\bottom{Exp{}}()))))) []
+  /* input(Cell): <a> 1 + 2 * 3 </a>                          */
+  axiom{} 
+kcell{}(inj{Exp{},K{}}(\or{Exp{}}(mul{}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("2"))),inj{Int{},Exp{}}(\dv{Int{}}("3"))),\or{Exp{}}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),mul{}(inj{Int{},Exp{}}(\dv{Int{}}("2")),inj{Int{},Exp{}}(\dv{Int{}}("3")))),\bottom{Exp{}}())))) []
+  /* input(Cell): <a> 1 + 2 [ 3 + 4 * 5 ] </a>                */
+  axiom{} 
+kcell{}(inj{Exp{},K{}}(\or{Exp{}}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),array{}(inj{Int{},Exp{}}(\dv{Int{}}("2")),\or{Exp{}}(mul{}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("3")),inj{Int{},Exp{}}(\dv{Int{}}("4"))),inj{Int{},Exp{}}(\dv{Int{}}("5"))),\or{Exp{}}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("3")),mul{}(inj{Int{},Exp{}}(\dv{Int{}}("4")),inj{Int{},Exp{}}(\dv{Int{}}("5")))),\bottom{Exp{}}())))),\or{Exp{}}(array{}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("2"))),\or{Exp{}}(mul{}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("3")),inj{Int{},Exp{}}(\dv{Int{}}("4"))),inj{Int{},Exp{}}(\dv{Int{}}("5"))),\or{Exp{}}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("3")),mul{}(inj{Int{},Exp{}}(\dv{Int{}}("4")),inj{Int{},Exp{}}(\dv{Int{}}("5")))),\bottom{Exp{}}()))),\bottom{Exp{}}())))) []
+  symbol plus{}(Exp{}, Exp{}):Exp{} []
+  /* input(Cell): <a> A:Int => B:Int </a>                     */
+  axiom{} 
+kcell{}(\or{K{}}(inj{KBott{},K{}}(rew{}(\or{K{}}(inj{Int{},K{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))))),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))))),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))))),\bottom{K{}}())))),\or{K{}}(inj{Int{},K{}}(\or{Int{}}(cast{Int{}}(inj{KBott{},Int{}}(rew{}(\or{K{}}(inj{Int{},K{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))))),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))))),\bottom{K{}}())),\or{K{}}(inj{KBott{},K{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))),\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\or{K{}}(inj{Exp{},K{}}(\or{Exp{}}(inj{Int{},Exp{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\or{Exp{}}(inj{KBott{},Exp{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))),\or{Exp{}}(inj{Id{},Exp{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\bottom{Exp{}}())))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\bottom{K{}}()))))))),\or{Int{}}(inj{KBott{},Int{}}(rew{}(\or{K{}}(inj{Int{},K{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))))),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))))),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))))),\bottom{K{}}())))),\bottom{Int{}}()))),\or{K{}}(inj{Exp{},K{}}(\or{Exp{}}(inj{Int{},Exp{}}(\or{Int{}}(cast{Int{}}(inj{KBott{},Int{}}(rew{}(\or{K{}}(inj{Int{},K{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))))),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))))),\bottom{K{}}())),\or{K{}}(inj{KBott{},K{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))),\or{K{}}(inj{Int{},K{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\or{K{}}(inj{Exp{},K{}}(\or{Exp{}}(inj{Int{},Exp{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\or{Exp{}}(inj{KBott{},Exp{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))),\or{Exp{}}(inj{Id{},Exp{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\bottom{Exp{}}())))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),\bottom{K{}}()))))))),\or{Int{}}(inj{KBott{},Int{}}(rew{}(\or{K{}}(inj{Int{},K{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))))),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))))),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))))),\bottom{K{}}())))),\bottom{Int{}}()))),\or{Exp{}}(inj{KBott{},Exp{}}(rew{}(\or{K{}}(inj{Int{},K{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))))),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))))),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))))),\bottom{K{}}())))),\or{Exp{}}(inj{Id{},Exp{}}(inj{KBott{},Id{}}(rew{}(\or{K{}}(inj{Int{},K{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))))),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))))),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))))),\bottom{K{}}()))))),\bottom{Exp{}}())))),\or{K{}}(inj{Id{},K{}}(inj{KBott{},Id{}}(rew{}(\or{K{}}(inj{Int{},K{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))))),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))))),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\or{K{}}(inj{Exp{},K{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))))),\bottom{K{}}()))))),\bottom{K{}}()))))) []
+endmodule []

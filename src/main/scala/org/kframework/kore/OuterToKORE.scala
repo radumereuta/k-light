@@ -13,6 +13,7 @@ object OuterToKORE {
       "  sort KInt{} []\n" +
       "  symbol inj{Sin,Sout}(Sin):Sout []\n" +
       "  symbol cast{C}(C):C []\n" +
+      "  symbol rew{C}(C,C):C []\n" +
       "  symbol info{S}(String{}, S) : S []\n" +
       "  symbol input{}(KInt{}, KInt{}, KInt{}, KInt{}) : String{} []\n" +
       "endmodule []\n\n" +
@@ -36,7 +37,7 @@ object OuterToKORE {
   def apply(s: Sentence, m:Module, d:Definition): String = s match {
     case SyntaxSort(_, _, _, _) => ""
     case p@Production(sort, items, att, _, _) =>
-      if (p.att.contains("token") || p.symbol.isEmpty || p.symbol.get.equals("inj") || p.symbol.get.equals("cast")) return ""
+      if (p.att.contains("token") || p.symbol.isEmpty || p.symbol.get.equals("inj") || p.symbol.get.equals("cast") || p.symbol.get.equals("rew")) return ""
       val sin = (items.filter((i) => i.isInstanceOf[NonTerminal]) map apply).mkString(", ")
       val inType = if (p.symbol.get == "inj" || p.symbol.get == "cast") sin + "," + sort.localName + "{}" else ""
       "  symbol " + p.symbol.get + "{" + inType + "}(" + sin + "):" + sort.localName + "{} []"

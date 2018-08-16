@@ -1,0 +1,11 @@
+[]
+module TEST
+
+  /* input(Cell): <a> A:Int => B:Int </a>                     */
+  axiom{} 
+kcell{}(
+\or{K{}}(
+    inj{Int{},K{}}(\or{Int{}}(rew{Int{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\or{Int{}}(cast{Int{}}(rew{Int{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\bottom{Int{}}()))),
+\or{K{}}(
+    inj{Exp{},K{}}(\or{Exp{}}(inj{Int{},Exp{}}(\or{Int{}}(rew{Int{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\or{Int{}}(cast{Int{}}(rew{Int{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A")))),inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B"))))),\bottom{Int{}}()))),\or{Exp{}}(rew{Exp{}}(inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))))),inj{Int{},Exp{}}(cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))))),\bottom{Exp{}}()))),\bottom{K{}}()))) [] 
+endmodule []

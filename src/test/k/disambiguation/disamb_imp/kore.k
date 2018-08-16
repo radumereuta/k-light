@@ -74,7 +74,7 @@ module KORE
   
   configuration <T> <k> $PGM:Definition </k> </T>
 
-  // null element
+  // unit element for \or
   rule \or{_}(X, \bottom{_}()) => X [anywhere]
   rule \or{_}(\bottom{_}(), X) => X [anywhere]
   // \or(X, X) => X
@@ -82,7 +82,7 @@ module KORE
   
   syntax Name ::= "inj" [token, prec(2)]
   
-  // inj composition
+  // inj composition - performs a similar step to TreeCleanerVisitor.java
   rule inj{Y,Z}(inj{X,Y}(W)) => inj{X,Z}(W) [anywhere]
 
 endmodule

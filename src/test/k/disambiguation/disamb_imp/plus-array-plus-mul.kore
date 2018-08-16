@@ -1,0 +1,29 @@
+[]
+module TEST
+
+  /* input(Cell): <a> 1 + 2 [ 3 + 4 * 5 ] </a>                */
+  axiom{} 
+\exists{Cell{}}(V5:Exp{},
+\exists{Cell{}}(V0:Exp{},
+\exists{Cell{}}(V1:Exp{},
+\exists{Cell{}}(V2:Exp{},
+\exists{Cell{}}(V3:Exp{},
+\exists{Cell{}}(V4:Exp{},
+    \and{Cell{}}(
+        \equals{Exp{},Cell{}}(V5:Exp{},\or{Exp{}}(mul{}(plus{}(V2:Exp{},V3:Exp{}),V4:Exp{}),\or{Exp{}}(plus{}(V2:Exp{},mul{}(V3:Exp{},V4:Exp{})),\bottom{Exp{}}()))),
+    \and{Cell{}}(
+        \equals{Exp{},Cell{}}(V0:Exp{},inj{Int{},Exp{}}(\dv{Int{}}("1"))),
+    \and{Cell{}}(
+        \equals{Exp{},Cell{}}(V1:Exp{},inj{Int{},Exp{}}(\dv{Int{}}("2"))),
+    \and{Cell{}}(
+        \equals{Exp{},Cell{}}(V2:Exp{},inj{Int{},Exp{}}(\dv{Int{}}("3"))),
+    \and{Cell{}}(
+        \equals{Exp{},Cell{}}(V3:Exp{},inj{Int{},Exp{}}(\dv{Int{}}("4"))),
+    \and{Cell{}}(
+        \equals{Exp{},Cell{}}(V4:Exp{},inj{Int{},Exp{}}(\dv{Int{}}("5"))),
+kcell{}(inj{Exp{},K{}}(
+    \or{Exp{}}(plus{}(V0:Exp{},array{}(V1:Exp{},V5:Exp{})),
+    \or{Exp{}}(array{}(plus{}(V0:Exp{},V1:Exp{}),V5:Exp{}),\bottom{Exp{}}())))))))))))))))) []
+
+
+endmodule []

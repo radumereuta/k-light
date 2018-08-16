@@ -1,0 +1,12 @@
+[]
+module TEST
+
+  /* input(Cell): <a> 1 + 2 * 3 </a>                          */
+  axiom{} 
+kcell{}(inj{Exp{},K{}}(
+\or{Exp{}}(
+    mul{}(plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),inj{Int{},Exp{}}(\dv{Int{}}("2"))),inj{Int{},Exp{}}(\dv{Int{}}("3"))),
+\or{Exp{}}(
+    plus{}(inj{Int{},Exp{}}(\dv{Int{}}("1")),mul{}(inj{Int{},Exp{}}(\dv{Int{}}("2")),inj{Int{},Exp{}}(\dv{Int{}}("3")))),\bottom{Exp{}}())))) []
+
+endmodule []

@@ -31,10 +31,11 @@ private class TreeNodesToKOREVisitor {
   var shared: Map[Term, Option[(String, String, String)]] = Map.empty // mark all the nodes which appear multiple times in the AST
   private var visited: Set[Term] = Set.empty
   private var seed: Int = 0
+  private var doShare = false
 
   // find and mark all the nodes which appear multiple times in the AST
   def visit(t:Term):Unit = {
-    if (visited.contains(t))
+    if (doShare && visited.contains(t))
       shared = shared + (t -> Option.empty)
     else {
       visited = visited + t
@@ -47,7 +48,7 @@ private class TreeNodesToKOREVisitor {
 
   // traverse the DAG, if a node is shared, mark it with a variable and store it
   def apply(t: Term): String = {
-    if (shared.contains(t)) {
+    if (doShare && shared.contains(t)) {
       val pair: Option[(String, String, String)] = shared(t)
       if (pair.isDefined) {
         pair.get._1
@@ -70,6 +71,7 @@ private class TreeNodesToKOREVisitor {
     case tc@TermCons(items, p) => printInfo(tc, p.symbol.get match {
       case "inj" => "inj{" + p.items.iterator.next().asInstanceOf[NonTerminal].sort.localName + "{}," + p.sort.localName + "{}}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
       case "cast" => "cast{" + p.sort.localName + "{}}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
+      case "rew" => "rew{" + p.sort.localName + "{}}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
       case _ => p.symbol.get + "{}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
     })
     case Ambiguity(items) =>
