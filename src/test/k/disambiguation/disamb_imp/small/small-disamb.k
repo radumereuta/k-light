@@ -1,15 +1,15 @@
 // written by Radu Mereuta
 // should be run with K5
-// used to disambiguate imp rules in the KORE format
-require "kore.k"
+// used to disambiguate small and simple rules in the KORE format
+require "../kore.k"
 
-module IMP-DISAMB-SYNTAX
+module SMALL-DISAMB-SYNTAX
 imports KORE-SYNTAX
 
 
 endmodule
 
-module IMP-DISAMB
+module SMALL-DISAMB
 imports KORE
 
 // labels
