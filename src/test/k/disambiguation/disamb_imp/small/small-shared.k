@@ -74,9 +74,18 @@ rule visittdRight(plus{_}(_), M, mul) => visitbu(\bottom{Exp{.Sorts}}(), M) [any
 rule visittdRight(P, M, mul) => visitbu(P, M) [anywhere, owise]
 rule mul{S}(Pt1, visitbu(Pt2, M)) =>  visitbu(mul{S}(Pt1, Pt2), M) [anywhere]
 
-rule visittd(plus{S}(Pt), M) => visitbu(plus{S}(Pt), M) [anywhere]
+rule visittd(plus{S}(Pt1, Pt2), M) => plus{S}(visittd(Pt1, M), Pt2) [anywhere]
+rule plus{S}(visitbu(Pt1, M), Pt2) => plus{S}(Pt1, visittd(Pt2, M)) [anywhere]
+rule plus{S}(Pt1, visitbu(Pt2, M)) => visitbu(plus{S}(Pt1, Pt2), M) [anywhere]
 
 rule visittd(V : S, M) => visitbu(V : S, M) [anywhere]
+rule visittd(\dv{S}(V), M) => visitbu(\dv{S}(V), M) [anywhere]
+
+rule visittdLeft(V : S, V |-> Pt M, N) => visittdLeft(Pt, V |-> Pt M, N) [anywhere]
+rule visittdRight(V : S, V |-> Pt M, N) => visittdRight(Pt, V |-> Pt M, N) [anywhere]
+
+rule visittdLeft(inj{S1, S2}(Pt), M, N) => inj{S1, S2}(visittdLeft(Pt, M, N)) [anywhere]
+rule visittdRight(inj{S1, S2}(Pt), M, N) => inj{S1, S2}(visittdRight(Pt, M, N)) [anywhere]
 
 
 rule patternList(S, \bottom{Exp{.Sorts}}()) => patternList(\bottom{Exp{.Sorts}}())  [anywhere]
