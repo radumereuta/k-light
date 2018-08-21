@@ -50,7 +50,7 @@ module KORE-COMMON
 
   syntax Declarations ::= List{Declaration, ""} [klabel(declList)]
   
-  syntax Module ::= "module" Name Declarations "endmodule" Attribute
+  syntax Module ::= "module" Name Declarations "endmodule" Attribute [klabel(module)]
   
   syntax Modules ::= List{Module, ""} [klabel(moduleList)]
   
@@ -72,7 +72,7 @@ module KORE
 
   imports KORE-COMMON  // don't import KORE-SYNTAX
   
-  configuration <T> <k> $PGM:Definition </k> </T>
+  //configuration <T> <k> $PGM:Definition </k> </T>
 
   // unit element for \or
   rule \or{_}(X, \bottom{_}()) => X [anywhere]
