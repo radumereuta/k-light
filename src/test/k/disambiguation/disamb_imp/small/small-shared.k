@@ -29,64 +29,67 @@ syntax Name ::= "inj"   [token, prec(2)]
 // sorts
 syntax Name ::= "Exp"  [token, prec(2)]
 
-syntax Pattern ::= visittd(Pattern, Map)
-syntax KBott   ::= visittd1(K)
-syntax Pattern ::= visittdLeft(Pattern, Map, Name)
-syntax Pattern ::= visittdRight(Pattern, Map, Name)
+syntax Pattern ::= visittd(Pattern, Map) [function]
+syntax KBott   ::= visittd1(K)           [function]
+syntax Pattern ::= visittdLeft(Pattern, Map, Name)  [function]
+syntax Pattern ::= visittdRight(Pattern, Map, Name) [function]
 syntax Pattern ::= visitbu(Pattern, Map)
 
 // module propagation
-rule visittd1(A:Attribute M:Modules) => A visittd1(M) [anywhere]
-rule visittd1(`moduleList`(M:Module, Ms)) => `moduleList`(visittd1(M), visittd1(Ms)) [anywhere]
-rule visittd1(.Modules) => .Modules [anywhere]
+rule visittd1(A:Attribute M:Modules) => A visittd1(M)
+rule visittd1(`moduleList`(M:Module, Ms)) => `moduleList`(visittd1(M), visittd1(Ms))
+rule visittd1(.Modules) => .Modules
 
-rule visittd1(`module`(N:Name, D:Declarations, A:Attribute)) => `module`(N, visittd1(D), A) [anywhere]
-rule visittd1(declList(D, Ds)) => declList(visittd1(D), visittd1(Ds)) [anywhere]
-rule visittd1(.Declarations) => .Declarations [anywhere]
+rule visittd1(`module`(N:Name, D:Declarations, A:Attribute)) => `module`(N, visittd1(D), A)
+rule visittd1(declList(D, Ds)) => declList(visittd1(D), visittd1(Ds))
+rule visittd1(.Declarations) => .Declarations
 
-rule visittd1(import N A) => import N A [anywhere]
-rule visittd1(sort N { Na } A) => visittd1(sort N { Na } A) [anywhere]
-rule visittd1(symbol N { Na } ( Ss ) : S A) => symbol N { Na } ( Ss ) : S A [anywhere]
+rule visittd1(import N A) => import N A
+rule visittd1(sort N { Na } A) => visittd1(sort N { Na } A)
+rule visittd1(symbol N { Na } ( Ss ) : S A) => symbol N { Na } ( Ss ) : S A
 
-rule visittd1(axiom {S} Pt A) => axiom {S} visittd(Pt, .Map) A [anywhere]
+rule visittd1(axiom {S} Pt A) => axiom {S} visittd(Pt, .Map) A
 rule axiom {S} visitbu(Pt, M) A => axiom {S} Pt A [anywhere]
 
 // pattern propagation
-rule visittd(\exists{S1}(Var:S2,Pt), M) => \exists{S1}(Var:S2, visittd(Pt, M)) [anywhere]
+rule visittd(\exists{S1}(Var:S2,Pt), M) => \exists{S1}(Var:S2, visittd(Pt, M))
 rule \exists{S1}(Var:S2, visitbu(Pt, M)) => visitbu(\exists{S1}(Var:S2, Pt), M) [anywhere]
-rule visittd(\and{S}(\equals{S1,S2}(Var:S1,Pte), Pta), M) => \and{S}(\equals{S1,S2}(Var:S1, Pte), visittd(Pta, M Var |-> Pte)) [anywhere]
+rule visittd(\and{S}(\equals{S1,S2}(Var:S1,Pte), Pta), M) => \and{S}(\equals{S1,S2}(Var:S1, Pte), visittd(Pta, M Var |-> Pte))
 rule \and{S}(\equals{S1,S2}(Var:S1,Pte), visitbu(Pta, M)) => visitbu(\and{S}(\equals{S1,S2}(Var:S1, Pte), Pta), M) [anywhere]
 
 // interesting propagation
 
-rule visittd(kcell{S}(Pt:Pattern), M) => kcell{S}(visittd(Pt, M)) [anywhere]
+rule visittd(kcell{S}(Pt:Pattern), M) => kcell{S}(visittd(Pt, M))
 rule kcell{S}(visitbu(Pt:Pattern, M)) => visitbu(kcell{S}(Pt), M) [anywhere]
-rule visittd(inj{S1, S2}(Pt:Pattern), M) => inj{S1, S2}(visittd(Pt, M)) [anywhere]
+rule visittd(inj{S1, S2}(Pt:Pattern), M) => inj{S1, S2}(visittd(Pt, M))
 rule inj{S1, S2}(visitbu(Pt:Pattern, M)) => visitbu(inj{S1, S2}(Pt), M) [anywhere]
-rule visittd(\or{S}(Pt1, Pt2), M) => \or{S}(visittd(Pt1, M), Pt2) [anywhere]
+rule visittd(\or{S}(Pt1, Pt2), M) => \or{S}(visittd(Pt1, M), Pt2)
 
 rule \or{S}(visitbu(Pt1, M), Pt2) => \or{S}(Pt1, visittd(Pt2, M)) [anywhere]
 
-rule visittd(mul{S}(Pt1, Pt2), M) => mul{S}(visittdLeft(Pt1, M, mul), Pt2) [anywhere]
-rule visittdLeft(plus{_}(_), M, mul) => visitbu(\bottom{Exp{.Sorts}}(), M) [anywhere]
+rule visittd(mul{S}(Pt1, Pt2), M) => mul{S}(visittdLeft(Pt1, M, mul), Pt2)
+rule visittdLeft(plus{_}(_), M, mul) => visitbu(\bottom{Exp{.Sorts}}(), M)
 rule mul{S}(visitbu(Pt1, M), Pt2) =>  mul{S}(Pt1, visittdRight(Pt2, M, mul)) [anywhere]
-rule visittdRight(plus{_}(_), M, mul) => visitbu(\bottom{Exp{.Sorts}}(), M) [anywhere]
-rule visittdRight(P, M, mul) => visitbu(P, M) [anywhere, owise]
+rule visittdRight(plus{_}(_), M, mul) => visitbu(\bottom{Exp{.Sorts}}(), M)
+rule visittdRight(P, M, _) => visitbu(P, M) [owise]
+rule visittdLeft(P, M, _) => visitbu(P, M) [owise]
 rule mul{S}(Pt1, visitbu(Pt2, M)) =>  visitbu(mul{S}(Pt1, Pt2), M) [anywhere]
 
-rule visittd(plus{S}(Pt1, Pt2), M) => plus{S}(visittd(Pt1, M), Pt2) [anywhere]
+rule visittd(plus{S}(Pt1, Pt2), M) => plus{S}(visittd(Pt1, M), Pt2)
 rule plus{S}(visitbu(Pt1, M), Pt2) => plus{S}(Pt1, visittd(Pt2, M)) [anywhere]
 rule plus{S}(Pt1, visitbu(Pt2, M)) => visitbu(plus{S}(Pt1, Pt2), M) [anywhere]
 
-rule visittd(V : S, M) => visitbu(V : S, M) [anywhere]
-rule visittd(\dv{S}(V), M) => visitbu(\dv{S}(V), M) [anywhere]
+rule visittd(V : S, M) => visitbu(V : S, M)
+rule visittd(\dv{S}(V), M) => visitbu(\dv{S}(V), M)
 
-rule visittdLeft(V : S, V |-> Pt M, N) => visittdLeft(Pt, V |-> Pt M, N) [anywhere]
-rule visittdRight(V : S, V |-> Pt M, N) => visittdRight(Pt, V |-> Pt M, N) [anywhere]
+rule visittdLeft(V : S, V |-> Pt M, N) => visittdLeft(Pt, V |-> Pt M, N)
+rule visittdRight(V : S, V |-> Pt M, N) => visittdRight(Pt, V |-> Pt M, N)
 
-rule visittdLeft(inj{S1, S2}(Pt), M, N) => inj{S1, S2}(visittdLeft(Pt, M, N)) [anywhere]
-rule visittdRight(inj{S1, S2}(Pt), M, N) => inj{S1, S2}(visittdRight(Pt, M, N)) [anywhere]
+rule visittdLeft(inj{S1, S2}(Pt), M, N) => inj{S1, S2}(visittdLeft(Pt, M, N))
+rule visittdRight(inj{S1, S2}(Pt), M, N) => inj{S1, S2}(visittdRight(Pt, M, N))
 
+rule visittdLeft(\or{S}(Pt1, Pt2), M, N) => \or{S}(visittdLeft(Pt1, M, N), visittdLeft(Pt2, M, N))
+rule visittdRight(\or{S}(Pt1, Pt2), M, N) => \or{S}(visittdRight(Pt1, M, N), visittdRight(Pt2, M, N))
 
 rule patternList(S, \bottom{Exp{.Sorts}}()) => patternList(\bottom{Exp{.Sorts}}())  [anywhere]
 rule symbolParams(_, patternList(\bottom{Exp{.Sorts}}(), _)) => \bottom{Exp{.Sorts}}() [anywhere]
