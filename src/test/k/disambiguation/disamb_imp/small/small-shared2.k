@@ -74,6 +74,13 @@ rule plus{S}(visitbu(Pt1, M), visitbu(Pt2, M)) =>  plus{S}(visittd(Pt1, M), visi
 
 rule visittdRight(plus{_}(_), M, plus) => visitbu(\bottom{Exp{.Sorts}}(), M)  // left assoc
 
+// array
+rule visittd(array{S}(Pt1, Pt2), M) => array{S}(visittdLeft(Pt1, M, array), Pt2)
+rule array{S}(visitbu(Pt1, M), Pt2) =>  array{S}(visittd(Pt1, M), visittd(Pt2, M)) [anywhere]
+
+rule visittdLeft(plus{_}(_), M, array) => visitbu(\bottom{Exp{.Sorts}}(), M)  // array > +
+rule visittdLeft( mul{_}(_), M, array) => visitbu(\bottom{Exp{.Sorts}}(), M)  // array > *
+
 
 
 rule visittdRight(P, M, _) => visitbu(P, M) [owise] // default visited
