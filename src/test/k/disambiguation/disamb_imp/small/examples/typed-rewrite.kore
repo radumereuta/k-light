@@ -1,0 +1,20 @@
+[]
+module TEST
+
+/* input(Cell): <a> A:Int => B:Int </a>                     */
+  axiom{} 
+\exists{Cell{}}(V1:Int{},
+\exists{Cell{}}(V0:Int{},
+\exists{Cell{}}(V3:Int{},
+\exists{Cell{}}(V2:Int{},
+    \and{Cell{}}(
+        \equals{Int{},Cell{}}(V1:Int{},inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("B")))),
+    \and{Cell{}}(
+        \equals{Int{},Cell{}}(V0:Int{},cast{Int{}}(inj{KBott{},Int{}}(inj{Variable{},KBott{}}(\dv{Variable{}}("A"))))),
+    \and{Cell{}}(
+        \equals{Int{},Cell{}}(V3:Int{},\or{Int{}}(rew{Int{}}(V0:Int{},V2:Int{}),\or{Int{}}(cast{Int{}}(rew{Int{}}(V0:Int{},V1:Int{})),\bottom{Int{}}()))),
+    \and{Cell{}}(
+        \equals{Int{},Cell{}}(V2:Int{},cast{Int{}}(V1:Int{})),
+kcell{}(\or{K{}}(inj{Int{},K{}}(V3:Int{}),\or{K{}}(inj{Exp{},K{}}(\or{Exp{}}(inj{Int{},Exp{}}(V3:Int{}),\or{Exp{}}(rew{Exp{}}(inj{Int{},Exp{}}(V0:Int{}),inj{Int{},Exp{}}(V2:Int{})),\bottom{Exp{}}()))),\bottom{K{}}()))))))))))) [] 
+
+endmodule []
