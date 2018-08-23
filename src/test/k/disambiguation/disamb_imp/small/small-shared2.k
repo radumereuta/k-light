@@ -31,10 +31,9 @@ syntax Name ::= "Exp"  [token, prec(2)]
 
 syntax KBott   ::= visittd1(K)           [function] // used for outer symbols
 syntax Pattern ::= visittd(Pattern, Map) [function] // used inside an axiom
-syntax Pattern ::= visitbu(Pattern, Map)            // return marker for first visitor
 syntax Pattern ::= visittdLeft(Pattern, Map, Name)  [function] // marker for left check
 syntax Pattern ::= visittdRight(Pattern, Map, Name) [function] // marker for right check
-syntax Pattern ::= visitbu2(Pattern, Map)                      // return marker for checker
+syntax Pattern ::= visitbu(Pattern, Map)                       // return marker for checker
 
 // module propagation
 rule visittd1(A:Attribute M:Modules) => A visittd1(M)
@@ -50,42 +49,39 @@ rule visittd1(sort N { Na } A) => visittd1(sort N { Na } A)
 rule visittd1(symbol N { Na } ( Ss ) : S A) => symbol N { Na } ( Ss ) : S A
 
 rule visittd1(axiom {S} Pt A) => axiom {S} visittd(Pt, .Map) A
-rule axiom {S} visitbu(Pt, M) A => axiom {S} Pt A [anywhere]
 
 // pattern propagation
 rule visittd(\exists{S1}(Var:S2,Pt), M) => \exists{S1}(Var:S2, visittd(Pt, M))
-rule \exists{S1}(Var:S2, visitbu(Pt, M)) => visitbu(\exists{S1}(Var:S2, Pt), M) [anywhere]
 rule visittd(\and{S}(\equals{S1,S2}(Var:S1,Pte), Pta), M) => \and{S}(\equals{S1,S2}(Var:S1, Pte), visittd(Pta, M Var |-> Pte))
-rule \and{S}(\equals{S1,S2}(Var:S1,Pte), visitbu(Pta, M)) => visitbu(\and{S}(\equals{S1,S2}(Var:S1, Pte), Pta), M) [anywhere]
 
 // interesting propagation
 
 rule visittd(kcell{S}(Pt:Pattern), M) => kcell{S}(visittd(Pt, M))
-rule kcell{S}(visitbu(Pt:Pattern, M)) => visitbu(kcell{S}(Pt), M) [anywhere]
 rule visittd(inj{S1, S2}(Pt:Pattern), M) => inj{S1, S2}(visittd(Pt, M))
-rule inj{S1, S2}(visitbu(Pt:Pattern, M)) => visitbu(inj{S1, S2}(Pt), M) [anywhere]
-rule visittd(\or{S}(Pt1, Pt2), M) => \or{S}(visittd(Pt1, M), Pt2)
-
-rule \or{S}(visitbu(Pt1, M), Pt2) => \or{S}(Pt1, visittd(Pt2, M)) [anywhere]
-rule \or{S}(Pt1, visitbu(Pt2, M)) => visitbu(\or{S}(Pt1, Pt2), M) [anywhere]
+rule visittd(\or{S}(Pt1, Pt2), M) => \or{S}(visittd(Pt1, M), visittd(Pt2, M))
 
 // mul
-rule visittd(mul{S}(Pt1, Pt2), M) => mul{S}(visittdLeft(Pt1, M, mul), Pt2)
+rule visittd(mul{S}(Pt1, Pt2), M) => mul{S}(visittdLeft(Pt1, M, mul), visittdRight(Pt2, M, mul))
+rule mul{S}(visitbu(Pt1, M), visitbu(Pt2, M)) =>  mul{S}(visittd(Pt1, M), visittd(Pt2, M)) [anywhere]
+
 rule visittdLeft(plus{_}(_), M, mul) => visitbu(\bottom{Exp{.Sorts}}(), M)  // * > +
-rule mul{S}(visitbu(Pt1, M), Pt2) =>  mul{S}(Pt1, visittdRight(Pt2, M, mul)) [anywhere]
 rule visittdRight(plus{_}(_), M, mul) => visitbu(\bottom{Exp{.Sorts}}(), M) // * > +
 rule visittdRight(mul{_}(_), M, mul) => visitbu(\bottom{Exp{.Sorts}}(), M)  // left assoc
-rule mul{S}(Pt1, visitbu(Pt2, M)) =>  visitbu(mul{S}(Pt1, Pt2), M) [anywhere]
 
-// TODO: same for plus - and try to find a generic way to write the visitors
+// plus
+rule visittd(plus{S}(Pt1, Pt2), M) => plus{S}(visittdLeft(Pt1, M, plus), visittdRight(Pt2, M, plus))
+rule plus{S}(visitbu(Pt1, M), visitbu(Pt2, M)) =>  plus{S}(visittd(Pt1, M), visittd(Pt2, M)) [anywhere]
+
+rule visittdRight(plus{_}(_), M, plus) => visitbu(\bottom{Exp{.Sorts}}(), M)  // left assoc
 
 
 
 rule visittdRight(P, M, _) => visitbu(P, M) [owise] // default visited
 rule visittdLeft(P, M, _) => visitbu(P, M) [owise]
 
-rule visittd(V : S, M) => visitbu(V : S, M)
-rule visittd(\dv{S}(V), M) => visitbu(\dv{S}(V), M)
+rule visittd(V : S, V |-> Pt M) => visittd(Pt, V |-> Pt M)
+rule visittd(\bottom{S}(), M) => \bottom{S}()
+rule visittd(\dv{S}(V), M) => \dv{S}(V)
 
 rule visittdLeft(V : S, V |-> Pt M, N) => visittdLeft(Pt, V |-> Pt M, N)
 rule visittdRight(V : S, V |-> Pt M, N) => visittdRight(Pt, V |-> Pt M, N)
@@ -96,7 +92,10 @@ rule visittdRight(inj{S1, S2}(Pt), M, N) => inj{S1, S2}(visittdRight(Pt, M, N))
 rule visittdLeft(\or{S}(Pt1, Pt2), M, N) => \or{S}(visittdLeft(Pt1, M, N), visittdLeft(Pt2, M, N))
 rule visittdRight(\or{S}(Pt1, Pt2), M, N) => \or{S}(visittdRight(Pt1, M, N), visittdRight(Pt2, M, N))
 
-rule patternList(S, \bottom{S}()) => \bottom{S}()  [anywhere]
+rule \or{S}(visitbu(Pt1, M), visitbu(Pt2, M)) => visitbu(\or{S}(Pt1, Pt2), M) [anywhere]
+rule inj{S1, S2}(visitbu(Pt, M)) => visitbu(inj{S1, S2}(Pt), M) [anywhere]
+
+rule patternList(P:Pattern, patternList(\bottom{S}(), L)) => patternList(\bottom{S}(), L)  [anywhere]
 rule symbolParams(_, patternList(\bottom{S}(), _)) => \bottom{S}() [anywhere]
 
 //rule mul{_}(plus{_}(_),_) => \bottom{Exp{.Sorts}}() [anywhere]
