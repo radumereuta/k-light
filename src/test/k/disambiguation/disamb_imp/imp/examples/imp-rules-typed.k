@@ -13,19 +13,20 @@ module PREDEF
   syntax Layout ::= r"[\\ \n\r\t]*" [token]
 
   // kapp
-  syntax KBott ::= K "=>" K [symbol(kRewrite)]
-  syntax KBott ::= K "~>" K [symbol(kSequence)]
-  syntax KBott ::= "(" K ")" [symbol(kBracket)]
+  syntax K ::= K "=>" K [symbol(rew)]
+  syntax K ::= K "~>" K [symbol(kSequence)]
+  syntax K ::= "(" K ")" [symbol(kBracket)]
   syntax KBott ::= KVariable [symbol(inj)]
   syntax KVariable ::= r"[A-Z][A-Za-z0-9'_]*|_" [token]
   syntax K ::= KBott [symbol(inj)]
-  syntax KBott ::= "." [symbol(dotK)]
+  syntax K ::= "." [symbol(dotK)]
   
   syntax K ::= K "requires" K [symbol(kRequires)]
 
   // Map  
   syntax Map ::= K "|->" K [symbol(mapElement)]
   syntax Map ::= Map Map [symbol(consMap)]
+  syntax Map ::= "(" Map ")" [symbol(mapBracket)]
   syntax Map ::= ".Map" [symbol(emptyMap)]
   
   // Int
@@ -73,13 +74,13 @@ endmodule
 module IMP-SYNTAX // mostly untouched
   imports PREDEF
   syntax AExp  ::= Int [symbol(inj)] | Id [symbol(inj)]
-                 | AExp "/" AExp              [left, strict, symbol(div)]
-                 > AExp "+" AExp              [left, strict, symbol(plus)]
+                 | AExp "/" AExp              [/*left,*/ strict, symbol(div)]
+            /*>*/| AExp "+" AExp              [/*left,*/ strict, symbol(plus)]
                  | "(" AExp ")"               [symbol(aExpBracket)]
   syntax BExp  ::= Bool [symbol(inj)]
                  | AExp "<=" AExp             [seqstrict, symbol(lte)]
                  | "!" BExp                   [strict, symbol(not)]
-                 > BExp "&&" BExp             [left, strict(1), symbol(and)]
+            /*>*/| BExp "&&" BExp             [/*left,*/ strict(1), symbol(and)]
                  | "(" BExp ")"               [symbol(bExpBracket)]
   syntax Block ::= "{" "}"                    [symbol(emptyBlock)]
                  | "{" Stmt "}"               [symbol(block)]
@@ -88,7 +89,7 @@ module IMP-SYNTAX // mostly untouched
                  | "if" "(" BExp ")"
                    Block "else" Block         [strict(1), symbol(if)]
                  | "while" "(" BExp ")" Block [symbol(while)]
-                 > Stmt Stmt                  [left, symbol(consStmt)]
+            /*>*/| Stmt Stmt                  [/*left,*/ symbol(consStmt)]
   syntax Pgm ::= "int" Ids ";" Stmt           [symbol(program)]
   syntax Ids ::= ".Ids"      [symbol(emptyIds)]
                | Id "," Ids  [symbol(consIds)]
@@ -112,37 +113,45 @@ module GENERATED
   syntax BExp ::= BExp ":BExp" [symbol(cast)]
   syntax Bool ::= Bool ":Bool" [symbol(cast)]
   syntax Ids  ::= Ids  ":Ids"  [symbol(cast)]
-  syntax K    ::= K    ":K"    [symbol(cast)]
 
   syntax K ::= Pgm [symbol(inj)]
   syntax Pgm ::= KBott [symbol(inj)]
+  syntax Pgm ::= Pgm "=>" Pgm [symbol(rew)]
 
   syntax Id ::= KBott [symbol(inj)]
   syntax K ::= Id [symbol(inj)]
-  
+  syntax Id ::= Id "=>" Id [symbol(rew)]
+
   syntax Int ::= KBott [symbol(inj)]
   syntax K ::= Int [symbol(inj)]
+  syntax Int ::= Int "=>" Int [symbol(rew)]
 
   syntax Bool ::= KBott [symbol(inj)]
   syntax K ::= Bool [symbol(inj)]
+  syntax Bool ::= Bool "=>" Bool [symbol(rew)]
+  syntax Bool ::= "(" Bool ")" [symbol(boolBracket)]
   
   syntax Stmt ::= KBott [symbol(inj)]
   syntax K ::= Stmt [symbol(inj)]
-  
-  syntax Stmt ::= KBott [symbol(inj)]
-  syntax K ::= Stmt  [symbol(inj)]
+  syntax Stmt ::= Stmt "=>" Stmt [symbol(rew)]
   
   syntax AExp ::= KBott [symbol(inj)]
   syntax K ::= AExp [symbol(inj)]
+  syntax AExp ::= AExp "=>" AExp [symbol(rew)]
 
   syntax BExp ::= KBott [symbol(inj)]
   syntax K ::= BExp [symbol(inj)]
+  syntax BExp ::= BExp "=>" BExp [symbol(rew)]
   
   syntax Block ::= KBott [symbol(inj)]
   syntax K ::= Block [symbol(inj)]
+  syntax Block ::= Block "=>" Block [symbol(rew)]
 
   syntax Ids ::= KBott [symbol(inj)]
   syntax K ::= Ids [symbol(inj)]
+  syntax Ids ::= Ids "=>" Ids [symbol(rew)]
+  syntax Ids ::= "(" Ids ")" [symbol(idsBracket)]
+
 
 endmodule
 
@@ -164,7 +173,7 @@ module IMP-RULES-TYPED
   rule {} => .   [structural]
   rule {S:Stmt} => S:Stmt  [structural]
 // Stmt
-  rule <k> X:Id = I:Int; => . ...</k> <state>... X:Id |-> (_:K => I:Int) ...</state>
+  rule <k> X:Id = I:Int; => . ...</k> <state>... X:Id |-> (_:Int => I:Int) ...</state>
   rule S1:Stmt S2:Stmt => S1:Stmt ~> S2:Stmt  [structural]
   rule if (true)  S:Block else _:Block => S:Block
   rule if (false) _:Block else S:Block => S:Block
