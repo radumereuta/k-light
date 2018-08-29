@@ -1,129 +1,196 @@
-<T>
-  <k>
-    [ .Patterns ] (
-
+[]
 module INJ
-sort String { .Names } [ .Patterns ] 
-sort KInt { .Names } [ .Patterns ] 
-symbol inj { Sin , Sout , .Names } ( Sin) : Sout [ .Patterns ] 
-symbol cast { C , .Names } ( C) : C [ .Patterns ] 
-symbol rew { C , .Names } ( C , C) : C [ .Patterns ] 
-symbol info { S , .Names } ( String{}, S) : S [ .Patterns ] 
-symbol input { .Names } ( KInt{}, KInt{}, KInt{}, KInt{}) : String{}[ .Patterns ]  .Declarations
-endmodule [ .Patterns ] 
+sort String {} []
+sort KInt {} []
+symbol inj { Sin , Sout} ( Sin) : Sout []
+symbol cast { C} ( C) : C []
+symbol bracket { C} ( C) : C []
+symbol rew { C} ( C , C) : C []
+symbol info { S} ( String{}, S) : S []
+symbol input {} ( KInt{}, KInt{}, KInt{}, KInt{}) : String{}[]
+endmodule []
 
 module KCELLS
-import INJ [ .Patterns ] 
-import PREDEF [ .Patterns ] 
-sort Bag { .Names } [ .Patterns ] 
-sort Cell { .Names } [ .Patterns ] 
-symbol consCells { .Names } ( Bag{}, Bag{}) : Bag{}[ .Patterns ] 
-symbol emptyCells { .Names } ( .Sorts ) : Bag{}[ .Patterns ]  .Declarations
-endmodule [ .Patterns ] 
-
-module IMP-RULES-TYPED
-import INJ [ .Patterns ] 
-import RULE-CELLS [ .Patterns ] 
-import GENERATED [ .Patterns ] 
-import IMP-SYNTAX [ .Patterns ] 
-axiom { .Names } rew { K{}} ( inj { Block{}, K{}} ( block{}( cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S" ))))) , inj { Stmt{}, K{}} ( cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S" ))))) [ .Patterns ] 
-axiom { .Names } rew { K{}} ( inj { BExp{}, K{}} ( lte{}( inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I1" )))) , inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I2" )))))) , inj { Int{}, K{}} ( lteInt{}( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I1" ))) , cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I2" )))))) [ .Patterns ] 
-axiom { .Names } rew { K{}} ( inj { Stmt{}, K{}} ( while{}( cast { BExp{}} ( inj { KVariable{}, BExp{}} ( \dv { KVariable{}} ( "B" ))) , cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "S" ))))) , inj { Stmt{}, K{}} ( if{}( cast { BExp{}} ( inj { KVariable{}, BExp{}} ( \dv { KVariable{}} ( "B" ))) , block{}( consStmt{}( inj { Block{}, Stmt{}} ( cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "S" )))) , while{}( cast { BExp{}} ( inj { KVariable{}, BExp{}} ( \dv { KVariable{}} ( "B" ))) , cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "S" )))))) , emptyBlock{}()))) [ .Patterns ] 
-axiom { .Names } rew { K{}} ( inj { Stmt{}, K{}} ( consStmt{}( cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S1" ))) , cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S2" ))))) , kSequence{}( inj { Stmt{}, K{}} ( cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S1" )))) , inj { Stmt{}, K{}} ( cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S2" )))))) [ .Patterns ] 
-axiom { .Names } rew { K{}} ( inj { Pgm{}, K{}} ( program{}( emptyIds{}() , cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S" ))))) , inj { Stmt{}, K{}} ( cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S" ))))) [ .Patterns ] 
-axiom { .Names } kRequires{}( inj { Bag{}, K{}} ( consCells{}( inj { Cell{}, Bag{}} ( kCell{}( noDots{}() , inj { Pgm{}, K{}} ( program{}( idsBracket{}( rew { Ids{}} ( consIds{}( cast { Id{}} ( inj { KVariable{}, Id{}} ( \dv { KVariable{}} ( "X" ))) , cast { Ids{}} ( inj { KVariable{}, Ids{}} ( \dv { KVariable{}} ( "Xs" )))) , cast { Ids{}} ( inj { KVariable{}, Ids{}} ( \dv { KVariable{}} ( "Xs" ))))) , cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "_" ))))) , noDots{}())) , inj { Cell{}, Bag{}} ( stateCell{}( noDots{}() , inj { Map{}, K{}} ( consMap{}( cast { Map{}} ( inj { KVariable{}, Map{}} ( \dv { KVariable{}} ( "Rho" ))) , mapBracket{}( mapElement{}( rew { K{}} ( inj { Map{}, K{}} ( emptyMap{}()) , inj { Id{}, K{}} ( cast { Id{}} ( inj { KVariable{}, Id{}} ( \dv { KVariable{}} ( "X" ))))) , inj { Int{}, K{}} ( \dv { Int{}} ( "0" )))))) , noDots{}())))) , inj { Bool{}, K{}} ( notBool{}( boolBracket{}( inKeys{}( inj { Id{}, K{}} ( cast { Id{}} ( inj { KVariable{}, Id{}} ( \dv { KVariable{}} ( "X" )))) , cast { Map{}} ( inj { KVariable{}, Map{}} ( \dv { KVariable{}} ( "Rho" )))))))) [ .Patterns ] 
-axiom { .Names } rew { K{}} ( inj { Block{}, K{}} ( emptyBlock{}()) , dotK{}()) [ .Patterns ] 
-axiom { .Names } rew { K{}} ( inj { AExp{}, K{}} ( plus{}( inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I1" )))) , inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I2" )))))) , inj { Int{}, K{}} ( plusInt{}( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I1" ))) , cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I2" )))))) [ .Patterns ] 
-axiom { .Names } rew { K{}} ( inj { Stmt{}, K{}} ( if{}( inj { Bool{}, BExp{}} ( boolFalse{}()) , cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "_" ))) , cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "S" ))))) , inj { Block{}, K{}} ( cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "S" ))))) [ .Patterns ] 
-axiom { .Names } rew { K{}} ( inj { BExp{}, K{}} ( not{}( inj { Bool{}, BExp{}} ( cast { Bool{}} ( inj { KVariable{}, Bool{}} ( \dv { KVariable{}} ( "T" )))))) , inj { Bool{}, K{}} ( notBool{}( cast { Bool{}} ( inj { KVariable{}, Bool{}} ( \dv { KVariable{}} ( "T" )))))) [ .Patterns ] 
-axiom { .Names } inj { AExp{}, K{}} ( plus{}( inj { Int{}, AExp{}} ( \dv { Int{}} ( "1" )) , div{}( inj { Int{}, AExp{}} ( \dv { Int{}} ( "2" )) , inj { Int{}, AExp{}} ( \dv { Int{}} ( "3" ))))) [ .Patterns ] 
-axiom { .Names } rew { K{}} ( inj { BExp{}, K{}} ( and{}( inj { Bool{}, BExp{}} ( boolTrue{}()) , cast { BExp{}} ( inj { KVariable{}, BExp{}} ( \dv { KVariable{}} ( "B" ))))) , inj { BExp{}, K{}} ( cast { BExp{}} ( inj { KVariable{}, BExp{}} ( \dv { KVariable{}} ( "B" ))))) [ .Patterns ] 
-axiom { .Names } kRequires{}( rew { K{}} ( inj { AExp{}, K{}} ( div{}( inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I1" )))) , inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I2" )))))) , inj { Int{}, K{}} ( divInt{}( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I1" ))) , cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I2" )))))) , inj { Int{}, K{}} ( neInt{}( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I2" ))) , \dv { Int{}} ( "0" )))) [ .Patterns ] 
-axiom { .Names } inj { Bag{}, K{}} ( consCells{}( inj { Cell{}, Bag{}} ( kCell{}( noDots{}() , rew { K{}} ( inj { Id{}, K{}} ( cast { Id{}} ( inj { KVariable{}, Id{}} ( \dv { KVariable{}} ( "X" )))) , inj { Int{}, K{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I" ))))) , dots{}())) , inj { Cell{}, Bag{}} ( stateCell{}( dots{}() , inj { Map{}, K{}} ( mapElement{}( inj { Id{}, K{}} ( cast { Id{}} ( inj { KVariable{}, Id{}} ( \dv { KVariable{}} ( "X" )))) , inj { Int{}, K{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I" )))))) , dots{}())))) [ .Patterns ] 
-axiom { .Names } rew { K{}} ( inj { Stmt{}, K{}} ( if{}( inj { Bool{}, BExp{}} ( boolTrue{}()) , cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "S" ))) , cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "_" ))))) , inj { Block{}, K{}} ( cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "S" ))))) [ .Patterns ] 
-axiom { .Names } rew { K{}} ( inj { BExp{}, K{}} ( and{}( inj { Bool{}, BExp{}} ( boolFalse{}()) , cast { BExp{}} ( inj { KVariable{}, BExp{}} ( \dv { KVariable{}} ( "_" ))))) , inj { Bool{}, K{}} ( boolFalse{}())) [ .Patterns ] 
-axiom { .Names } inj { Bag{}, K{}} ( consCells{}( inj { Cell{}, Bag{}} ( kCell{}( noDots{}() , rew { K{}} ( inj { Stmt{}, K{}} ( assignment{}( cast { Id{}} ( inj { KVariable{}, Id{}} ( \dv { KVariable{}} ( "X" ))) , inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I" )))))) , dotK{}()) , dots{}())) , inj { Cell{}, Bag{}} ( stateCell{}( dots{}() , inj { Map{}, K{}} ( mapElement{}( inj { Id{}, K{}} ( cast { Id{}} ( inj { KVariable{}, Id{}} ( \dv { KVariable{}} ( "X" )))) , 
-    \or { K{}} (
-        inj { AExp{}, K{}} ( aExpBracket{}( rew { AExp{}} ( inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "_" )))) , inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I" ))))))) ,
-        kBracket{}( rew { K{}} ( inj { Int{}, K{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "_" )))) , inj { Int{}, K{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I" ))))))
-    ))) , dots{}())))) [ .Patterns ]  .Declarations
-endmodule [ .Patterns ] 
-
-module PREDEF
-import INJ [ .Patterns ] 
-sort KResult { .Names } [ .Patterns ] 
-sort K { .Names } [ .Patterns ] 
-sort KBott { .Names } [ .Patterns ] 
-sort Bool { .Names } [ .Patterns ] 
-sort Set { .Names } [ .Patterns ] 
-sort Layout { .Names } [ .Patterns ] 
-sort Map { .Names } [ .Patterns ] 
-sort Id { .Names } [ .Patterns ] 
-sort Int { .Names } [ .Patterns ] 
-sort KVariable { .Names } [ .Patterns ] 
-symbol kRequires { .Names } ( K{}, K{}) : K{}[ .Patterns ] 
-symbol kBracket { .Names } ( K{}) : K{}[ .Patterns ] 
-symbol inKeys { .Names } ( K{}, Map{}) : Bool{}[ .Patterns ] 
-symbol notBool { .Names } ( Bool{}) : Bool{}[ .Patterns ] 
-symbol boolFalse { .Names } ( .Sorts ) : Bool{}[ .Patterns ] 
-symbol mapBracket { .Names } ( Map{}) : Map{}[ .Patterns ] 
-symbol dotK { .Names } ( .Sorts ) : K{}[ .Patterns ] 
-symbol boolTrue { .Names } ( .Sorts ) : Bool{}[ .Patterns ] 
-symbol divInt { .Names } ( Int{}, Int{}) : Int{}[ .Patterns ] 
-symbol emptyMap { .Names } ( .Sorts ) : Map{}[ .Patterns ] 
-symbol lteInt { .Names } ( Int{}, Int{}) : Int{}[ .Patterns ] 
-symbol neInt { .Names } ( Int{}, Int{}) : Int{}[ .Patterns ] 
-symbol consMap { .Names } ( Map{}, Map{}) : Map{}[ .Patterns ] 
-symbol mapElement { .Names } ( K{}, K{}) : Map{}[ .Patterns ] 
-symbol boolAnd { .Names } ( Bool{}, Bool{}) : Bool{}[ .Patterns ] 
-symbol plusInt { .Names } ( Int{}, Int{}) : Int{}[ .Patterns ] 
-symbol kSequence { .Names } ( K{}, K{}) : K{}[ .Patterns ]  .Declarations
-endmodule [ .Patterns ] 
+import INJ []
+import PREDEF []
+sort Bag {} []
+sort Cell {} []
+symbol consCells {} ( Bag{}, Bag{}) : Bag{}[]
+symbol emptyCells {} () : Bag{}[]
+endmodule []
 
 module IMP-SYNTAX
-import INJ [ .Patterns ] 
-import PREDEF [ .Patterns ] 
-sort BExp { .Names } [ .Patterns ] 
-sort Ids { .Names } [ .Patterns ] 
-sort Pgm { .Names } [ .Patterns ] 
-sort AExp { .Names } [ .Patterns ] 
-sort Stmt { .Names } [ .Patterns ] 
-sort Block { .Names } [ .Patterns ] 
-symbol emptyIds { .Names } ( .Sorts ) : Ids{}[ .Patterns ] 
-symbol plus { .Names } ( AExp{}, AExp{}) : AExp{}[ .Patterns ] 
-symbol not { .Names } ( BExp{}) : BExp{}[ .Patterns ] 
-symbol program { .Names } ( Ids{}, Stmt{}) : Pgm{}[ .Patterns ] 
-symbol aExpBracket { .Names } ( AExp{}) : AExp{}[ .Patterns ] 
-symbol bExpBracket { .Names } ( BExp{}) : BExp{}[ .Patterns ] 
-symbol while { .Names } ( BExp{}, Block{}) : Stmt{}[ .Patterns ] 
-symbol lte { .Names } ( AExp{}, AExp{}) : BExp{}[ .Patterns ] 
-symbol consIds { .Names } ( Id{}, Ids{}) : Ids{}[ .Patterns ] 
-symbol if { .Names } ( BExp{}, Block{}, Block{}) : Stmt{}[ .Patterns ] 
-symbol assignment { .Names } ( Id{}, AExp{}) : Stmt{}[ .Patterns ] 
-symbol block { .Names } ( Stmt{}) : Block{}[ .Patterns ] 
-symbol consStmt { .Names } ( Stmt{}, Stmt{}) : Stmt{}[ .Patterns ] 
-symbol div { .Names } ( AExp{}, AExp{}) : AExp{}[ .Patterns ] 
-symbol emptyBlock { .Names } ( .Sorts ) : Block{}[ .Patterns ] 
-symbol and { .Names } ( BExp{}, BExp{}) : BExp{}[ .Patterns ]  .Declarations
-endmodule [ .Patterns ] 
+import INJ []
+import PREDEF []
+sort BExp {} []
+sort Ids {} []
+sort Pgm {} []
+sort AExp {} []
+sort Stmt {} []
+sort Block {} []
+symbol emptyIds {} () : Ids{}[]
+symbol plus {} ( AExp{}, AExp{}) : AExp{}[]
+symbol not {} ( BExp{}) : BExp{}[]
+symbol program {} ( Ids{}, Stmt{}) : Pgm{}[]
+symbol while {} ( BExp{}, Block{}) : Stmt{}[]
+symbol lte {} ( AExp{}, AExp{}) : BExp{}[]
+symbol consIds {} ( Id{}, Ids{}) : Ids{}[]
+symbol if {} ( BExp{}, Block{}, Block{}) : Stmt{}[]
+symbol assignment {} ( Id{}, AExp{}) : Stmt{}[]
+symbol block {} ( Stmt{}) : Block{}[]
+symbol consStmt {} ( Stmt{}, Stmt{}) : Stmt{}[]
+symbol div {} ( AExp{}, AExp{}) : AExp{}[]
+symbol emptyBlock {} () : Block{}[]
+symbol and {} ( BExp{}, BExp{}) : BExp{}[]
+endmodule []
 
-module RULE-CELLS
-import INJ [ .Patterns ] 
-import KCELLS [ .Patterns ] 
-sort OptionalDots { .Names } [ .Patterns ] 
-symbol tCell { .Names } ( OptionalDots{}, K{}, OptionalDots{}) : Cell{}[ .Patterns ] 
-symbol dots { .Names } ( .Sorts ) : OptionalDots{}[ .Patterns ] 
-symbol kCell { .Names } ( OptionalDots{}, K{}, OptionalDots{}) : Cell{}[ .Patterns ] 
-symbol noDots { .Names } ( .Sorts ) : OptionalDots{}[ .Patterns ] 
-symbol stateCell { .Names } ( OptionalDots{}, K{}, OptionalDots{}) : Cell{}[ .Patterns ]  .Declarations
-endmodule [ .Patterns ] 
+module IMP-RULES-TYPED
+import INJ []
+import RULE-CELLS []
+import GENERATED []
+import IMP-SYNTAX []
+
+/* input(K): {S:Stmt} => S:Stmt  */
+axiom {} 
+    rew { K{}} (
+        inj { Block{}, K{}} ( block{}( cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S" ))))) ,
+        inj { Stmt{}, K{}} ( cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S" ))))) []
+
+/* input(K): I1:Int <= I2:Int => I1:Int <=Int I2:Int*/
+axiom {} 
+    rew { K{}} (
+        inj { BExp{}, K{}} ( lte{}( inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I1" )))) , inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I2" )))))) ,
+        inj { Int{}, K{}} ( lteInt{}( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I1" ))) , cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I2" )))))) []
+  
+/* input(K): while (B:BExp) S:Block => if (B:BExp) {S:Block while (B:BExp) S:Block} else {}  */
+axiom {} 
+    rew { K{}} (
+        inj { Stmt{}, K{}} ( while{}( cast { BExp{}} ( inj { KVariable{}, BExp{}} ( \dv { KVariable{}} ( "B" ))) , cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "S" ))))) ,
+        inj { Stmt{}, K{}} ( if{}( cast { BExp{}} ( inj { KVariable{}, BExp{}} ( \dv { KVariable{}} ( "B" ))) , block{}( consStmt{}( inj { Block{}, Stmt{}} ( cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "S" )))) , while{}( cast { BExp{}} ( inj { KVariable{}, BExp{}} ( \dv { KVariable{}} ( "B" ))) , cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "S" )))))) , emptyBlock{}()))) []
+
+/* input(K): S1:Stmt S2:Stmt => S1:Stmt ~> S2:Stmt  */
+axiom {} 
+    rew { K{}} (
+        inj { Stmt{}, K{}} ( consStmt{}( cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S1" ))) , cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S2" ))))) ,
+        kSequence{}( inj { Stmt{}, K{}} ( cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S1" )))) , inj { Stmt{}, K{}} ( cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S2" )))))) []
+
+/* input(K): int .Ids; S:Stmt => S:Stmt  */
+axiom {} 
+    rew { K{}} (
+        inj { Pgm{}, K{}} ( program{}( emptyIds{}() , cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S" ))))) ,
+        inj { Stmt{}, K{}} ( cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "S" ))))) []
+
+/* input(K): <k> int (X:Id,Xs:Ids => Xs:Ids);_:Stmt </k> <state> Rho:Map (.Map => X:Id|->0) </state>       
+axiom {} 
+    kRequires{}(
+        inj { Bag{}, K{}} ( consCells{}( inj { Cell{}, Bag{}} (
+            kCell{}( noDots{}() , inj { Pgm{}, K{}} ( program{}( bracket { Ids{}} ( rew { Ids{}} ( consIds{}( cast { Id{}} ( inj { KVariable{}, Id{}} ( \dv { KVariable{}} ( "X" ))) , cast { Ids{}} ( inj { KVariable{}, Ids{}} ( \dv { KVariable{}} ( "Xs" )))) , cast { Ids{}} ( inj { KVariable{}, Ids{}} ( \dv { KVariable{}} ( "Xs" ))))) , cast { Stmt{}} ( inj { KVariable{}, Stmt{}} ( \dv { KVariable{}} ( "_" ))))) , noDots{}())) ,inj { Cell{}, Bag{}} (
+            stateCell{}( noDots{}() , inj { Map{}, K{}} ( consMap{}( cast { Map{}} ( inj { KVariable{}, Map{}} ( \dv { KVariable{}} ( "Rho" ))) , bracket { Map{}} ( mapElement{}( rew { K{}} ( inj { Map{}, K{}} ( emptyMap{}()) , inj { Id{}, K{}} ( cast { Id{}} ( inj { KVariable{}, Id{}} ( \dv { KVariable{}} ( "X" ))))) , inj { Int{}, K{}} ( \dv { Int{}} ( "0" )))))) , noDots{}())))) ,
+        inj { Bool{}, K{}} ( notBool{}( bracket { Bool{}} ( inKeys{}( inj { Id{}, K{}} ( cast { Id{}} ( inj { KVariable{}, Id{}} ( \dv { KVariable{}} ( "X" )))) , cast { Map{}} ( inj { KVariable{}, Map{}} ( \dv { KVariable{}} ( "Rho" )))))))) []
+
+/* input(K): {} => .   */
+axiom {} 
+    rew { K{}} ( 
+        inj { Block{}, K{}} ( emptyBlock{}()) ,
+        dotK{}()) []
+        
+/* input(K): I1:Int + I2:Int => I1:Int +Int I2:Int*/
+axiom {} 
+    rew { K{}} (
+        inj { AExp{}, K{}} ( plus{}( inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I1" )))) , inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I2" )))))) ,
+        inj { Int{}, K{}} ( plusInt{}( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I1" ))) , cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I2" )))))) []
+
+/* input(K): if (false) _:Block else S:Block => S:Block*/
+axiom {} 
+    rew { K{}} (
+        inj { Stmt{}, K{}} ( if{}( inj { Bool{}, BExp{}} ( boolFalse{}()) , cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "_" ))) , cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "S" ))))) ,
+        inj { Block{}, K{}} ( cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "S" ))))) []
+
+/* input(K): ! T:Bool => notBool T:Bool*/
+axiom {} 
+    rew { K{}} (
+        inj { BExp{}, K{}} ( not{}( inj { Bool{}, BExp{}} ( cast { Bool{}} ( inj { KVariable{}, Bool{}} ( \dv { KVariable{}} ( "T" )))))) ,
+        inj { Bool{}, K{}} ( notBool{}( cast { Bool{}} ( inj { KVariable{}, Bool{}} ( \dv { KVariable{}} ( "T" )))))) []
+
+/* input(K): true && B:BExp => B:BExp*/
+axiom {}
+    rew { K{}} (
+        inj { BExp{}, K{}} ( and{}( inj { Bool{}, BExp{}} ( boolTrue{}()) , cast { BExp{}} ( inj { KVariable{}, BExp{}} ( \dv { KVariable{}} ( "B" ))))) ,
+        inj { BExp{}, K{}} ( cast { BExp{}} ( inj { KVariable{}, BExp{}} ( \dv { KVariable{}} ( "B" ))))) []
+
+/* input(K): I1:Int / I2:Int => I1:Int /Int I2:Int  requires I2:Int =/=Int 0*/
+axiom {} 
+    kRequires{}(
+        rew { K{}} (
+            inj { AExp{}, K{}} ( div{}( inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I1" )))) , inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I2" )))))) ,
+            inj { Int{}, K{}} ( divInt{}( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I1" ))) , cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I2" )))))) ,
+        inj { Int{}, K{}} ( neInt{}( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I2" ))) , \dv { Int{}} ( "0" )))) []
+
+/* input(K): <k> X:Id = I:Int; => . ...</k> <state>... X:Id |-> (_:Int => I:Int) ...</state>*/
+axiom {} inj { Bag{}, K{}} ( consCells{}( inj { Cell{}, Bag{}} ( 
+    kCell{}( noDots{}() , rew { K{}} ( inj { Stmt{}, K{}} ( assignment{}( cast { Id{}} ( inj { KVariable{}, Id{}} ( \dv { KVariable{}} ( "X" ))) , inj { Int{}, AExp{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I" )))))) , dotK{}()) , dots{}())) , inj { Cell{}, Bag{}} ( 
+    stateCell{}( dots{}() , inj { Map{}, K{}} ( mapElement{}( inj { Id{}, K{}} ( cast { Id{}} ( inj { KVariable{}, Id{}} ( \dv { KVariable{}} ( "X" )))) , bracket { K{}} ( rew { K{}} ( inj { Int{}, K{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "_" )))) , inj { Int{}, K{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I" )))))))) , dots{}())))) []
+
+/* input(K): <k> X:Id => I:Int ...</k> <state>... X:Id |-> I:Int ...</state>*/
+axiom {} inj { Bag{}, K{}} ( consCells{}( inj { Cell{}, Bag{}} ( 
+    kCell{}( noDots{}() , rew { K{}} ( inj { Id{}, K{}} ( cast { Id{}} ( inj { KVariable{}, Id{}} ( \dv { KVariable{}} ( "X" )))) , inj { Int{}, K{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I" ))))) , dots{}())) , inj { Cell{}, Bag{}} ( 
+    stateCell{}( dots{}() , inj { Map{}, K{}} ( mapElement{}( inj { Id{}, K{}} ( cast { Id{}} ( inj { KVariable{}, Id{}} ( \dv { KVariable{}} ( "X" )))) , inj { Int{}, K{}} ( cast { Int{}} ( inj { KVariable{}, Int{}} ( \dv { KVariable{}} ( "I" )))))) , dots{}())))) []
+
+/* input(K): if (true)  S:Block else _:Block => S:Block*/
+axiom {} 
+    rew { K{}} (
+        inj { Stmt{}, K{}} ( if{}( inj { Bool{}, BExp{}} ( boolTrue{}()) , cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "S" ))) , cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "_" ))))) ,
+        inj { Block{}, K{}} ( cast { Block{}} ( inj { KVariable{}, Block{}} ( \dv { KVariable{}} ( "S" ))))) []
+
+/* input(K): false && _:BExp => false*/
+axiom {} 
+    rew { K{}} (
+        inj { BExp{}, K{}} ( and{}( inj { Bool{}, BExp{}} ( boolFalse{}()) , cast { BExp{}} ( inj { KVariable{}, BExp{}} ( \dv { KVariable{}} ( "_" ))))) ,
+        inj { Bool{}, K{}} ( boolFalse{}())) []
+endmodule []
+
+module PREDEF
+import INJ []
+sort KResult {} []
+sort K {} []
+sort KBott {} []
+sort Bool {} []
+sort Set {} []
+sort Layout {} []
+sort Map {} []
+sort Id {} []
+sort Int {} []
+sort KVariable {} []
+symbol kRequires {} ( K{}, K{}) : K{}[]
+symbol inKeys {} ( K{}, Map{}) : Bool{}[]
+symbol notBool {} ( Bool{}) : Bool{}[]
+symbol boolFalse {} () : Bool{}[]
+symbol dotK {} () : K{}[]
+symbol boolTrue {} () : Bool{}[]
+symbol divInt {} ( Int{}, Int{}) : Int{}[]
+symbol emptyMap {} () : Map{}[]
+symbol lteInt {} ( Int{}, Int{}) : Int{}[]
+symbol neInt {} ( Int{}, Int{}) : Int{}[]
+symbol consMap {} ( Map{}, Map{}) : Map{}[]
+symbol mapElement {} ( K{}, K{}) : Map{}[]
+symbol boolAnd {} ( Bool{}, Bool{}) : Bool{}[]
+symbol plusInt {} ( Int{}, Int{}) : Int{}[]
+symbol kSequence {} ( K{}, K{}) : K{}[]
+endmodule []
 
 module GENERATED
-import INJ [ .Patterns ] 
-import RULE-CELLS [ .Patterns ] 
-import IMP-SYNTAX [ .Patterns ] 
-symbol boolBracket { .Names } ( Bool{}) : Bool{}[ .Patterns ] 
-symbol idsBracket { .Names } ( Ids{}) : Ids{}[ .Patterns ]  .Declarations
-endmodule [ .Patterns ]  .Modules )  .Modules
-  </k>
-</T>
+import INJ []
+import RULE-CELLS []
+import IMP-SYNTAX []
+endmodule []
+
+module RULE-CELLS
+import INJ []
+import KCELLS []
+sort OptionalDots {} []
+symbol tCell {} ( OptionalDots{}, K{}, OptionalDots{}) : Cell{}[]
+symbol dots {} () : OptionalDots{}[]
+symbol kCell {} ( OptionalDots{}, K{}, OptionalDots{}) : Cell{}[]
+symbol noDots {} () : OptionalDots{}[]
+symbol stateCell {} ( OptionalDots{}, K{}, OptionalDots{}) : Cell{}[]
+endmodule []

@@ -80,6 +80,7 @@ rule symbolParams(_, patternList(\bottom{Exp{.Sorts}}(), _)) => \bottom{Exp{.Sor
 //rule rew{S2}(inj{S1,S2}(A),inj{S1,S2}(B)) => inj{S1,S2}(rew{S1}(A, B)) [anywhere] // the agressive axiom implemented as a rule
 // so let's try the other way around
 rule inj{S1,S2}(rew{S1}(A, B)) => rew{S2}(inj{S1,S2}(A),inj{S1,S2}(B)) [anywhere] // the agressive axiom implemented as a rule
+rule inj{S1,S2}(bracket{S1}(A)) => bracket{S2}(inj{S1,S2}(A)) [anywhere] // the agressive axiom implemented as a rule
 
 
 
@@ -90,6 +91,7 @@ syntax Name ::= "kRequires"  [token, prec(2)]
 syntax Name ::= "kSequence"  [token, prec(2)]
 syntax Name ::= "cast"  [token, prec(2)]
 syntax Name ::= "rew"   [token, prec(2)]
+syntax Name ::= "bracket"   [token, prec(2)]
 syntax Name ::= "div"   [token, prec(2)]
 syntax Name ::= "divInt"   [token, prec(2)]
 syntax Name ::= "plus"  [token, prec(2)]

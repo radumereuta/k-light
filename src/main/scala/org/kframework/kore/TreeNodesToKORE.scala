@@ -71,6 +71,7 @@ private class TreeNodesToKOREVisitor {
     case tc@TermCons(items, p) => printInfo(tc, p.symbol.get match {
       case "inj" => "inj{" + p.items.iterator.next().asInstanceOf[NonTerminal].sort.localName + "{}," + p.sort.localName + "{}}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
       case "cast" => "cast{" + p.sort.localName + "{}}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
+      case "bracket" => "bracket{" + p.sort.localName + "{}}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
       case "rew" => "rew{" + p.sort.localName + "{}}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
       case _ => p.symbol.get + "{}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
     })

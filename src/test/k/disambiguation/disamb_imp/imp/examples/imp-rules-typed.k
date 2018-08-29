@@ -15,7 +15,7 @@ module PREDEF
   // kapp
   syntax K ::= K "=>" K [symbol(rew)]
   syntax K ::= K "~>" K [symbol(kSequence)]
-  syntax K ::= "(" K ")" [symbol(kBracket)]
+  syntax K ::= "(" K ")" [symbol(bracket)]
   syntax KBott ::= KVariable [symbol(inj)]
   syntax KVariable ::= r"[A-Z][A-Za-z0-9'_]*|_" [token]
   syntax K ::= KBott [symbol(inj)]
@@ -26,7 +26,7 @@ module PREDEF
   // Map  
   syntax Map ::= K "|->" K [symbol(mapElement)]
   syntax Map ::= Map Map [symbol(consMap)]
-  syntax Map ::= "(" Map ")" [symbol(mapBracket)]
+  syntax Map ::= "(" Map ")" [symbol(bracket)]
   syntax Map ::= ".Map" [symbol(emptyMap)]
   
   // Int
@@ -76,12 +76,12 @@ module IMP-SYNTAX // mostly untouched
   syntax AExp  ::= Int [symbol(inj)] | Id [symbol(inj)]
                  | AExp "/" AExp              [/*left,*/ strict, symbol(div)]
             /*>*/| AExp "+" AExp              [/*left,*/ strict, symbol(plus)]
-                 | "(" AExp ")"               [symbol(aExpBracket)]
+                 | "(" AExp ")"               [symbol(bracket)]
   syntax BExp  ::= Bool [symbol(inj)]
                  | AExp "<=" AExp             [seqstrict, symbol(lte)]
                  | "!" BExp                   [strict, symbol(not)]
             /*>*/| BExp "&&" BExp             [/*left,*/ strict(1), symbol(and)]
-                 | "(" BExp ")"               [symbol(bExpBracket)]
+                 | "(" BExp ")"               [symbol(bracket)]
   syntax Block ::= "{" "}"                    [symbol(emptyBlock)]
                  | "{" Stmt "}"               [symbol(block)]
   syntax Stmt  ::= Block [symbol(inj)]
@@ -129,7 +129,7 @@ module GENERATED
   syntax Bool ::= KBott [symbol(inj)]
   syntax K ::= Bool [symbol(inj)]
   syntax Bool ::= Bool "=>" Bool [symbol(rew)]
-  syntax Bool ::= "(" Bool ")" [symbol(boolBracket)]
+  syntax Bool ::= "(" Bool ")" [symbol(bracket)]
   
   syntax Stmt ::= KBott [symbol(inj)]
   syntax K ::= Stmt [symbol(inj)]
@@ -150,7 +150,7 @@ module GENERATED
   syntax Ids ::= KBott [symbol(inj)]
   syntax K ::= Ids [symbol(inj)]
   syntax Ids ::= Ids "=>" Ids [symbol(rew)]
-  syntax Ids ::= "(" Ids ")" [symbol(idsBracket)]
+  syntax Ids ::= "(" Ids ")" [symbol(bracket)]
 
 
 endmodule

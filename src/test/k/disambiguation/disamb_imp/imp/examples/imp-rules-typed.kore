@@ -4,6 +4,7 @@ module INJ
   sort KInt{} []
   symbol inj{Sin,Sout}(Sin):Sout []
   symbol cast{C}(C):C []
+  symbol bracket{C}(C):C []
   symbol rew{C}(C,C):C []
   symbol info{S}(String{}, S) : S []
   symbol input{}(KInt{}, KInt{}, KInt{}, KInt{}) : String{} []
@@ -17,6 +18,32 @@ module KCELLS
 
   symbol consCells{}(Bag{}, Bag{}):Bag{} []
   symbol emptyCells{}():Bag{} []
+endmodule []
+
+module IMP-SYNTAX
+  import INJ []
+  import PREDEF []
+  sort BExp{} []
+  sort Ids{} []
+  sort Pgm{} []
+  sort AExp{} []
+  sort Stmt{} []
+  sort Block{} []
+  symbol emptyIds{}():Ids{} []
+
+  symbol plus{}(AExp{}, AExp{}):AExp{} []
+  symbol not{}(BExp{}):BExp{} []
+  symbol program{}(Ids{}, Stmt{}):Pgm{} []
+  symbol while{}(BExp{}, Block{}):Stmt{} []
+  symbol lte{}(AExp{}, AExp{}):BExp{} []
+  symbol consIds{}(Id{}, Ids{}):Ids{} []
+  symbol if{}(BExp{}, Block{}, Block{}):Stmt{} []
+  symbol assignment{}(Id{}, AExp{}):Stmt{} []
+  symbol block{}(Stmt{}):Block{} []
+  symbol consStmt{}(Stmt{}, Stmt{}):Stmt{} []
+  symbol div{}(AExp{}, AExp{}):AExp{} []
+  symbol emptyBlock{}():Block{} []
+  symbol and{}(BExp{}, BExp{}):BExp{} []
 endmodule []
 
 module IMP-RULES-TYPED
@@ -167,7 +194,7 @@ module IMP-RULES-TYPED
     \and{K{}}(
         \equals{K{},K{}}(V8:K{},\or{K{}}(inj{AExp{},K{}}(inj{Id{},AExp{}}(V1:Id{})),\or{K{}}(inj{Id{},K{}}(V1:Id{}),\bottom{K{}}()))),
     \and{K{}}(
-        \equals{Bool{},K{}}(V10:Bool{},notBool{}(boolBracket{}(inKeys{}(V8:K{},V7:Map{})))),
+        \equals{Bool{},K{}}(V10:Bool{},notBool{}(bracket{Bool{}}(inKeys{}(V8:K{},V7:Map{})))),
     \and{K{}}(
         \equals{KBott{},K{}}(V6:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("_"))),
     \and{K{}}(
@@ -184,7 +211,7 @@ module IMP-RULES-TYPED
         \equals{Map{},K{}}(V7:Map{},cast{Map{}}(inj{KBott{},Map{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("Rho"))))),
     \and{K{}}(
         \equals{Ids{},K{}}(V4:Ids{},rew{Ids{}}(V3:Ids{},V2:Ids{})),
-kRequires{}(inj{Bag{},K{}}(consCells{}(inj{Cell{},Bag{}}(kCell{}(V0:OptionalDots{},inj{Pgm{},K{}}(program{}(idsBracket{}(\or{Ids{}}(rew{Ids{}}(V5:Ids{},V3:Ids{}),\or{Ids{}}(cast{Ids{}}(\or{Ids{}}(rew{Ids{}}(V5:Ids{},V2:Ids{}),\or{Ids{}}(consIds{}(V1:Id{},V4:Ids{}),\bottom{Ids{}}()))),\or{Ids{}}(consIds{}(V1:Id{},\or{Ids{}}(rew{Ids{}}(V3:Ids{},V3:Ids{}),\or{Ids{}}(cast{Ids{}}(V4:Ids{}),\bottom{Ids{}}()))),\bottom{Ids{}}())))),cast{Stmt{}}(\or{Stmt{}}(inj{KBott{},Stmt{}}(V6:KBott{}),\or{Stmt{}}(inj{Block{},Stmt{}}(inj{KBott{},Block{}}(V6:KBott{})),\bottom{Stmt{}}()))))),V0:OptionalDots{})),inj{Cell{},Bag{}}(stateCell{}(V0:OptionalDots{},inj{Map{},K{}}(consMap{}(V7:Map{},mapBracket{}(mapElement{}(rew{K{}}(inj{Map{},K{}}(emptyMap{}()),V8:K{}),\or{K{}}(inj{Int{},K{}}(V9:Int{}),\or{K{}}(inj{AExp{},K{}}(inj{Int{},AExp{}}(V9:Int{})),\bottom{K{}}())))))),V0:OptionalDots{})))),\or{K{}}(inj{Bool{},K{}}(V10:Bool{}),\or{K{}}(inj{BExp{},K{}}(inj{Bool{},BExp{}}(V10:Bool{})),\bottom{K{}}()))))))))))))))))))))))))) []
+kRequires{}(inj{Bag{},K{}}(consCells{}(inj{Cell{},Bag{}}(kCell{}(V0:OptionalDots{},inj{Pgm{},K{}}(program{}(bracket{Ids{}}(\or{Ids{}}(rew{Ids{}}(V5:Ids{},V3:Ids{}),\or{Ids{}}(cast{Ids{}}(\or{Ids{}}(rew{Ids{}}(V5:Ids{},V2:Ids{}),\or{Ids{}}(consIds{}(V1:Id{},V4:Ids{}),\bottom{Ids{}}()))),\or{Ids{}}(consIds{}(V1:Id{},\or{Ids{}}(rew{Ids{}}(V3:Ids{},V3:Ids{}),\or{Ids{}}(cast{Ids{}}(V4:Ids{}),\bottom{Ids{}}()))),\bottom{Ids{}}())))),cast{Stmt{}}(\or{Stmt{}}(inj{KBott{},Stmt{}}(V6:KBott{}),\or{Stmt{}}(inj{Block{},Stmt{}}(inj{KBott{},Block{}}(V6:KBott{})),\bottom{Stmt{}}()))))),V0:OptionalDots{})),inj{Cell{},Bag{}}(stateCell{}(V0:OptionalDots{},inj{Map{},K{}}(consMap{}(V7:Map{},bracket{Map{}}(mapElement{}(rew{K{}}(inj{Map{},K{}}(emptyMap{}()),V8:K{}),\or{K{}}(inj{Int{},K{}}(V9:Int{}),\or{K{}}(inj{AExp{},K{}}(inj{Int{},AExp{}}(V9:Int{})),\bottom{K{}}())))))),V0:OptionalDots{})))),\or{K{}}(inj{Bool{},K{}}(V10:Bool{}),\or{K{}}(inj{BExp{},K{}}(inj{Bool{},BExp{}}(V10:Bool{})),\bottom{K{}}()))))))))))))))))))))))))) []
   /* input(K): {} => .   */
   axiom{} 
 \exists{K{}}(V0:Block{},
@@ -272,18 +299,6 @@ rew{K{}}(\or{K{}}(inj{Block{},K{}}(V0:Block{}),\or{K{}}(inj{Stmt{},K{}}(inj{Bloc
     \and{K{}}(
         \equals{Bool{},K{}}(V0:Bool{},inj{KBott{},Bool{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("T")))),
 \or{K{}}(rew{K{}}(inj{BExp{},K{}}(V3:BExp{}),\or{K{}}(inj{Bool{},K{}}(V5:Bool{}),\or{K{}}(inj{BExp{},K{}}(V6:BExp{}),\bottom{K{}}()))),\or{K{}}(inj{BExp{},K{}}(\or{BExp{}}(not{}(\or{BExp{}}(inj{Bool{},BExp{}}(\or{Bool{}}(cast{Bool{}}(rew{Bool{}}(V1:Bool{},V4:Bool{})),\or{Bool{}}(rew{Bool{}}(V1:Bool{},V5:Bool{}),\bottom{Bool{}}()))),\or{BExp{}}(rew{BExp{}}(V2:BExp{},V6:BExp{}),\bottom{BExp{}}()))),\or{BExp{}}(rew{BExp{}}(V3:BExp{},V6:BExp{}),\bottom{BExp{}}()))),\bottom{K{}}())))))))))))))))) []
-  /* input(K): 1 + 2 / 3*/
-  axiom{} 
-\exists{K{}}(V2:AExp{},
-\exists{K{}}(V1:AExp{},
-\exists{K{}}(V0:AExp{},
-    \and{K{}}(
-        \equals{AExp{},K{}}(V2:AExp{},inj{Int{},AExp{}}(\dv{Int{}}("3"))),
-    \and{K{}}(
-        \equals{AExp{},K{}}(V1:AExp{},inj{Int{},AExp{}}(\dv{Int{}}("2"))),
-    \and{K{}}(
-        \equals{AExp{},K{}}(V0:AExp{},inj{Int{},AExp{}}(\dv{Int{}}("1"))),
-inj{AExp{},K{}}(\or{AExp{}}(div{}(plus{}(V0:AExp{},V1:AExp{}),V2:AExp{}),\or{AExp{}}(plus{}(V0:AExp{},div{}(V1:AExp{},V2:AExp{})),\bottom{AExp{}}()))))))))) []
   /* input(K): true && B:BExp => B:BExp*/
   axiom{} 
 \exists{K{}}(V5:BExp{},
@@ -359,6 +374,36 @@ inj{AExp{},K{}}(\or{AExp{}}(div{}(plus{}(V0:AExp{},V1:AExp{}),V2:AExp{}),\or{AEx
     \and{K{}}(
         \equals{Int{},K{}}(V3:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I2")))),
 \or{K{}}(rew{K{}}(V11:K{},kRequires{}(V12:K{},V14:K{})),\or{K{}}(kRequires{}(\or{K{}}(rew{K{}}(V11:K{},V12:K{}),\or{K{}}(inj{AExp{},K{}}(\or{AExp{}}(div{}(V2:AExp{},\or{AExp{}}(inj{Int{},AExp{}}(\or{Int{}}(rew{Int{}}(V4:Int{},V8:Int{}),\or{Int{}}(cast{Int{}}(\or{Int{}}(rew{Int{}}(V4:Int{},V7:Int{}),\or{Int{}}(divInt{}(V10:Int{},V3:Int{}),\bottom{Int{}}()))),\or{Int{}}(divInt{}(V10:Int{},V4:Int{}),\bottom{Int{}}())))),\or{AExp{}}(rew{AExp{}}(V5:AExp{},V9:AExp{}),\bottom{AExp{}}()))),\or{AExp{}}(rew{AExp{}}(V6:AExp{},V9:AExp{}),\bottom{AExp{}}()))),\bottom{K{}}())),V14:K{}),\bottom{K{}}())))))))))))))))))))))))))))))))) []
+  /* input(K): <k> X:Id = I:Int; => . ...</k> <state>... X:Id |-> (_:Int => I:Int) ...</state>*/
+  axiom{} 
+\exists{K{}}(V3:AExp{},
+\exists{K{}}(V6:AExp{},
+\exists{K{}}(V8:AExp{},
+\exists{K{}}(V4:OptionalDots{},
+\exists{K{}}(V7:Int{},
+\exists{K{}}(V0:Id{},
+\exists{K{}}(V2:Int{},
+\exists{K{}}(V5:Int{},
+\exists{K{}}(V1:Int{},
+    \and{K{}}(
+        \equals{AExp{},K{}}(V3:AExp{},inj{Int{},AExp{}}(V2:Int{})),
+    \and{K{}}(
+        \equals{AExp{},K{}}(V6:AExp{},inj{Int{},AExp{}}(V5:Int{})),
+    \and{K{}}(
+        \equals{AExp{},K{}}(V8:AExp{},\or{AExp{}}(inj{Int{},AExp{}}(V7:Int{}),\or{AExp{}}(rew{AExp{}}(V6:AExp{},V3:AExp{}),\bottom{AExp{}}()))),
+    \and{K{}}(
+        \equals{OptionalDots{},K{}}(V4:OptionalDots{},dots{}()),
+    \and{K{}}(
+        \equals{Int{},K{}}(V7:Int{},\or{Int{}}(rew{Int{}}(V5:Int{},V2:Int{}),\or{Int{}}(cast{Int{}}(rew{Int{}}(V5:Int{},V1:Int{})),\bottom{Int{}}()))),
+    \and{K{}}(
+        \equals{Id{},K{}}(V0:Id{},cast{Id{}}(inj{KBott{},Id{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("X"))))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V2:Int{},cast{Int{}}(V1:Int{})),
+    \and{K{}}(
+        \equals{Int{},K{}}(V5:Int{},cast{Int{}}(inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("_"))))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V1:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I")))),
+inj{Bag{},K{}}(consCells{}(inj{Cell{},Bag{}}(kCell{}(noDots{}(),rew{K{}}(inj{Stmt{},K{}}(assignment{}(V0:Id{},V3:AExp{})),dotK{}()),V4:OptionalDots{})),inj{Cell{},Bag{}}(stateCell{}(V4:OptionalDots{},inj{Map{},K{}}(mapElement{}(\or{K{}}(inj{AExp{},K{}}(inj{Id{},AExp{}}(V0:Id{})),\or{K{}}(inj{Id{},K{}}(V0:Id{}),\bottom{K{}}())),\or{K{}}(bracket{K{}}(\or{K{}}(rew{K{}}(\or{K{}}(inj{Int{},K{}}(V5:Int{}),\or{K{}}(inj{AExp{},K{}}(V6:AExp{}),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(V2:Int{}),\or{K{}}(inj{AExp{},K{}}(V3:AExp{}),\bottom{K{}}()))),\or{K{}}(inj{Int{},K{}}(V7:Int{}),\or{K{}}(inj{AExp{},K{}}(V8:AExp{}),\bottom{K{}}())))),\or{K{}}(inj{AExp{},K{}}(bracket{AExp{}}(V8:AExp{})),\bottom{K{}}())))),V4:OptionalDots{})))))))))))))))))))))) []
   /* input(K): <k> X:Id => I:Int ...</k> <state>... X:Id |-> I:Int ...</state>*/
   axiom{} 
 \exists{K{}}(V3:AExp{},
@@ -428,36 +473,6 @@ inj{Bag{},K{}}(consCells{}(inj{Cell{},Bag{}}(kCell{}(noDots{}(),\or{K{}}(rew{K{}
     \and{K{}}(
         \equals{Bool{},K{}}(V3:Bool{},inj{KBott{},Bool{}}(V2:KBott{})),
 \or{K{}}(rew{K{}}(inj{BExp{},K{}}(V6:BExp{}),\or{K{}}(inj{Bool{},K{}}(V0:Bool{}),\or{K{}}(inj{BExp{},K{}}(V1:BExp{}),\bottom{K{}}()))),\or{K{}}(inj{BExp{},K{}}(\or{BExp{}}(and{}(V1:BExp{},rew{BExp{}}(V5:BExp{},V1:BExp{})),\or{BExp{}}(rew{BExp{}}(V6:BExp{},V1:BExp{}),\bottom{BExp{}}()))),\bottom{K{}}())))))))))))))))) []
-  /* input(K): <k> X:Id = I:Int; => . ...</k> <state>... X:Id |-> (_:Int => I:Int) ...</state>*/
-  axiom{} 
-\exists{K{}}(V3:AExp{},
-\exists{K{}}(V6:AExp{},
-\exists{K{}}(V8:AExp{},
-\exists{K{}}(V4:OptionalDots{},
-\exists{K{}}(V7:Int{},
-\exists{K{}}(V0:Id{},
-\exists{K{}}(V2:Int{},
-\exists{K{}}(V5:Int{},
-\exists{K{}}(V1:Int{},
-    \and{K{}}(
-        \equals{AExp{},K{}}(V3:AExp{},inj{Int{},AExp{}}(V2:Int{})),
-    \and{K{}}(
-        \equals{AExp{},K{}}(V6:AExp{},inj{Int{},AExp{}}(V5:Int{})),
-    \and{K{}}(
-        \equals{AExp{},K{}}(V8:AExp{},\or{AExp{}}(inj{Int{},AExp{}}(V7:Int{}),\or{AExp{}}(rew{AExp{}}(V6:AExp{},V3:AExp{}),\bottom{AExp{}}()))),
-    \and{K{}}(
-        \equals{OptionalDots{},K{}}(V4:OptionalDots{},dots{}()),
-    \and{K{}}(
-        \equals{Int{},K{}}(V7:Int{},\or{Int{}}(rew{Int{}}(V5:Int{},V2:Int{}),\or{Int{}}(cast{Int{}}(rew{Int{}}(V5:Int{},V1:Int{})),\bottom{Int{}}()))),
-    \and{K{}}(
-        \equals{Id{},K{}}(V0:Id{},cast{Id{}}(inj{KBott{},Id{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("X"))))),
-    \and{K{}}(
-        \equals{Int{},K{}}(V2:Int{},cast{Int{}}(V1:Int{})),
-    \and{K{}}(
-        \equals{Int{},K{}}(V5:Int{},cast{Int{}}(inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("_"))))),
-    \and{K{}}(
-        \equals{Int{},K{}}(V1:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I")))),
-inj{Bag{},K{}}(consCells{}(inj{Cell{},Bag{}}(kCell{}(noDots{}(),rew{K{}}(inj{Stmt{},K{}}(assignment{}(V0:Id{},V3:AExp{})),dotK{}()),V4:OptionalDots{})),inj{Cell{},Bag{}}(stateCell{}(V4:OptionalDots{},inj{Map{},K{}}(mapElement{}(\or{K{}}(inj{AExp{},K{}}(inj{Id{},AExp{}}(V0:Id{})),\or{K{}}(inj{Id{},K{}}(V0:Id{}),\bottom{K{}}())),\or{K{}}(inj{AExp{},K{}}(aExpBracket{}(V8:AExp{})),\or{K{}}(kBracket{}(\or{K{}}(rew{K{}}(\or{K{}}(inj{Int{},K{}}(V5:Int{}),\or{K{}}(inj{AExp{},K{}}(V6:AExp{}),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(V2:Int{}),\or{K{}}(inj{AExp{},K{}}(V3:AExp{}),\bottom{K{}}()))),\or{K{}}(inj{Int{},K{}}(V7:Int{}),\or{K{}}(inj{AExp{},K{}}(V8:AExp{}),\bottom{K{}}())))),\bottom{K{}}())))),V4:OptionalDots{})))))))))))))))))))))) []
 endmodule []
 
 module PREDEF
@@ -474,11 +489,9 @@ module PREDEF
   sort KVariable{} []
 
   symbol kRequires{}(K{}, K{}):K{} []
-  symbol kBracket{}(K{}):K{} []
   symbol inKeys{}(K{}, Map{}):Bool{} []
   symbol notBool{}(Bool{}):Bool{} []
   symbol boolFalse{}():Bool{} []
-  symbol mapBracket{}(Map{}):Map{} []
   symbol dotK{}():K{} []
   symbol boolTrue{}():Bool{} []
   symbol divInt{}(Int{}, Int{}):Int{} []
@@ -492,32 +505,11 @@ module PREDEF
   symbol kSequence{}(K{}, K{}):K{} []
 endmodule []
 
-module IMP-SYNTAX
+module GENERATED
   import INJ []
-  import PREDEF []
-  sort BExp{} []
-  sort Ids{} []
-  sort Pgm{} []
-  sort AExp{} []
-  sort Stmt{} []
-  sort Block{} []
-  symbol emptyIds{}():Ids{} []
+  import RULE-CELLS []
+  import IMP-SYNTAX []
 
-  symbol plus{}(AExp{}, AExp{}):AExp{} []
-  symbol not{}(BExp{}):BExp{} []
-  symbol program{}(Ids{}, Stmt{}):Pgm{} []
-  symbol aExpBracket{}(AExp{}):AExp{} []
-  symbol bExpBracket{}(BExp{}):BExp{} []
-  symbol while{}(BExp{}, Block{}):Stmt{} []
-  symbol lte{}(AExp{}, AExp{}):BExp{} []
-  symbol consIds{}(Id{}, Ids{}):Ids{} []
-  symbol if{}(BExp{}, Block{}, Block{}):Stmt{} []
-  symbol assignment{}(Id{}, AExp{}):Stmt{} []
-  symbol block{}(Stmt{}):Block{} []
-  symbol consStmt{}(Stmt{}, Stmt{}):Stmt{} []
-  symbol div{}(AExp{}, AExp{}):AExp{} []
-  symbol emptyBlock{}():Block{} []
-  symbol and{}(BExp{}, BExp{}):BExp{} []
 endmodule []
 
 module RULE-CELLS
@@ -530,13 +522,4 @@ module RULE-CELLS
   symbol kCell{}(OptionalDots{}, K{}, OptionalDots{}):Cell{} []
   symbol noDots{}():OptionalDots{} []
   symbol stateCell{}(OptionalDots{}, K{}, OptionalDots{}):Cell{} []
-endmodule []
-
-module GENERATED
-  import INJ []
-  import RULE-CELLS []
-  import IMP-SYNTAX []
-
-  symbol boolBracket{}(Bool{}):Bool{} []
-  symbol idsBracket{}(Ids{}):Ids{} []
 endmodule []

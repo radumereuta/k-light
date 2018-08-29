@@ -4,6 +4,7 @@ module INJ
   sort KInt{} []
   symbol inj{Sin,Sout}(Sin):Sout []
   symbol cast{C}(C):C []
+  symbol bracket{C}(C):C []
   symbol rew{C}(C,C):C []
   symbol info{S}(String{}, S) : S []
   symbol input{}(KInt{}, KInt{}, KInt{}, KInt{}) : String{} []
