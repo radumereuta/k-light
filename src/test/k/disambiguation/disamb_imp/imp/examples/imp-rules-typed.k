@@ -13,7 +13,7 @@ module PREDEF
   syntax Layout ::= r"[\\ \n\r\t]*" [token]
 
   // kapp
-  syntax K ::= K "=>" K [symbol(rew)]
+  syntax K ::= K "=>" K [symbol(\rewrites)]
   syntax K ::= K "~>" K [symbol(kSequence)]
   syntax K ::= "(" K ")" [symbol(bracket)]
   syntax KBott ::= KVariable [symbol(inj)]
@@ -116,40 +116,40 @@ module GENERATED
 
   syntax K ::= Pgm [symbol(inj)]
   syntax Pgm ::= KBott [symbol(inj)]
-  syntax Pgm ::= Pgm "=>" Pgm [symbol(rew)]
+  syntax Pgm ::= Pgm "=>" Pgm [symbol(\rewrites)]
 
   syntax Id ::= KBott [symbol(inj)]
   syntax K ::= Id [symbol(inj)]
-  syntax Id ::= Id "=>" Id [symbol(rew)]
+  syntax Id ::= Id "=>" Id [symbol(\rewrites)]
 
   syntax Int ::= KBott [symbol(inj)]
   syntax K ::= Int [symbol(inj)]
-  syntax Int ::= Int "=>" Int [symbol(rew)]
+  syntax Int ::= Int "=>" Int [symbol(\rewrites)]
 
   syntax Bool ::= KBott [symbol(inj)]
   syntax K ::= Bool [symbol(inj)]
-  syntax Bool ::= Bool "=>" Bool [symbol(rew)]
+  syntax Bool ::= Bool "=>" Bool [symbol(\rewrites)]
   syntax Bool ::= "(" Bool ")" [symbol(bracket)]
   
   syntax Stmt ::= KBott [symbol(inj)]
   syntax K ::= Stmt [symbol(inj)]
-  syntax Stmt ::= Stmt "=>" Stmt [symbol(rew)]
+  syntax Stmt ::= Stmt "=>" Stmt [symbol(\rewrites)]
   
   syntax AExp ::= KBott [symbol(inj)]
   syntax K ::= AExp [symbol(inj)]
-  syntax AExp ::= AExp "=>" AExp [symbol(rew)]
+  syntax AExp ::= AExp "=>" AExp [symbol(\rewrites)]
 
   syntax BExp ::= KBott [symbol(inj)]
   syntax K ::= BExp [symbol(inj)]
-  syntax BExp ::= BExp "=>" BExp [symbol(rew)]
+  syntax BExp ::= BExp "=>" BExp [symbol(\rewrites)]
   
   syntax Block ::= KBott [symbol(inj)]
   syntax K ::= Block [symbol(inj)]
-  syntax Block ::= Block "=>" Block [symbol(rew)]
+  syntax Block ::= Block "=>" Block [symbol(\rewrites)]
 
   syntax Ids ::= KBott [symbol(inj)]
   syntax K ::= Ids [symbol(inj)]
-  syntax Ids ::= Ids "=>" Ids [symbol(rew)]
+  syntax Ids ::= Ids "=>" Ids [symbol(\rewrites)]
   syntax Ids ::= "(" Ids ")" [symbol(bracket)]
 
 

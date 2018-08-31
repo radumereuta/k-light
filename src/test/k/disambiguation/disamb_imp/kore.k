@@ -31,7 +31,7 @@ module KORE-COMMON
                    | "\\top" "{" Sort "}" "(" ")"
                    | "\\bottom" "{" Sort "}" "(" ")"
                    | "\\next" "{" Sort "}" "(" Pattern ")"
-                   | "\\rewrites" "{" Sort "}" "(" Pattern "," Pattern ")"
+                   //| "\\rewrites" "{" Sort "}" "(" Pattern "," Pattern ")" // commented so it makes visiting easier
                    | "\\dv" "{" Sort "}" "(" Pattern ")"
 
   syntax Patterns ::= List{Pattern, ","} [klabel(patternList)]
@@ -63,7 +63,8 @@ module KORE-SYNTAX
   imports KORE-COMMON
 
   // TODO:: Fix this regexp.
-  syntax Name ::= r"[-#a-zA-Z0-9]*"     [autoReject, token, prec(2)]
+  syntax Name ::= r"[\\\\]?[-#a-zA-Z0-9]*"     [autoReject, token, prec(2)]
+  syntax Name ::= r"\\rewrites"     [token, prec(2)]
 
 endmodule
 

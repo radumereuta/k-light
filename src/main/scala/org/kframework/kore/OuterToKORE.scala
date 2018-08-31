@@ -38,7 +38,7 @@ object OuterToKORE {
   def apply(s: Sentence, m:Module, d:Definition): String = s match {
     case SyntaxSort(_, _, _, _) => ""
     case p@Production(sort, items, att, _, _) =>
-      if (p.att.contains("token") || p.symbol.isEmpty || p.symbol.get.equals("inj") || p.symbol.get.equals("cast") || p.symbol.get.equals("bracket") || p.symbol.get.equals("rew")) return ""
+      if (p.att.contains("token") || p.symbol.isEmpty || p.symbol.get.equals("inj") || p.symbol.get.equals("cast") || p.symbol.get.equals("bracket") || p.symbol.get.equals("\\rewrites")) return ""
       val sin = (items.filter((i) => i.isInstanceOf[NonTerminal]) map apply).mkString(", ")
       val inType = if (p.symbol.get == "inj" || p.symbol.get == "cast") sin + "," + sort.localName + "{}" else ""
       "  symbol " + p.symbol.get + "{" + inType + "}(" + sin + "):" + sort.localName + "{} []"

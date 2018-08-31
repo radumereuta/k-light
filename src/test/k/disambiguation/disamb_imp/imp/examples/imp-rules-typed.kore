@@ -46,435 +46,6 @@ module IMP-SYNTAX
   symbol and{}(BExp{}, BExp{}):BExp{} []
 endmodule []
 
-module IMP-RULES-TYPED
-  import INJ []
-  import RULE-CELLS []
-  import GENERATED []
-  import IMP-SYNTAX []
-  /* input(K): {S:Stmt} => S:Stmt  */
-  axiom{} 
-\exists{K{}}(V2:Stmt{},
-\exists{K{}}(V4:Block{},
-\exists{K{}}(V1:Block{},
-\exists{K{}}(V3:Stmt{},
-\exists{K{}}(V5:Stmt{},
-\exists{K{}}(V0:KBott{},
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V2:Stmt{},\or{Stmt{}}(inj{KBott{},Stmt{}}(V0:KBott{}),\or{Stmt{}}(inj{Block{},Stmt{}}(V1:Block{}),\bottom{Stmt{}}()))),
-    \and{K{}}(
-        \equals{Block{},K{}}(V4:Block{},block{}(V3:Stmt{})),
-    \and{K{}}(
-        \equals{Block{},K{}}(V1:Block{},inj{KBott{},Block{}}(V0:KBott{})),
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V3:Stmt{},cast{Stmt{}}(V2:Stmt{})),
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V5:Stmt{},inj{Block{},Stmt{}}(V4:Block{})),
-    \and{K{}}(
-        \equals{KBott{},K{}}(V0:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("S"))),
-\or{K{}}(rew{K{}}(\or{K{}}(inj{Block{},K{}}(V4:Block{}),\or{K{}}(inj{Stmt{},K{}}(V5:Stmt{}),\bottom{K{}}())),inj{Stmt{},K{}}(V3:Stmt{})),\or{K{}}(inj{Stmt{},K{}}(\or{Stmt{}}(rew{Stmt{}}(V5:Stmt{},V3:Stmt{}),\or{Stmt{}}(cast{Stmt{}}(\or{Stmt{}}(inj{Block{},Stmt{}}(rew{Block{}}(V4:Block{},V1:Block{})),\or{Stmt{}}(rew{Stmt{}}(V5:Stmt{},V2:Stmt{}),\bottom{Stmt{}}()))),\bottom{Stmt{}}()))),\bottom{K{}}())))))))))))))) []
-
-  /* input(K): I1:Int <= I2:Int => I1:Int <=Int I2:Int*/
-  axiom{} 
-\exists{K{}}(V2:AExp{},
-\exists{K{}}(V5:AExp{},
-\exists{K{}}(V8:AExp{},
-\exists{K{}}(V9:Int{},
-\exists{K{}}(V6:Int{},
-\exists{K{}}(V7:Int{},
-\exists{K{}}(V1:Int{},
-\exists{K{}}(V4:Int{},
-\exists{K{}}(V0:Int{},
-\exists{K{}}(V3:Int{},
-    \and{K{}}(
-        \equals{AExp{},K{}}(V2:AExp{},inj{Int{},AExp{}}(V1:Int{})),
-    \and{K{}}(
-        \equals{AExp{},K{}}(V5:AExp{},inj{Int{},AExp{}}(V4:Int{})),
-    \and{K{}}(
-        \equals{AExp{},K{}}(V8:AExp{},inj{Int{},AExp{}}(V7:Int{})),
-    \and{K{}}(
-        \equals{Int{},K{}}(V9:Int{},\or{Int{}}(rew{Int{}}(V4:Int{},V1:Int{}),\or{Int{}}(cast{Int{}}(rew{Int{}}(V4:Int{},V0:Int{})),\bottom{Int{}}()))),
-    \and{K{}}(
-        \equals{Int{},K{}}(V6:Int{},lteInt{}(V1:Int{},V3:Int{})),
-    \and{K{}}(
-        \equals{Int{},K{}}(V7:Int{},\or{Int{}}(lteInt{}(V1:Int{},V4:Int{}),\or{Int{}}(cast{Int{}}(V6:Int{}),\bottom{Int{}}()))),
-    \and{K{}}(
-        \equals{Int{},K{}}(V1:Int{},cast{Int{}}(V0:Int{})),
-    \and{K{}}(
-        \equals{Int{},K{}}(V4:Int{},cast{Int{}}(V3:Int{})),
-    \and{K{}}(
-        \equals{Int{},K{}}(V0:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I1")))),
-    \and{K{}}(
-        \equals{Int{},K{}}(V3:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I2")))),
-\or{K{}}(rew{K{}}(inj{BExp{},K{}}(lte{}(V2:AExp{},V5:AExp{})),\or{K{}}(inj{Int{},K{}}(V7:Int{}),\or{K{}}(inj{AExp{},K{}}(V8:AExp{}),\bottom{K{}}()))),\or{K{}}(inj{BExp{},K{}}(lte{}(V2:AExp{},\or{AExp{}}(inj{Int{},AExp{}}(\or{Int{}}(lteInt{}(V9:Int{},V4:Int{}),\or{Int{}}(rew{Int{}}(V4:Int{},V7:Int{}),\or{Int{}}(cast{Int{}}(\or{Int{}}(lteInt{}(V9:Int{},V3:Int{}),\or{Int{}}(rew{Int{}}(V4:Int{},V6:Int{}),\bottom{Int{}}()))),\bottom{Int{}}())))),\or{AExp{}}(rew{AExp{}}(V5:AExp{},V8:AExp{}),\bottom{AExp{}}())))),\bottom{K{}}())))))))))))))))))))))) []
-  /* input(K): while (B:BExp) S:Block => if (B:BExp) {S:Block while (B:BExp) S:Block} else {}  */
-  axiom{} 
-\exists{K{}}(V1:BExp{},
-\exists{K{}}(V4:Stmt{},
-\exists{K{}}(V3:Stmt{},
-\exists{K{}}(V0:KBott{},
-\exists{K{}}(V2:Block{},
-    \and{K{}}(
-        \equals{BExp{},K{}}(V1:BExp{},cast{BExp{}}(\or{BExp{}}(inj{KBott{},BExp{}}(V0:KBott{}),\or{BExp{}}(inj{Bool{},BExp{}}(inj{KBott{},Bool{}}(V0:KBott{})),\bottom{BExp{}}())))),
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V4:Stmt{},if{}(V1:BExp{},block{}(consStmt{}(inj{Block{},Stmt{}}(V2:Block{}),V3:Stmt{})),emptyBlock{}())),
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V3:Stmt{},while{}(V1:BExp{},V2:Block{})),
-    \and{K{}}(
-        \equals{KBott{},K{}}(V0:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("B"))),
-    \and{K{}}(
-        \equals{Block{},K{}}(V2:Block{},cast{Block{}}(inj{KBott{},Block{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("S"))))),
-\or{K{}}(rew{K{}}(inj{Stmt{},K{}}(V3:Stmt{}),inj{Stmt{},K{}}(V4:Stmt{})),\or{K{}}(inj{Stmt{},K{}}(rew{Stmt{}}(V3:Stmt{},V4:Stmt{})),\bottom{K{}}())))))))))))) []
-  /* input(K): S1:Stmt S2:Stmt => S1:Stmt ~> S2:Stmt  */
-  axiom{} 
-\exists{K{}}(V1:Stmt{},
-\exists{K{}}(V4:Stmt{},
-\exists{K{}}(V8:K{},
-\exists{K{}}(V9:K{},
-\exists{K{}}(V10:K{},
-\exists{K{}}(V2:Stmt{},
-\exists{K{}}(V5:Stmt{},
-\exists{K{}}(V0:KBott{},
-\exists{K{}}(V3:KBott{},
-\exists{K{}}(V6:Stmt{},
-\exists{K{}}(V7:Stmt{},
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V1:Stmt{},\or{Stmt{}}(inj{KBott{},Stmt{}}(V0:KBott{}),\or{Stmt{}}(inj{Block{},Stmt{}}(inj{KBott{},Block{}}(V0:KBott{})),\bottom{Stmt{}}()))),
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V4:Stmt{},\or{Stmt{}}(inj{KBott{},Stmt{}}(V3:KBott{}),\or{Stmt{}}(inj{Block{},Stmt{}}(inj{KBott{},Block{}}(V3:KBott{})),\bottom{Stmt{}}()))),
-    \and{K{}}(
-        \equals{K{},K{}}(V8:K{},inj{Stmt{},K{}}(V6:Stmt{})),
-    \and{K{}}(
-        \equals{K{},K{}}(V9:K{},inj{Stmt{},K{}}(V2:Stmt{})),
-    \and{K{}}(
-        \equals{K{},K{}}(V10:K{},inj{Stmt{},K{}}(V5:Stmt{})),
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V2:Stmt{},cast{Stmt{}}(V1:Stmt{})),
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V5:Stmt{},cast{Stmt{}}(V4:Stmt{})),
-    \and{K{}}(
-        \equals{KBott{},K{}}(V0:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("S1"))),
-    \and{K{}}(
-        \equals{KBott{},K{}}(V3:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("S2"))),
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V6:Stmt{},\or{Stmt{}}(consStmt{}(V2:Stmt{},V5:Stmt{}),\or{Stmt{}}(cast{Stmt{}}(consStmt{}(V2:Stmt{},V4:Stmt{})),\bottom{Stmt{}}()))),
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V7:Stmt{},rew{Stmt{}}(V5:Stmt{},V1:Stmt{})),
-\or{K{}}(rew{K{}}(V8:K{},kSequence{}(V9:K{},V10:K{})),\or{K{}}(kSequence{}(\or{K{}}(rew{K{}}(V8:K{},V9:K{}),\or{K{}}(inj{Stmt{},K{}}(\or{Stmt{}}(consStmt{}(V2:Stmt{},\or{Stmt{}}(rew{Stmt{}}(V5:Stmt{},V2:Stmt{}),\or{Stmt{}}(cast{Stmt{}}(V7:Stmt{}),\bottom{Stmt{}}()))),\or{Stmt{}}(rew{Stmt{}}(V6:Stmt{},V2:Stmt{}),\or{Stmt{}}(cast{Stmt{}}(\or{Stmt{}}(consStmt{}(V2:Stmt{},V7:Stmt{}),\or{Stmt{}}(rew{Stmt{}}(V6:Stmt{},V1:Stmt{}),\bottom{Stmt{}}()))),\bottom{Stmt{}}())))),\bottom{K{}}())),V10:K{}),\bottom{K{}}())))))))))))))))))))))))) []
-  /* input(K): int .Ids; S:Stmt => S:Stmt  */
-  axiom{} 
-\exists{K{}}(V1:KBott{},
-\exists{K{}}(V3:Stmt{},
-\exists{K{}}(V2:Stmt{},
-\exists{K{}}(V0:Ids{},
-    \and{K{}}(
-        \equals{KBott{},K{}}(V1:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("S"))),
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V3:Stmt{},cast{Stmt{}}(V2:Stmt{})),
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V2:Stmt{},\or{Stmt{}}(inj{KBott{},Stmt{}}(V1:KBott{}),\or{Stmt{}}(inj{Block{},Stmt{}}(inj{KBott{},Block{}}(V1:KBott{})),\bottom{Stmt{}}()))),
-    \and{K{}}(
-        \equals{Ids{},K{}}(V0:Ids{},emptyIds{}()),
-\or{K{}}(rew{K{}}(inj{Pgm{},K{}}(program{}(V0:Ids{},V3:Stmt{})),inj{Stmt{},K{}}(V3:Stmt{})),\or{K{}}(inj{Pgm{},K{}}(program{}(V0:Ids{},\or{Stmt{}}(rew{Stmt{}}(V3:Stmt{},V3:Stmt{}),\or{Stmt{}}(cast{Stmt{}}(rew{Stmt{}}(V3:Stmt{},V2:Stmt{})),\bottom{Stmt{}}())))),\bottom{K{}}())))))))))) []
-  /* input(K): <k> int (X:Id,Xs:Ids => Xs:Ids);_:Stmt </k> <state> Rho:Map (.Map => X:Id|->0) </state>
-    requires notBool (X:Id in_keys(Rho:Map))*/
-  axiom{} 
-\exists{K{}}(V2:Ids{},
-\exists{K{}}(V8:K{},
-\exists{K{}}(V10:Bool{},
-\exists{K{}}(V6:KBott{},
-\exists{K{}}(V0:OptionalDots{},
-\exists{K{}}(V1:Id{},
-\exists{K{}}(V9:Int{},
-\exists{K{}}(V5:Ids{},
-\exists{K{}}(V3:Ids{},
-\exists{K{}}(V7:Map{},
-\exists{K{}}(V4:Ids{},
-    \and{K{}}(
-        \equals{Ids{},K{}}(V2:Ids{},inj{KBott{},Ids{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("Xs")))),
-    \and{K{}}(
-        \equals{K{},K{}}(V8:K{},\or{K{}}(inj{AExp{},K{}}(inj{Id{},AExp{}}(V1:Id{})),\or{K{}}(inj{Id{},K{}}(V1:Id{}),\bottom{K{}}()))),
-    \and{K{}}(
-        \equals{Bool{},K{}}(V10:Bool{},notBool{}(bracket{Bool{}}(inKeys{}(V8:K{},V7:Map{})))),
-    \and{K{}}(
-        \equals{KBott{},K{}}(V6:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("_"))),
-    \and{K{}}(
-        \equals{OptionalDots{},K{}}(V0:OptionalDots{},noDots{}()),
-    \and{K{}}(
-        \equals{Id{},K{}}(V1:Id{},cast{Id{}}(inj{KBott{},Id{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("X"))))),
-    \and{K{}}(
-        \equals{Int{},K{}}(V9:Int{},\dv{Int{}}("0")),
-    \and{K{}}(
-        \equals{Ids{},K{}}(V5:Ids{},\or{Ids{}}(cast{Ids{}}(consIds{}(V1:Id{},V2:Ids{})),\or{Ids{}}(consIds{}(V1:Id{},V3:Ids{}),\bottom{Ids{}}()))),
-    \and{K{}}(
-        \equals{Ids{},K{}}(V3:Ids{},cast{Ids{}}(V2:Ids{})),
-    \and{K{}}(
-        \equals{Map{},K{}}(V7:Map{},cast{Map{}}(inj{KBott{},Map{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("Rho"))))),
-    \and{K{}}(
-        \equals{Ids{},K{}}(V4:Ids{},rew{Ids{}}(V3:Ids{},V2:Ids{})),
-kRequires{}(inj{Bag{},K{}}(consCells{}(inj{Cell{},Bag{}}(kCell{}(V0:OptionalDots{},inj{Pgm{},K{}}(program{}(bracket{Ids{}}(\or{Ids{}}(rew{Ids{}}(V5:Ids{},V3:Ids{}),\or{Ids{}}(cast{Ids{}}(\or{Ids{}}(rew{Ids{}}(V5:Ids{},V2:Ids{}),\or{Ids{}}(consIds{}(V1:Id{},V4:Ids{}),\bottom{Ids{}}()))),\or{Ids{}}(consIds{}(V1:Id{},\or{Ids{}}(rew{Ids{}}(V3:Ids{},V3:Ids{}),\or{Ids{}}(cast{Ids{}}(V4:Ids{}),\bottom{Ids{}}()))),\bottom{Ids{}}())))),cast{Stmt{}}(\or{Stmt{}}(inj{KBott{},Stmt{}}(V6:KBott{}),\or{Stmt{}}(inj{Block{},Stmt{}}(inj{KBott{},Block{}}(V6:KBott{})),\bottom{Stmt{}}()))))),V0:OptionalDots{})),inj{Cell{},Bag{}}(stateCell{}(V0:OptionalDots{},inj{Map{},K{}}(consMap{}(V7:Map{},bracket{Map{}}(mapElement{}(rew{K{}}(inj{Map{},K{}}(emptyMap{}()),V8:K{}),\or{K{}}(inj{Int{},K{}}(V9:Int{}),\or{K{}}(inj{AExp{},K{}}(inj{Int{},AExp{}}(V9:Int{})),\bottom{K{}}())))))),V0:OptionalDots{})))),\or{K{}}(inj{Bool{},K{}}(V10:Bool{}),\or{K{}}(inj{BExp{},K{}}(inj{Bool{},BExp{}}(V10:Bool{})),\bottom{K{}}()))))))))))))))))))))))))) []
-  /* input(K): {} => .   */
-  axiom{} 
-\exists{K{}}(V0:Block{},
-    \and{K{}}(
-        \equals{Block{},K{}}(V0:Block{},emptyBlock{}()),
-rew{K{}}(\or{K{}}(inj{Block{},K{}}(V0:Block{}),\or{K{}}(inj{Stmt{},K{}}(inj{Block{},Stmt{}}(V0:Block{})),\bottom{K{}}())),dotK{}()))) []
-  /* input(K): I1:Int + I2:Int => I1:Int +Int I2:Int*/
-  axiom{} 
-\exists{K{}}(V2:AExp{},
-\exists{K{}}(V5:AExp{},
-\exists{K{}}(V8:AExp{},
-\exists{K{}}(V7:Int{},
-\exists{K{}}(V6:Int{},
-\exists{K{}}(V10:AExp{},
-\exists{K{}}(V9:Int{},
-\exists{K{}}(V1:Int{},
-\exists{K{}}(V4:Int{},
-\exists{K{}}(V0:Int{},
-\exists{K{}}(V3:Int{},
-    \and{K{}}(
-        \equals{AExp{},K{}}(V2:AExp{},inj{Int{},AExp{}}(V1:Int{})),
-    \and{K{}}(
-        \equals{AExp{},K{}}(V5:AExp{},inj{Int{},AExp{}}(V4:Int{})),
-    \and{K{}}(
-        \equals{AExp{},K{}}(V8:AExp{},inj{Int{},AExp{}}(V7:Int{})),
-    \and{K{}}(
-        \equals{Int{},K{}}(V7:Int{},\or{Int{}}(plusInt{}(V1:Int{},V4:Int{}),\or{Int{}}(cast{Int{}}(V6:Int{}),\bottom{Int{}}()))),
-    \and{K{}}(
-        \equals{Int{},K{}}(V6:Int{},plusInt{}(V1:Int{},V3:Int{})),
-    \and{K{}}(
-        \equals{AExp{},K{}}(V10:AExp{},plus{}(V2:AExp{},V5:AExp{})),
-    \and{K{}}(
-        \equals{Int{},K{}}(V9:Int{},\or{Int{}}(rew{Int{}}(V4:Int{},V1:Int{}),\or{Int{}}(cast{Int{}}(rew{Int{}}(V4:Int{},V0:Int{})),\bottom{Int{}}()))),
-    \and{K{}}(
-        \equals{Int{},K{}}(V1:Int{},cast{Int{}}(V0:Int{})),
-    \and{K{}}(
-        \equals{Int{},K{}}(V4:Int{},cast{Int{}}(V3:Int{})),
-    \and{K{}}(
-        \equals{Int{},K{}}(V0:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I1")))),
-    \and{K{}}(
-        \equals{Int{},K{}}(V3:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I2")))),
-\or{K{}}(rew{K{}}(inj{AExp{},K{}}(V10:AExp{}),\or{K{}}(inj{Int{},K{}}(V7:Int{}),\or{K{}}(inj{AExp{},K{}}(V8:AExp{}),\bottom{K{}}()))),\or{K{}}(inj{AExp{},K{}}(\or{AExp{}}(rew{AExp{}}(V10:AExp{},V8:AExp{}),\or{AExp{}}(plus{}(V2:AExp{},\or{AExp{}}(inj{Int{},AExp{}}(\or{Int{}}(plusInt{}(V9:Int{},V4:Int{}),\or{Int{}}(rew{Int{}}(V4:Int{},V7:Int{}),\or{Int{}}(cast{Int{}}(\or{Int{}}(plusInt{}(V9:Int{},V3:Int{}),\or{Int{}}(rew{Int{}}(V4:Int{},V6:Int{}),\bottom{Int{}}()))),\bottom{Int{}}())))),\or{AExp{}}(rew{AExp{}}(V5:AExp{},V8:AExp{}),\bottom{AExp{}}()))),\bottom{AExp{}}()))),\bottom{K{}}())))))))))))))))))))))))) []
-  /* input(K): if (false) _:Block else S:Block => S:Block*/
-  axiom{} 
-\exists{K{}}(V2:Block{},
-\exists{K{}}(V4:Stmt{},
-\exists{K{}}(V0:BExp{},
-\exists{K{}}(V5:Stmt{},
-\exists{K{}}(V1:Block{},
-\exists{K{}}(V3:Block{},
-    \and{K{}}(
-        \equals{Block{},K{}}(V2:Block{},inj{KBott{},Block{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("S")))),
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V4:Stmt{},if{}(V0:BExp{},V1:Block{},V3:Block{})),
-    \and{K{}}(
-        \equals{BExp{},K{}}(V0:BExp{},inj{Bool{},BExp{}}(boolFalse{}())),
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V5:Stmt{},inj{Block{},Stmt{}}(V3:Block{})),
-    \and{K{}}(
-        \equals{Block{},K{}}(V1:Block{},cast{Block{}}(inj{KBott{},Block{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("_"))))),
-    \and{K{}}(
-        \equals{Block{},K{}}(V3:Block{},cast{Block{}}(V2:Block{})),
-\or{K{}}(rew{K{}}(inj{Stmt{},K{}}(V4:Stmt{}),\or{K{}}(inj{Block{},K{}}(V3:Block{}),\or{K{}}(inj{Stmt{},K{}}(V5:Stmt{}),\bottom{K{}}()))),\or{K{}}(inj{Stmt{},K{}}(\or{Stmt{}}(if{}(V0:BExp{},V1:Block{},\or{Block{}}(rew{Block{}}(V3:Block{},V3:Block{}),\or{Block{}}(cast{Block{}}(rew{Block{}}(V3:Block{},V2:Block{})),\bottom{Block{}}()))),\or{Stmt{}}(rew{Stmt{}}(V4:Stmt{},V5:Stmt{}),\bottom{Stmt{}}()))),\bottom{K{}}())))))))))))))) []
-  /* input(K): ! T:Bool => notBool T:Bool*/
-  axiom{} 
-\exists{K{}}(V4:Bool{},
-\exists{K{}}(V5:Bool{},
-\exists{K{}}(V2:BExp{},
-\exists{K{}}(V6:BExp{},
-\exists{K{}}(V3:BExp{},
-\exists{K{}}(V1:Bool{},
-\exists{K{}}(V0:Bool{},
-    \and{K{}}(
-        \equals{Bool{},K{}}(V4:Bool{},notBool{}(V0:Bool{})),
-    \and{K{}}(
-        \equals{Bool{},K{}}(V5:Bool{},\or{Bool{}}(notBool{}(V1:Bool{}),\or{Bool{}}(cast{Bool{}}(V4:Bool{}),\bottom{Bool{}}()))),
-    \and{K{}}(
-        \equals{BExp{},K{}}(V2:BExp{},inj{Bool{},BExp{}}(V1:Bool{})),
-    \and{K{}}(
-        \equals{BExp{},K{}}(V6:BExp{},inj{Bool{},BExp{}}(V5:Bool{})),
-    \and{K{}}(
-        \equals{BExp{},K{}}(V3:BExp{},not{}(V2:BExp{})),
-    \and{K{}}(
-        \equals{Bool{},K{}}(V1:Bool{},cast{Bool{}}(V0:Bool{})),
-    \and{K{}}(
-        \equals{Bool{},K{}}(V0:Bool{},inj{KBott{},Bool{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("T")))),
-\or{K{}}(rew{K{}}(inj{BExp{},K{}}(V3:BExp{}),\or{K{}}(inj{Bool{},K{}}(V5:Bool{}),\or{K{}}(inj{BExp{},K{}}(V6:BExp{}),\bottom{K{}}()))),\or{K{}}(inj{BExp{},K{}}(\or{BExp{}}(not{}(\or{BExp{}}(inj{Bool{},BExp{}}(\or{Bool{}}(cast{Bool{}}(rew{Bool{}}(V1:Bool{},V4:Bool{})),\or{Bool{}}(rew{Bool{}}(V1:Bool{},V5:Bool{}),\bottom{Bool{}}()))),\or{BExp{}}(rew{BExp{}}(V2:BExp{},V6:BExp{}),\bottom{BExp{}}()))),\or{BExp{}}(rew{BExp{}}(V3:BExp{},V6:BExp{}),\bottom{BExp{}}()))),\bottom{K{}}())))))))))))))))) []
-  /* input(K): true && B:BExp => B:BExp*/
-  axiom{} 
-\exists{K{}}(V5:BExp{},
-\exists{K{}}(V0:Bool{},
-\exists{K{}}(V1:BExp{},
-\exists{K{}}(V7:BExp{},
-\exists{K{}}(V6:BExp{},
-\exists{K{}}(V2:KBott{},
-\exists{K{}}(V4:BExp{},
-\exists{K{}}(V3:Bool{},
-    \and{K{}}(
-        \equals{BExp{},K{}}(V5:BExp{},cast{BExp{}}(V4:BExp{})),
-    \and{K{}}(
-        \equals{Bool{},K{}}(V0:Bool{},boolTrue{}()),
-    \and{K{}}(
-        \equals{BExp{},K{}}(V1:BExp{},inj{Bool{},BExp{}}(V0:Bool{})),
-    \and{K{}}(
-        \equals{BExp{},K{}}(V7:BExp{},rew{BExp{}}(V5:BExp{},V4:BExp{})),
-    \and{K{}}(
-        \equals{BExp{},K{}}(V6:BExp{},\or{BExp{}}(cast{BExp{}}(\or{BExp{}}(and{}(V1:BExp{},V4:BExp{}),\or{BExp{}}(inj{Bool{},BExp{}}(boolAnd{}(V0:Bool{},V3:Bool{})),\bottom{BExp{}}()))),\or{BExp{}}(and{}(V1:BExp{},V5:BExp{}),\bottom{BExp{}}()))),
-    \and{K{}}(
-        \equals{KBott{},K{}}(V2:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("B"))),
-    \and{K{}}(
-        \equals{BExp{},K{}}(V4:BExp{},\or{BExp{}}(inj{KBott{},BExp{}}(V2:KBott{}),\or{BExp{}}(inj{Bool{},BExp{}}(V3:Bool{}),\bottom{BExp{}}()))),
-    \and{K{}}(
-        \equals{Bool{},K{}}(V3:Bool{},inj{KBott{},Bool{}}(V2:KBott{})),
-\or{K{}}(rew{K{}}(inj{BExp{},K{}}(V6:BExp{}),inj{BExp{},K{}}(V5:BExp{})),\or{K{}}(inj{BExp{},K{}}(\or{BExp{}}(cast{BExp{}}(\or{BExp{}}(and{}(V1:BExp{},V7:BExp{}),\or{BExp{}}(rew{BExp{}}(V6:BExp{},V4:BExp{}),\bottom{BExp{}}()))),\or{BExp{}}(and{}(V1:BExp{},\or{BExp{}}(cast{BExp{}}(V7:BExp{}),\or{BExp{}}(rew{BExp{}}(V5:BExp{},V5:BExp{}),\bottom{BExp{}}()))),\or{BExp{}}(rew{BExp{}}(V6:BExp{},V5:BExp{}),\bottom{BExp{}}())))),\bottom{K{}}())))))))))))))))))) []
-  /* input(K): I1:Int / I2:Int => I1:Int /Int I2:Int  requires I2:Int =/=Int 0*/
-  axiom{} 
-\exists{K{}}(V2:AExp{},
-\exists{K{}}(V5:AExp{},
-\exists{K{}}(V9:AExp{},
-\exists{K{}}(V10:Int{},
-\exists{K{}}(V12:K{},
-\exists{K{}}(V14:K{},
-\exists{K{}}(V6:AExp{},
-\exists{K{}}(V11:K{},
-\exists{K{}}(V8:Int{},
-\exists{K{}}(V13:Int{},
-\exists{K{}}(V7:Int{},
-\exists{K{}}(V1:Int{},
-\exists{K{}}(V4:Int{},
-\exists{K{}}(V0:Int{},
-\exists{K{}}(V3:Int{},
-    \and{K{}}(
-        \equals{AExp{},K{}}(V2:AExp{},inj{Int{},AExp{}}(V1:Int{})),
-    \and{K{}}(
-        \equals{AExp{},K{}}(V5:AExp{},inj{Int{},AExp{}}(V4:Int{})),
-    \and{K{}}(
-        \equals{AExp{},K{}}(V9:AExp{},inj{Int{},AExp{}}(V8:Int{})),
-    \and{K{}}(
-        \equals{Int{},K{}}(V10:Int{},\or{Int{}}(rew{Int{}}(V4:Int{},V1:Int{}),\or{Int{}}(cast{Int{}}(rew{Int{}}(V4:Int{},V0:Int{})),\bottom{Int{}}()))),
-    \and{K{}}(
-        \equals{K{},K{}}(V12:K{},\or{K{}}(inj{Int{},K{}}(V8:Int{}),\or{K{}}(inj{AExp{},K{}}(V9:AExp{}),\bottom{K{}}()))),
-    \and{K{}}(
-        \equals{K{},K{}}(V14:K{},\or{K{}}(inj{Int{},K{}}(V13:Int{}),\or{K{}}(inj{AExp{},K{}}(inj{Int{},AExp{}}(V13:Int{})),\bottom{K{}}()))),
-    \and{K{}}(
-        \equals{AExp{},K{}}(V6:AExp{},div{}(V2:AExp{},V5:AExp{})),
-    \and{K{}}(
-        \equals{K{},K{}}(V11:K{},inj{AExp{},K{}}(V6:AExp{})),
-    \and{K{}}(
-        \equals{Int{},K{}}(V8:Int{},\or{Int{}}(cast{Int{}}(V7:Int{}),\or{Int{}}(divInt{}(V1:Int{},V4:Int{}),\bottom{Int{}}()))),
-    \and{K{}}(
-        \equals{Int{},K{}}(V13:Int{},neInt{}(V4:Int{},\dv{Int{}}("0"))),
-    \and{K{}}(
-        \equals{Int{},K{}}(V7:Int{},divInt{}(V1:Int{},V3:Int{})),
-    \and{K{}}(
-        \equals{Int{},K{}}(V1:Int{},cast{Int{}}(V0:Int{})),
-    \and{K{}}(
-        \equals{Int{},K{}}(V4:Int{},cast{Int{}}(V3:Int{})),
-    \and{K{}}(
-        \equals{Int{},K{}}(V0:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I1")))),
-    \and{K{}}(
-        \equals{Int{},K{}}(V3:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I2")))),
-\or{K{}}(rew{K{}}(V11:K{},kRequires{}(V12:K{},V14:K{})),\or{K{}}(kRequires{}(\or{K{}}(rew{K{}}(V11:K{},V12:K{}),\or{K{}}(inj{AExp{},K{}}(\or{AExp{}}(div{}(V2:AExp{},\or{AExp{}}(inj{Int{},AExp{}}(\or{Int{}}(rew{Int{}}(V4:Int{},V8:Int{}),\or{Int{}}(cast{Int{}}(\or{Int{}}(rew{Int{}}(V4:Int{},V7:Int{}),\or{Int{}}(divInt{}(V10:Int{},V3:Int{}),\bottom{Int{}}()))),\or{Int{}}(divInt{}(V10:Int{},V4:Int{}),\bottom{Int{}}())))),\or{AExp{}}(rew{AExp{}}(V5:AExp{},V9:AExp{}),\bottom{AExp{}}()))),\or{AExp{}}(rew{AExp{}}(V6:AExp{},V9:AExp{}),\bottom{AExp{}}()))),\bottom{K{}}())),V14:K{}),\bottom{K{}}())))))))))))))))))))))))))))))))) []
-  /* input(K): <k> X:Id = I:Int; => . ...</k> <state>... X:Id |-> (_:Int => I:Int) ...</state>*/
-  axiom{} 
-\exists{K{}}(V3:AExp{},
-\exists{K{}}(V6:AExp{},
-\exists{K{}}(V8:AExp{},
-\exists{K{}}(V4:OptionalDots{},
-\exists{K{}}(V7:Int{},
-\exists{K{}}(V0:Id{},
-\exists{K{}}(V2:Int{},
-\exists{K{}}(V5:Int{},
-\exists{K{}}(V1:Int{},
-    \and{K{}}(
-        \equals{AExp{},K{}}(V3:AExp{},inj{Int{},AExp{}}(V2:Int{})),
-    \and{K{}}(
-        \equals{AExp{},K{}}(V6:AExp{},inj{Int{},AExp{}}(V5:Int{})),
-    \and{K{}}(
-        \equals{AExp{},K{}}(V8:AExp{},\or{AExp{}}(inj{Int{},AExp{}}(V7:Int{}),\or{AExp{}}(rew{AExp{}}(V6:AExp{},V3:AExp{}),\bottom{AExp{}}()))),
-    \and{K{}}(
-        \equals{OptionalDots{},K{}}(V4:OptionalDots{},dots{}()),
-    \and{K{}}(
-        \equals{Int{},K{}}(V7:Int{},\or{Int{}}(rew{Int{}}(V5:Int{},V2:Int{}),\or{Int{}}(cast{Int{}}(rew{Int{}}(V5:Int{},V1:Int{})),\bottom{Int{}}()))),
-    \and{K{}}(
-        \equals{Id{},K{}}(V0:Id{},cast{Id{}}(inj{KBott{},Id{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("X"))))),
-    \and{K{}}(
-        \equals{Int{},K{}}(V2:Int{},cast{Int{}}(V1:Int{})),
-    \and{K{}}(
-        \equals{Int{},K{}}(V5:Int{},cast{Int{}}(inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("_"))))),
-    \and{K{}}(
-        \equals{Int{},K{}}(V1:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I")))),
-inj{Bag{},K{}}(consCells{}(inj{Cell{},Bag{}}(kCell{}(noDots{}(),rew{K{}}(inj{Stmt{},K{}}(assignment{}(V0:Id{},V3:AExp{})),dotK{}()),V4:OptionalDots{})),inj{Cell{},Bag{}}(stateCell{}(V4:OptionalDots{},inj{Map{},K{}}(mapElement{}(\or{K{}}(inj{AExp{},K{}}(inj{Id{},AExp{}}(V0:Id{})),\or{K{}}(inj{Id{},K{}}(V0:Id{}),\bottom{K{}}())),\or{K{}}(bracket{K{}}(\or{K{}}(rew{K{}}(\or{K{}}(inj{Int{},K{}}(V5:Int{}),\or{K{}}(inj{AExp{},K{}}(V6:AExp{}),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(V2:Int{}),\or{K{}}(inj{AExp{},K{}}(V3:AExp{}),\bottom{K{}}()))),\or{K{}}(inj{Int{},K{}}(V7:Int{}),\or{K{}}(inj{AExp{},K{}}(V8:AExp{}),\bottom{K{}}())))),\or{K{}}(inj{AExp{},K{}}(bracket{AExp{}}(V8:AExp{})),\bottom{K{}}())))),V4:OptionalDots{})))))))))))))))))))))) []
-  /* input(K): <k> X:Id => I:Int ...</k> <state>... X:Id |-> I:Int ...</state>*/
-  axiom{} 
-\exists{K{}}(V3:AExp{},
-\exists{K{}}(V4:K{},
-\exists{K{}}(V6:OptionalDots{},
-\exists{K{}}(V5:K{},
-\exists{K{}}(V1:AExp{},
-\exists{K{}}(V0:Id{},
-\exists{K{}}(V2:Int{},
-    \and{K{}}(
-        \equals{AExp{},K{}}(V3:AExp{},inj{Int{},AExp{}}(V2:Int{})),
-    \and{K{}}(
-        \equals{K{},K{}}(V4:K{},\or{K{}}(inj{AExp{},K{}}(V1:AExp{}),\or{K{}}(inj{Id{},K{}}(V0:Id{}),\bottom{K{}}()))),
-    \and{K{}}(
-        \equals{OptionalDots{},K{}}(V6:OptionalDots{},dots{}()),
-    \and{K{}}(
-        \equals{K{},K{}}(V5:K{},\or{K{}}(inj{Int{},K{}}(V2:Int{}),\or{K{}}(inj{AExp{},K{}}(V3:AExp{}),\bottom{K{}}()))),
-    \and{K{}}(
-        \equals{AExp{},K{}}(V1:AExp{},inj{Id{},AExp{}}(V0:Id{})),
-    \and{K{}}(
-        \equals{Id{},K{}}(V0:Id{},cast{Id{}}(inj{KBott{},Id{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("X"))))),
-    \and{K{}}(
-        \equals{Int{},K{}}(V2:Int{},cast{Int{}}(inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I"))))),
-inj{Bag{},K{}}(consCells{}(inj{Cell{},Bag{}}(kCell{}(noDots{}(),\or{K{}}(rew{K{}}(V4:K{},V5:K{}),\or{K{}}(inj{AExp{},K{}}(rew{AExp{}}(V1:AExp{},V3:AExp{})),\bottom{K{}}())),V6:OptionalDots{})),inj{Cell{},Bag{}}(stateCell{}(V6:OptionalDots{},inj{Map{},K{}}(mapElement{}(V4:K{},V5:K{})),V6:OptionalDots{})))))))))))))))))) []
-  /* input(K): if (true)  S:Block else _:Block => S:Block*/
-  axiom{} 
-\exists{K{}}(V1:Block{},
-\exists{K{}}(V4:Stmt{},
-\exists{K{}}(V0:BExp{},
-\exists{K{}}(V5:Stmt{},
-\exists{K{}}(V2:Block{},
-\exists{K{}}(V3:Block{},
-    \and{K{}}(
-        \equals{Block{},K{}}(V1:Block{},inj{KBott{},Block{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("S")))),
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V4:Stmt{},if{}(V0:BExp{},V2:Block{},V3:Block{})),
-    \and{K{}}(
-        \equals{BExp{},K{}}(V0:BExp{},inj{Bool{},BExp{}}(boolTrue{}())),
-    \and{K{}}(
-        \equals{Stmt{},K{}}(V5:Stmt{},inj{Block{},Stmt{}}(V2:Block{})),
-    \and{K{}}(
-        \equals{Block{},K{}}(V2:Block{},cast{Block{}}(V1:Block{})),
-    \and{K{}}(
-        \equals{Block{},K{}}(V3:Block{},cast{Block{}}(inj{KBott{},Block{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("_"))))),
-\or{K{}}(rew{K{}}(inj{Stmt{},K{}}(V4:Stmt{}),\or{K{}}(inj{Block{},K{}}(V2:Block{}),\or{K{}}(inj{Stmt{},K{}}(V5:Stmt{}),\bottom{K{}}()))),\or{K{}}(inj{Stmt{},K{}}(\or{Stmt{}}(if{}(V0:BExp{},V2:Block{},\or{Block{}}(rew{Block{}}(V3:Block{},V2:Block{}),\or{Block{}}(cast{Block{}}(rew{Block{}}(V3:Block{},V1:Block{})),\bottom{Block{}}()))),\or{Stmt{}}(rew{Stmt{}}(V4:Stmt{},V5:Stmt{}),\bottom{Stmt{}}()))),\bottom{K{}}())))))))))))))) []
-  /* input(K): false && _:BExp => false*/
-  axiom{} 
-\exists{K{}}(V5:BExp{},
-\exists{K{}}(V1:BExp{},
-\exists{K{}}(V6:BExp{},
-\exists{K{}}(V2:KBott{},
-\exists{K{}}(V4:BExp{},
-\exists{K{}}(V0:Bool{},
-\exists{K{}}(V3:Bool{},
-    \and{K{}}(
-        \equals{BExp{},K{}}(V5:BExp{},cast{BExp{}}(V4:BExp{})),
-    \and{K{}}(
-        \equals{BExp{},K{}}(V1:BExp{},inj{Bool{},BExp{}}(V0:Bool{})),
-    \and{K{}}(
-        \equals{BExp{},K{}}(V6:BExp{},\or{BExp{}}(cast{BExp{}}(\or{BExp{}}(and{}(V1:BExp{},V4:BExp{}),\or{BExp{}}(inj{Bool{},BExp{}}(boolAnd{}(V0:Bool{},V3:Bool{})),\bottom{BExp{}}()))),\or{BExp{}}(and{}(V1:BExp{},V5:BExp{}),\bottom{BExp{}}()))),
-    \and{K{}}(
-        \equals{KBott{},K{}}(V2:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("_"))),
-    \and{K{}}(
-        \equals{BExp{},K{}}(V4:BExp{},\or{BExp{}}(inj{KBott{},BExp{}}(V2:KBott{}),\or{BExp{}}(inj{Bool{},BExp{}}(V3:Bool{}),\bottom{BExp{}}()))),
-    \and{K{}}(
-        \equals{Bool{},K{}}(V0:Bool{},boolFalse{}()),
-    \and{K{}}(
-        \equals{Bool{},K{}}(V3:Bool{},inj{KBott{},Bool{}}(V2:KBott{})),
-\or{K{}}(rew{K{}}(inj{BExp{},K{}}(V6:BExp{}),\or{K{}}(inj{Bool{},K{}}(V0:Bool{}),\or{K{}}(inj{BExp{},K{}}(V1:BExp{}),\bottom{K{}}()))),\or{K{}}(inj{BExp{},K{}}(\or{BExp{}}(and{}(V1:BExp{},rew{BExp{}}(V5:BExp{},V1:BExp{})),\or{BExp{}}(rew{BExp{}}(V6:BExp{},V1:BExp{}),\bottom{BExp{}}()))),\bottom{K{}}())))))))))))))))) []
-endmodule []
-
 module PREDEF
   import INJ []
   sort KResult{} []
@@ -503,6 +74,435 @@ module PREDEF
   symbol boolAnd{}(Bool{}, Bool{}):Bool{} []
   symbol plusInt{}(Int{}, Int{}):Int{} []
   symbol kSequence{}(K{}, K{}):K{} []
+endmodule []
+
+module IMP-RULES-TYPED
+  import INJ []
+  import RULE-CELLS []
+  import GENERATED []
+  import IMP-SYNTAX []
+
+  /* input(K): int .Ids; S:Stmt => S:Stmt  */
+  axiom{} 
+\exists{K{}}(V1:KBott{},
+\exists{K{}}(V3:Stmt{},
+\exists{K{}}(V2:Stmt{},
+\exists{K{}}(V0:Ids{},
+    \and{K{}}(
+        \equals{KBott{},K{}}(V1:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("S"))),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V3:Stmt{},cast{Stmt{}}(V2:Stmt{})),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V2:Stmt{},\or{Stmt{}}(inj{KBott{},Stmt{}}(V1:KBott{}),\or{Stmt{}}(inj{Block{},Stmt{}}(inj{KBott{},Block{}}(V1:KBott{})),\bottom{Stmt{}}()))),
+    \and{K{}}(
+        \equals{Ids{},K{}}(V0:Ids{},emptyIds{}()),
+\or{K{}}(inj{Pgm{},K{}}(program{}(V0:Ids{},\or{Stmt{}}(\rewrites{Stmt{}}(V3:Stmt{},V3:Stmt{}),\or{Stmt{}}(cast{Stmt{}}(\rewrites{Stmt{}}(V3:Stmt{},V2:Stmt{})),\bottom{Stmt{}}())))),\or{K{}}(\rewrites{K{}}(inj{Pgm{},K{}}(program{}(V0:Ids{},V3:Stmt{})),inj{Stmt{},K{}}(V3:Stmt{})),\bottom{K{}}())))))))))) []
+  /* input(K): I1:Int / I2:Int => I1:Int /Int I2:Int  requires I2:Int =/=Int 0*/
+  axiom{} 
+\exists{K{}}(V2:AExp{},
+\exists{K{}}(V5:AExp{},
+\exists{K{}}(V10:AExp{},
+\exists{K{}}(V11:K{},
+\exists{K{}}(V13:K{},
+\exists{K{}}(V6:AExp{},
+\exists{K{}}(V7:K{},
+\exists{K{}}(V9:Int{},
+\exists{K{}}(V12:Int{},
+\exists{K{}}(V8:Int{},
+\exists{K{}}(V1:Int{},
+\exists{K{}}(V4:Int{},
+\exists{K{}}(V0:Int{},
+\exists{K{}}(V3:Int{},
+\exists{K{}}(V14:Int{},
+    \and{K{}}(
+        \equals{AExp{},K{}}(V2:AExp{},inj{Int{},AExp{}}(V1:Int{})),
+    \and{K{}}(
+        \equals{AExp{},K{}}(V5:AExp{},inj{Int{},AExp{}}(V4:Int{})),
+    \and{K{}}(
+        \equals{AExp{},K{}}(V10:AExp{},inj{Int{},AExp{}}(V9:Int{})),
+    \and{K{}}(
+        \equals{K{},K{}}(V11:K{},\or{K{}}(inj{Int{},K{}}(V9:Int{}),\or{K{}}(inj{AExp{},K{}}(V10:AExp{}),\bottom{K{}}()))),
+    \and{K{}}(
+        \equals{K{},K{}}(V13:K{},\or{K{}}(inj{Int{},K{}}(V12:Int{}),\or{K{}}(inj{AExp{},K{}}(inj{Int{},AExp{}}(V12:Int{})),\bottom{K{}}()))),
+    \and{K{}}(
+        \equals{AExp{},K{}}(V6:AExp{},div{}(V2:AExp{},V5:AExp{})),
+    \and{K{}}(
+        \equals{K{},K{}}(V7:K{},inj{AExp{},K{}}(V6:AExp{})),
+    \and{K{}}(
+        \equals{Int{},K{}}(V9:Int{},\or{Int{}}(cast{Int{}}(V8:Int{}),\or{Int{}}(divInt{}(V1:Int{},V4:Int{}),\bottom{Int{}}()))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V12:Int{},neInt{}(V4:Int{},\dv{Int{}}("0"))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V8:Int{},divInt{}(V1:Int{},V3:Int{})),
+    \and{K{}}(
+        \equals{Int{},K{}}(V1:Int{},cast{Int{}}(V0:Int{})),
+    \and{K{}}(
+        \equals{Int{},K{}}(V4:Int{},cast{Int{}}(V3:Int{})),
+    \and{K{}}(
+        \equals{Int{},K{}}(V0:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I1")))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V3:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I2")))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V14:Int{},\or{Int{}}(cast{Int{}}(\rewrites{Int{}}(V4:Int{},V0:Int{})),\or{Int{}}(\rewrites{Int{}}(V4:Int{},V1:Int{}),\bottom{Int{}}()))),
+\or{K{}}(kRequires{}(\or{K{}}(inj{AExp{},K{}}(\or{AExp{}}(\rewrites{AExp{}}(V6:AExp{},V10:AExp{}),\or{AExp{}}(div{}(V2:AExp{},\or{AExp{}}(\rewrites{AExp{}}(V5:AExp{},V10:AExp{}),\or{AExp{}}(inj{Int{},AExp{}}(\or{Int{}}(cast{Int{}}(\or{Int{}}(divInt{}(V14:Int{},V3:Int{}),\or{Int{}}(\rewrites{Int{}}(V4:Int{},V8:Int{}),\bottom{Int{}}()))),\or{Int{}}(divInt{}(V14:Int{},V4:Int{}),\or{Int{}}(\rewrites{Int{}}(V4:Int{},V9:Int{}),\bottom{Int{}}())))),\bottom{AExp{}}()))),\bottom{AExp{}}()))),\or{K{}}(\rewrites{K{}}(V7:K{},V11:K{}),\bottom{K{}}())),V13:K{}),\or{K{}}(\rewrites{K{}}(V7:K{},kRequires{}(V11:K{},V13:K{})),\bottom{K{}}())))))))))))))))))))))))))))))))) []
+  /* input(K): {} => .   */
+  axiom{} 
+\exists{K{}}(V0:Block{},
+    \and{K{}}(
+        \equals{Block{},K{}}(V0:Block{},emptyBlock{}()),
+\rewrites{K{}}(\or{K{}}(inj{Block{},K{}}(V0:Block{}),\or{K{}}(inj{Stmt{},K{}}(inj{Block{},Stmt{}}(V0:Block{})),\bottom{K{}}())),dotK{}()))) []
+  /* input(K): S1:Stmt S2:Stmt => S1:Stmt ~> S2:Stmt  */
+  axiom{} 
+\exists{K{}}(V1:Stmt{},
+\exists{K{}}(V4:Stmt{},
+\exists{K{}}(V7:K{},
+\exists{K{}}(V8:K{},
+\exists{K{}}(V9:K{},
+\exists{K{}}(V2:Stmt{},
+\exists{K{}}(V5:Stmt{},
+\exists{K{}}(V10:Stmt{},
+\exists{K{}}(V0:KBott{},
+\exists{K{}}(V3:KBott{},
+\exists{K{}}(V6:Stmt{},
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V1:Stmt{},\or{Stmt{}}(inj{KBott{},Stmt{}}(V0:KBott{}),\or{Stmt{}}(inj{Block{},Stmt{}}(inj{KBott{},Block{}}(V0:KBott{})),\bottom{Stmt{}}()))),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V4:Stmt{},\or{Stmt{}}(inj{KBott{},Stmt{}}(V3:KBott{}),\or{Stmt{}}(inj{Block{},Stmt{}}(inj{KBott{},Block{}}(V3:KBott{})),\bottom{Stmt{}}()))),
+    \and{K{}}(
+        \equals{K{},K{}}(V7:K{},inj{Stmt{},K{}}(V6:Stmt{})),
+    \and{K{}}(
+        \equals{K{},K{}}(V8:K{},inj{Stmt{},K{}}(V2:Stmt{})),
+    \and{K{}}(
+        \equals{K{},K{}}(V9:K{},inj{Stmt{},K{}}(V5:Stmt{})),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V2:Stmt{},cast{Stmt{}}(V1:Stmt{})),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V5:Stmt{},cast{Stmt{}}(V4:Stmt{})),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V10:Stmt{},\rewrites{Stmt{}}(V5:Stmt{},V1:Stmt{})),
+    \and{K{}}(
+        \equals{KBott{},K{}}(V0:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("S1"))),
+    \and{K{}}(
+        \equals{KBott{},K{}}(V3:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("S2"))),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V6:Stmt{},\or{Stmt{}}(consStmt{}(V2:Stmt{},V5:Stmt{}),\or{Stmt{}}(cast{Stmt{}}(consStmt{}(V2:Stmt{},V4:Stmt{})),\bottom{Stmt{}}()))),
+\or{K{}}(kSequence{}(\or{K{}}(\rewrites{K{}}(V7:K{},V8:K{}),\or{K{}}(inj{Stmt{},K{}}(\or{Stmt{}}(\rewrites{Stmt{}}(V6:Stmt{},V2:Stmt{}),\or{Stmt{}}(consStmt{}(V2:Stmt{},\or{Stmt{}}(\rewrites{Stmt{}}(V5:Stmt{},V2:Stmt{}),\or{Stmt{}}(cast{Stmt{}}(V10:Stmt{}),\bottom{Stmt{}}()))),\or{Stmt{}}(cast{Stmt{}}(\or{Stmt{}}(\rewrites{Stmt{}}(V6:Stmt{},V1:Stmt{}),\or{Stmt{}}(consStmt{}(V2:Stmt{},V10:Stmt{}),\bottom{Stmt{}}()))),\bottom{Stmt{}}())))),\bottom{K{}}())),V9:K{}),\or{K{}}(\rewrites{K{}}(V7:K{},kSequence{}(V8:K{},V9:K{})),\bottom{K{}}())))))))))))))))))))))))) []
+  /* input(K): if (false) _:Block else S:Block => S:Block*/
+  axiom{} 
+\exists{K{}}(V2:Block{},
+\exists{K{}}(V4:Stmt{},
+\exists{K{}}(V0:BExp{},
+\exists{K{}}(V5:Stmt{},
+\exists{K{}}(V1:Block{},
+\exists{K{}}(V3:Block{},
+    \and{K{}}(
+        \equals{Block{},K{}}(V2:Block{},inj{KBott{},Block{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("S")))),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V4:Stmt{},if{}(V0:BExp{},V1:Block{},V3:Block{})),
+    \and{K{}}(
+        \equals{BExp{},K{}}(V0:BExp{},inj{Bool{},BExp{}}(boolFalse{}())),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V5:Stmt{},inj{Block{},Stmt{}}(V3:Block{})),
+    \and{K{}}(
+        \equals{Block{},K{}}(V1:Block{},cast{Block{}}(inj{KBott{},Block{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("_"))))),
+    \and{K{}}(
+        \equals{Block{},K{}}(V3:Block{},cast{Block{}}(V2:Block{})),
+\or{K{}}(\rewrites{K{}}(inj{Stmt{},K{}}(V4:Stmt{}),\or{K{}}(inj{Block{},K{}}(V3:Block{}),\or{K{}}(inj{Stmt{},K{}}(V5:Stmt{}),\bottom{K{}}()))),\or{K{}}(inj{Stmt{},K{}}(\or{Stmt{}}(\rewrites{Stmt{}}(V4:Stmt{},V5:Stmt{}),\or{Stmt{}}(if{}(V0:BExp{},V1:Block{},\or{Block{}}(cast{Block{}}(\rewrites{Block{}}(V3:Block{},V2:Block{})),\or{Block{}}(\rewrites{Block{}}(V3:Block{},V3:Block{}),\bottom{Block{}}()))),\bottom{Stmt{}}()))),\bottom{K{}}())))))))))))))) []
+  /* input(K): if (true)  S:Block else _:Block => S:Block*/
+  axiom{} 
+\exists{K{}}(V1:Block{},
+\exists{K{}}(V4:Stmt{},
+\exists{K{}}(V0:BExp{},
+\exists{K{}}(V5:Stmt{},
+\exists{K{}}(V2:Block{},
+\exists{K{}}(V3:Block{},
+    \and{K{}}(
+        \equals{Block{},K{}}(V1:Block{},inj{KBott{},Block{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("S")))),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V4:Stmt{},if{}(V0:BExp{},V2:Block{},V3:Block{})),
+    \and{K{}}(
+        \equals{BExp{},K{}}(V0:BExp{},inj{Bool{},BExp{}}(boolTrue{}())),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V5:Stmt{},inj{Block{},Stmt{}}(V2:Block{})),
+    \and{K{}}(
+        \equals{Block{},K{}}(V2:Block{},cast{Block{}}(V1:Block{})),
+    \and{K{}}(
+        \equals{Block{},K{}}(V3:Block{},cast{Block{}}(inj{KBott{},Block{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("_"))))),
+\or{K{}}(\rewrites{K{}}(inj{Stmt{},K{}}(V4:Stmt{}),\or{K{}}(inj{Block{},K{}}(V2:Block{}),\or{K{}}(inj{Stmt{},K{}}(V5:Stmt{}),\bottom{K{}}()))),\or{K{}}(inj{Stmt{},K{}}(\or{Stmt{}}(\rewrites{Stmt{}}(V4:Stmt{},V5:Stmt{}),\or{Stmt{}}(if{}(V0:BExp{},V2:Block{},\or{Block{}}(cast{Block{}}(\rewrites{Block{}}(V3:Block{},V1:Block{})),\or{Block{}}(\rewrites{Block{}}(V3:Block{},V2:Block{}),\bottom{Block{}}()))),\bottom{Stmt{}}()))),\bottom{K{}}())))))))))))))) []
+  /* input(K): ! T:Bool => notBool T:Bool*/
+  axiom{} 
+\exists{K{}}(V4:Bool{},
+\exists{K{}}(V5:Bool{},
+\exists{K{}}(V2:BExp{},
+\exists{K{}}(V6:BExp{},
+\exists{K{}}(V3:BExp{},
+\exists{K{}}(V1:Bool{},
+\exists{K{}}(V0:Bool{},
+    \and{K{}}(
+        \equals{Bool{},K{}}(V4:Bool{},notBool{}(V0:Bool{})),
+    \and{K{}}(
+        \equals{Bool{},K{}}(V5:Bool{},\or{Bool{}}(notBool{}(V1:Bool{}),\or{Bool{}}(cast{Bool{}}(V4:Bool{}),\bottom{Bool{}}()))),
+    \and{K{}}(
+        \equals{BExp{},K{}}(V2:BExp{},inj{Bool{},BExp{}}(V1:Bool{})),
+    \and{K{}}(
+        \equals{BExp{},K{}}(V6:BExp{},inj{Bool{},BExp{}}(V5:Bool{})),
+    \and{K{}}(
+        \equals{BExp{},K{}}(V3:BExp{},not{}(V2:BExp{})),
+    \and{K{}}(
+        \equals{Bool{},K{}}(V1:Bool{},cast{Bool{}}(V0:Bool{})),
+    \and{K{}}(
+        \equals{Bool{},K{}}(V0:Bool{},inj{KBott{},Bool{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("T")))),
+\or{K{}}(inj{BExp{},K{}}(\or{BExp{}}(\rewrites{BExp{}}(V3:BExp{},V6:BExp{}),\or{BExp{}}(not{}(\or{BExp{}}(\rewrites{BExp{}}(V2:BExp{},V6:BExp{}),\or{BExp{}}(inj{Bool{},BExp{}}(\or{Bool{}}(cast{Bool{}}(\rewrites{Bool{}}(V1:Bool{},V4:Bool{})),\or{Bool{}}(\rewrites{Bool{}}(V1:Bool{},V5:Bool{}),\bottom{Bool{}}()))),\bottom{BExp{}}()))),\bottom{BExp{}}()))),\or{K{}}(\rewrites{K{}}(inj{BExp{},K{}}(V3:BExp{}),\or{K{}}(inj{Bool{},K{}}(V5:Bool{}),\or{K{}}(inj{BExp{},K{}}(V6:BExp{}),\bottom{K{}}()))),\bottom{K{}}())))))))))))))))) []
+  /* input(K): I1:Int + I2:Int => I1:Int +Int I2:Int*/
+  axiom{} 
+\exists{K{}}(V2:AExp{},
+\exists{K{}}(V5:AExp{},
+\exists{K{}}(V9:AExp{},
+\exists{K{}}(V8:Int{},
+\exists{K{}}(V7:Int{},
+\exists{K{}}(V6:AExp{},
+\exists{K{}}(V1:Int{},
+\exists{K{}}(V4:Int{},
+\exists{K{}}(V0:Int{},
+\exists{K{}}(V3:Int{},
+\exists{K{}}(V10:Int{},
+    \and{K{}}(
+        \equals{AExp{},K{}}(V2:AExp{},inj{Int{},AExp{}}(V1:Int{})),
+    \and{K{}}(
+        \equals{AExp{},K{}}(V5:AExp{},inj{Int{},AExp{}}(V4:Int{})),
+    \and{K{}}(
+        \equals{AExp{},K{}}(V9:AExp{},inj{Int{},AExp{}}(V8:Int{})),
+    \and{K{}}(
+        \equals{Int{},K{}}(V8:Int{},\or{Int{}}(plusInt{}(V1:Int{},V4:Int{}),\or{Int{}}(cast{Int{}}(V7:Int{}),\bottom{Int{}}()))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V7:Int{},plusInt{}(V1:Int{},V3:Int{})),
+    \and{K{}}(
+        \equals{AExp{},K{}}(V6:AExp{},plus{}(V2:AExp{},V5:AExp{})),
+    \and{K{}}(
+        \equals{Int{},K{}}(V1:Int{},cast{Int{}}(V0:Int{})),
+    \and{K{}}(
+        \equals{Int{},K{}}(V4:Int{},cast{Int{}}(V3:Int{})),
+    \and{K{}}(
+        \equals{Int{},K{}}(V0:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I1")))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V3:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I2")))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V10:Int{},\or{Int{}}(cast{Int{}}(\rewrites{Int{}}(V4:Int{},V0:Int{})),\or{Int{}}(\rewrites{Int{}}(V4:Int{},V1:Int{}),\bottom{Int{}}()))),
+\or{K{}}(inj{AExp{},K{}}(\or{AExp{}}(\rewrites{AExp{}}(V6:AExp{},V9:AExp{}),\or{AExp{}}(plus{}(V2:AExp{},\or{AExp{}}(\rewrites{AExp{}}(V5:AExp{},V9:AExp{}),\or{AExp{}}(inj{Int{},AExp{}}(\or{Int{}}(plusInt{}(V10:Int{},V4:Int{}),\or{Int{}}(cast{Int{}}(\or{Int{}}(plusInt{}(V10:Int{},V3:Int{}),\or{Int{}}(\rewrites{Int{}}(V4:Int{},V7:Int{}),\bottom{Int{}}()))),\or{Int{}}(\rewrites{Int{}}(V4:Int{},V8:Int{}),\bottom{Int{}}())))),\bottom{AExp{}}()))),\bottom{AExp{}}()))),\or{K{}}(\rewrites{K{}}(inj{AExp{},K{}}(V6:AExp{}),\or{K{}}(inj{Int{},K{}}(V8:Int{}),\or{K{}}(inj{AExp{},K{}}(V9:AExp{}),\bottom{K{}}()))),\bottom{K{}}())))))))))))))))))))))))) []
+  /* input(K): {S:Stmt} => S:Stmt  */
+  axiom{} 
+\exists{K{}}(V2:Stmt{},
+\exists{K{}}(V4:Block{},
+\exists{K{}}(V1:Block{},
+\exists{K{}}(V3:Stmt{},
+\exists{K{}}(V5:Stmt{},
+\exists{K{}}(V0:KBott{},
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V2:Stmt{},\or{Stmt{}}(inj{KBott{},Stmt{}}(V0:KBott{}),\or{Stmt{}}(inj{Block{},Stmt{}}(V1:Block{}),\bottom{Stmt{}}()))),
+    \and{K{}}(
+        \equals{Block{},K{}}(V4:Block{},block{}(V3:Stmt{})),
+    \and{K{}}(
+        \equals{Block{},K{}}(V1:Block{},inj{KBott{},Block{}}(V0:KBott{})),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V3:Stmt{},cast{Stmt{}}(V2:Stmt{})),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V5:Stmt{},inj{Block{},Stmt{}}(V4:Block{})),
+    \and{K{}}(
+        \equals{KBott{},K{}}(V0:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("S"))),
+\or{K{}}(\rewrites{K{}}(\or{K{}}(inj{Block{},K{}}(V4:Block{}),\or{K{}}(inj{Stmt{},K{}}(V5:Stmt{}),\bottom{K{}}())),inj{Stmt{},K{}}(V3:Stmt{})),\or{K{}}(inj{Stmt{},K{}}(\or{Stmt{}}(\rewrites{Stmt{}}(V5:Stmt{},V3:Stmt{}),\or{Stmt{}}(cast{Stmt{}}(\or{Stmt{}}(\rewrites{Stmt{}}(V5:Stmt{},V2:Stmt{}),\or{Stmt{}}(inj{Block{},Stmt{}}(\rewrites{Block{}}(V4:Block{},V1:Block{})),\bottom{Stmt{}}()))),\bottom{Stmt{}}()))),\bottom{K{}}())))))))))))))) []
+  /* input(K): false && _:BExp => false*/
+  axiom{} 
+\exists{K{}}(V5:BExp{},
+\exists{K{}}(V1:BExp{},
+\exists{K{}}(V6:BExp{},
+\exists{K{}}(V2:KBott{},
+\exists{K{}}(V4:BExp{},
+\exists{K{}}(V0:Bool{},
+\exists{K{}}(V3:Bool{},
+    \and{K{}}(
+        \equals{BExp{},K{}}(V5:BExp{},cast{BExp{}}(V4:BExp{})),
+    \and{K{}}(
+        \equals{BExp{},K{}}(V1:BExp{},inj{Bool{},BExp{}}(V0:Bool{})),
+    \and{K{}}(
+        \equals{BExp{},K{}}(V6:BExp{},\or{BExp{}}(cast{BExp{}}(\or{BExp{}}(and{}(V1:BExp{},V4:BExp{}),\or{BExp{}}(inj{Bool{},BExp{}}(boolAnd{}(V0:Bool{},V3:Bool{})),\bottom{BExp{}}()))),\or{BExp{}}(and{}(V1:BExp{},V5:BExp{}),\bottom{BExp{}}()))),
+    \and{K{}}(
+        \equals{KBott{},K{}}(V2:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("_"))),
+    \and{K{}}(
+        \equals{BExp{},K{}}(V4:BExp{},\or{BExp{}}(inj{KBott{},BExp{}}(V2:KBott{}),\or{BExp{}}(inj{Bool{},BExp{}}(V3:Bool{}),\bottom{BExp{}}()))),
+    \and{K{}}(
+        \equals{Bool{},K{}}(V0:Bool{},boolFalse{}()),
+    \and{K{}}(
+        \equals{Bool{},K{}}(V3:Bool{},inj{KBott{},Bool{}}(V2:KBott{})),
+\or{K{}}(inj{BExp{},K{}}(\or{BExp{}}(\rewrites{BExp{}}(V6:BExp{},V1:BExp{}),\or{BExp{}}(and{}(V1:BExp{},\rewrites{BExp{}}(V5:BExp{},V1:BExp{})),\bottom{BExp{}}()))),\or{K{}}(\rewrites{K{}}(inj{BExp{},K{}}(V6:BExp{}),\or{K{}}(inj{Bool{},K{}}(V0:Bool{}),\or{K{}}(inj{BExp{},K{}}(V1:BExp{}),\bottom{K{}}()))),\bottom{K{}}())))))))))))))))) []
+  /* input(K): true && B:BExp => B:BExp*/
+  axiom{} 
+\exists{K{}}(V5:BExp{},
+\exists{K{}}(V0:Bool{},
+\exists{K{}}(V1:BExp{},
+\exists{K{}}(V6:BExp{},
+\exists{K{}}(V2:KBott{},
+\exists{K{}}(V7:BExp{},
+\exists{K{}}(V4:BExp{},
+\exists{K{}}(V3:Bool{},
+    \and{K{}}(
+        \equals{BExp{},K{}}(V5:BExp{},cast{BExp{}}(V4:BExp{})),
+    \and{K{}}(
+        \equals{Bool{},K{}}(V0:Bool{},boolTrue{}()),
+    \and{K{}}(
+        \equals{BExp{},K{}}(V1:BExp{},inj{Bool{},BExp{}}(V0:Bool{})),
+    \and{K{}}(
+        \equals{BExp{},K{}}(V6:BExp{},\or{BExp{}}(cast{BExp{}}(\or{BExp{}}(and{}(V1:BExp{},V4:BExp{}),\or{BExp{}}(inj{Bool{},BExp{}}(boolAnd{}(V0:Bool{},V3:Bool{})),\bottom{BExp{}}()))),\or{BExp{}}(and{}(V1:BExp{},V5:BExp{}),\bottom{BExp{}}()))),
+    \and{K{}}(
+        \equals{KBott{},K{}}(V2:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("B"))),
+    \and{K{}}(
+        \equals{BExp{},K{}}(V7:BExp{},\rewrites{BExp{}}(V5:BExp{},V4:BExp{})),
+    \and{K{}}(
+        \equals{BExp{},K{}}(V4:BExp{},\or{BExp{}}(inj{KBott{},BExp{}}(V2:KBott{}),\or{BExp{}}(inj{Bool{},BExp{}}(V3:Bool{}),\bottom{BExp{}}()))),
+    \and{K{}}(
+        \equals{Bool{},K{}}(V3:Bool{},inj{KBott{},Bool{}}(V2:KBott{})),
+\or{K{}}(inj{BExp{},K{}}(\or{BExp{}}(cast{BExp{}}(\or{BExp{}}(\rewrites{BExp{}}(V6:BExp{},V4:BExp{}),\or{BExp{}}(and{}(V1:BExp{},V7:BExp{}),\bottom{BExp{}}()))),\or{BExp{}}(\rewrites{BExp{}}(V6:BExp{},V5:BExp{}),\or{BExp{}}(and{}(V1:BExp{},\or{BExp{}}(cast{BExp{}}(V7:BExp{}),\or{BExp{}}(\rewrites{BExp{}}(V5:BExp{},V5:BExp{}),\bottom{BExp{}}()))),\bottom{BExp{}}())))),\or{K{}}(\rewrites{K{}}(inj{BExp{},K{}}(V6:BExp{}),inj{BExp{},K{}}(V5:BExp{})),\bottom{K{}}())))))))))))))))))) []
+  /* input(K): while (B:BExp) S:Block => if (B:BExp) {S:Block while (B:BExp) S:Block} else {}  */
+  axiom{} 
+\exists{K{}}(V1:BExp{},
+\exists{K{}}(V4:Stmt{},
+\exists{K{}}(V3:Stmt{},
+\exists{K{}}(V0:KBott{},
+\exists{K{}}(V2:Block{},
+    \and{K{}}(
+        \equals{BExp{},K{}}(V1:BExp{},cast{BExp{}}(\or{BExp{}}(inj{KBott{},BExp{}}(V0:KBott{}),\or{BExp{}}(inj{Bool{},BExp{}}(inj{KBott{},Bool{}}(V0:KBott{})),\bottom{BExp{}}())))),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V4:Stmt{},if{}(V1:BExp{},block{}(consStmt{}(inj{Block{},Stmt{}}(V2:Block{}),V3:Stmt{})),emptyBlock{}())),
+    \and{K{}}(
+        \equals{Stmt{},K{}}(V3:Stmt{},while{}(V1:BExp{},V2:Block{})),
+    \and{K{}}(
+        \equals{KBott{},K{}}(V0:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("B"))),
+    \and{K{}}(
+        \equals{Block{},K{}}(V2:Block{},cast{Block{}}(inj{KBott{},Block{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("S"))))),
+\or{K{}}(\rewrites{K{}}(inj{Stmt{},K{}}(V3:Stmt{}),inj{Stmt{},K{}}(V4:Stmt{})),\or{K{}}(inj{Stmt{},K{}}(\rewrites{Stmt{}}(V3:Stmt{},V4:Stmt{})),\bottom{K{}}())))))))))))) []
+  /* input(K): <k> X:Id => I:Int ...</k> <state>... X:Id |-> I:Int ...</state>*/
+  axiom{} 
+\exists{K{}}(V4:AExp{},
+\exists{K{}}(V2:K{},
+\exists{K{}}(V6:OptionalDots{},
+\exists{K{}}(V5:K{},
+\exists{K{}}(V1:AExp{},
+\exists{K{}}(V0:Id{},
+\exists{K{}}(V3:Int{},
+    \and{K{}}(
+        \equals{AExp{},K{}}(V4:AExp{},inj{Int{},AExp{}}(V3:Int{})),
+    \and{K{}}(
+        \equals{K{},K{}}(V2:K{},\or{K{}}(inj{AExp{},K{}}(V1:AExp{}),\or{K{}}(inj{Id{},K{}}(V0:Id{}),\bottom{K{}}()))),
+    \and{K{}}(
+        \equals{OptionalDots{},K{}}(V6:OptionalDots{},dots{}()),
+    \and{K{}}(
+        \equals{K{},K{}}(V5:K{},\or{K{}}(inj{Int{},K{}}(V3:Int{}),\or{K{}}(inj{AExp{},K{}}(V4:AExp{}),\bottom{K{}}()))),
+    \and{K{}}(
+        \equals{AExp{},K{}}(V1:AExp{},inj{Id{},AExp{}}(V0:Id{})),
+    \and{K{}}(
+        \equals{Id{},K{}}(V0:Id{},cast{Id{}}(inj{KBott{},Id{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("X"))))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V3:Int{},cast{Int{}}(inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I"))))),
+inj{Bag{},K{}}(consCells{}(inj{Cell{},Bag{}}(kCell{}(noDots{}(),\or{K{}}(inj{AExp{},K{}}(\rewrites{AExp{}}(V1:AExp{},V4:AExp{})),\or{K{}}(\rewrites{K{}}(V2:K{},V5:K{}),\bottom{K{}}())),V6:OptionalDots{})),inj{Cell{},Bag{}}(stateCell{}(V6:OptionalDots{},inj{Map{},K{}}(mapElement{}(V2:K{},V5:K{})),V6:OptionalDots{})))))))))))))))))) []
+  /* input(K): <k> int (X:Id,Xs:Ids => Xs:Ids);_:Stmt </k> <state> Rho:Map (.Map => X:Id|->0) </state>
+    requires notBool (X:Id in_keys(Rho:Map))*/
+  axiom{} 
+\exists{K{}}(V2:Ids{},
+\exists{K{}}(V8:K{},
+\exists{K{}}(V10:Bool{},
+\exists{K{}}(V6:KBott{},
+\exists{K{}}(V0:OptionalDots{},
+\exists{K{}}(V4:Ids{},
+\exists{K{}}(V1:Id{},
+\exists{K{}}(V9:Int{},
+\exists{K{}}(V5:Ids{},
+\exists{K{}}(V3:Ids{},
+\exists{K{}}(V7:Map{},
+    \and{K{}}(
+        \equals{Ids{},K{}}(V2:Ids{},inj{KBott{},Ids{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("Xs")))),
+    \and{K{}}(
+        \equals{K{},K{}}(V8:K{},\or{K{}}(inj{AExp{},K{}}(inj{Id{},AExp{}}(V1:Id{})),\or{K{}}(inj{Id{},K{}}(V1:Id{}),\bottom{K{}}()))),
+    \and{K{}}(
+        \equals{Bool{},K{}}(V10:Bool{},notBool{}(bracket{Bool{}}(inKeys{}(V8:K{},V7:Map{})))),
+    \and{K{}}(
+        \equals{KBott{},K{}}(V6:KBott{},inj{KVariable{},KBott{}}(\dv{KVariable{}}("_"))),
+    \and{K{}}(
+        \equals{OptionalDots{},K{}}(V0:OptionalDots{},noDots{}()),
+    \and{K{}}(
+        \equals{Ids{},K{}}(V4:Ids{},\rewrites{Ids{}}(V3:Ids{},V2:Ids{})),
+    \and{K{}}(
+        \equals{Id{},K{}}(V1:Id{},cast{Id{}}(inj{KBott{},Id{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("X"))))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V9:Int{},\dv{Int{}}("0")),
+    \and{K{}}(
+        \equals{Ids{},K{}}(V5:Ids{},\or{Ids{}}(cast{Ids{}}(consIds{}(V1:Id{},V2:Ids{})),\or{Ids{}}(consIds{}(V1:Id{},V3:Ids{}),\bottom{Ids{}}()))),
+    \and{K{}}(
+        \equals{Ids{},K{}}(V3:Ids{},cast{Ids{}}(V2:Ids{})),
+    \and{K{}}(
+        \equals{Map{},K{}}(V7:Map{},cast{Map{}}(inj{KBott{},Map{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("Rho"))))),
+kRequires{}(inj{Bag{},K{}}(consCells{}(inj{Cell{},Bag{}}(kCell{}(V0:OptionalDots{},inj{Pgm{},K{}}(program{}(bracket{Ids{}}(\or{Ids{}}(cast{Ids{}}(\or{Ids{}}(\rewrites{Ids{}}(V5:Ids{},V2:Ids{}),\or{Ids{}}(consIds{}(V1:Id{},V4:Ids{}),\bottom{Ids{}}()))),\or{Ids{}}(\rewrites{Ids{}}(V5:Ids{},V3:Ids{}),\or{Ids{}}(consIds{}(V1:Id{},\or{Ids{}}(cast{Ids{}}(V4:Ids{}),\or{Ids{}}(\rewrites{Ids{}}(V3:Ids{},V3:Ids{}),\bottom{Ids{}}()))),\bottom{Ids{}}())))),cast{Stmt{}}(\or{Stmt{}}(inj{KBott{},Stmt{}}(V6:KBott{}),\or{Stmt{}}(inj{Block{},Stmt{}}(inj{KBott{},Block{}}(V6:KBott{})),\bottom{Stmt{}}()))))),V0:OptionalDots{})),inj{Cell{},Bag{}}(stateCell{}(V0:OptionalDots{},inj{Map{},K{}}(consMap{}(V7:Map{},bracket{Map{}}(mapElement{}(\rewrites{K{}}(inj{Map{},K{}}(emptyMap{}()),V8:K{}),\or{K{}}(inj{Int{},K{}}(V9:Int{}),\or{K{}}(inj{AExp{},K{}}(inj{Int{},AExp{}}(V9:Int{})),\bottom{K{}}())))))),V0:OptionalDots{})))),\or{K{}}(inj{Bool{},K{}}(V10:Bool{}),\or{K{}}(inj{BExp{},K{}}(inj{Bool{},BExp{}}(V10:Bool{})),\bottom{K{}}()))))))))))))))))))))))))) []
+  /* input(K): I1:Int <= I2:Int => I1:Int <=Int I2:Int*/
+  axiom{} 
+\exists{K{}}(V2:AExp{},
+\exists{K{}}(V5:AExp{},
+\exists{K{}}(V8:AExp{},
+\exists{K{}}(V6:Int{},
+\exists{K{}}(V7:Int{},
+\exists{K{}}(V1:Int{},
+\exists{K{}}(V4:Int{},
+\exists{K{}}(V0:Int{},
+\exists{K{}}(V3:Int{},
+\exists{K{}}(V9:Int{},
+    \and{K{}}(
+        \equals{AExp{},K{}}(V2:AExp{},inj{Int{},AExp{}}(V1:Int{})),
+    \and{K{}}(
+        \equals{AExp{},K{}}(V5:AExp{},inj{Int{},AExp{}}(V4:Int{})),
+    \and{K{}}(
+        \equals{AExp{},K{}}(V8:AExp{},inj{Int{},AExp{}}(V7:Int{})),
+    \and{K{}}(
+        \equals{Int{},K{}}(V6:Int{},lteInt{}(V1:Int{},V3:Int{})),
+    \and{K{}}(
+        \equals{Int{},K{}}(V7:Int{},\or{Int{}}(lteInt{}(V1:Int{},V4:Int{}),\or{Int{}}(cast{Int{}}(V6:Int{}),\bottom{Int{}}()))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V1:Int{},cast{Int{}}(V0:Int{})),
+    \and{K{}}(
+        \equals{Int{},K{}}(V4:Int{},cast{Int{}}(V3:Int{})),
+    \and{K{}}(
+        \equals{Int{},K{}}(V0:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I1")))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V3:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I2")))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V9:Int{},\or{Int{}}(cast{Int{}}(\rewrites{Int{}}(V4:Int{},V0:Int{})),\or{Int{}}(\rewrites{Int{}}(V4:Int{},V1:Int{}),\bottom{Int{}}()))),
+\or{K{}}(inj{BExp{},K{}}(lte{}(V2:AExp{},\or{AExp{}}(\rewrites{AExp{}}(V5:AExp{},V8:AExp{}),\or{AExp{}}(inj{Int{},AExp{}}(\or{Int{}}(lteInt{}(V9:Int{},V4:Int{}),\or{Int{}}(cast{Int{}}(\or{Int{}}(lteInt{}(V9:Int{},V3:Int{}),\or{Int{}}(\rewrites{Int{}}(V4:Int{},V6:Int{}),\bottom{Int{}}()))),\or{Int{}}(\rewrites{Int{}}(V4:Int{},V7:Int{}),\bottom{Int{}}())))),\bottom{AExp{}}())))),\or{K{}}(\rewrites{K{}}(inj{BExp{},K{}}(lte{}(V2:AExp{},V5:AExp{})),\or{K{}}(inj{Int{},K{}}(V7:Int{}),\or{K{}}(inj{AExp{},K{}}(V8:AExp{}),\bottom{K{}}()))),\bottom{K{}}())))))))))))))))))))))) []
+  /* input(K): <k> X:Id = I:Int; => . ...</k> <state>... X:Id |-> (_:Int => I:Int) ...</state>*/
+  axiom{} 
+\exists{K{}}(V3:AExp{},
+\exists{K{}}(V7:AExp{},
+\exists{K{}}(V4:OptionalDots{},
+\exists{K{}}(V8:AExp{},
+\exists{K{}}(V0:Id{},
+\exists{K{}}(V2:Int{},
+\exists{K{}}(V5:Int{},
+\exists{K{}}(V1:Int{},
+\exists{K{}}(V6:Int{},
+    \and{K{}}(
+        \equals{AExp{},K{}}(V3:AExp{},inj{Int{},AExp{}}(V2:Int{})),
+    \and{K{}}(
+        \equals{AExp{},K{}}(V7:AExp{},inj{Int{},AExp{}}(V5:Int{})),
+    \and{K{}}(
+        \equals{OptionalDots{},K{}}(V4:OptionalDots{},dots{}()),
+    \and{K{}}(
+        \equals{AExp{},K{}}(V8:AExp{},\or{AExp{}}(\rewrites{AExp{}}(V7:AExp{},V3:AExp{}),\or{AExp{}}(inj{Int{},AExp{}}(V6:Int{}),\bottom{AExp{}}()))),
+    \and{K{}}(
+        \equals{Id{},K{}}(V0:Id{},cast{Id{}}(inj{KBott{},Id{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("X"))))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V2:Int{},cast{Int{}}(V1:Int{})),
+    \and{K{}}(
+        \equals{Int{},K{}}(V5:Int{},cast{Int{}}(inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("_"))))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V1:Int{},inj{KBott{},Int{}}(inj{KVariable{},KBott{}}(\dv{KVariable{}}("I")))),
+    \and{K{}}(
+        \equals{Int{},K{}}(V6:Int{},\or{Int{}}(cast{Int{}}(\rewrites{Int{}}(V5:Int{},V1:Int{})),\or{Int{}}(\rewrites{Int{}}(V5:Int{},V2:Int{}),\bottom{Int{}}()))),
+inj{Bag{},K{}}(consCells{}(inj{Cell{},Bag{}}(kCell{}(noDots{}(),\rewrites{K{}}(inj{Stmt{},K{}}(assignment{}(V0:Id{},V3:AExp{})),dotK{}()),V4:OptionalDots{})),inj{Cell{},Bag{}}(stateCell{}(V4:OptionalDots{},inj{Map{},K{}}(mapElement{}(\or{K{}}(inj{AExp{},K{}}(inj{Id{},AExp{}}(V0:Id{})),\or{K{}}(inj{Id{},K{}}(V0:Id{}),\bottom{K{}}())),\or{K{}}(bracket{K{}}(\or{K{}}(inj{Int{},K{}}(V6:Int{}),\or{K{}}(inj{AExp{},K{}}(V8:AExp{}),\or{K{}}(\rewrites{K{}}(\or{K{}}(inj{Int{},K{}}(V5:Int{}),\or{K{}}(inj{AExp{},K{}}(V7:AExp{}),\bottom{K{}}())),\or{K{}}(inj{Int{},K{}}(V2:Int{}),\or{K{}}(inj{AExp{},K{}}(V3:AExp{}),\bottom{K{}}()))),\bottom{K{}}())))),\or{K{}}(inj{AExp{},K{}}(bracket{AExp{}}(V8:AExp{})),\bottom{K{}}())))),V4:OptionalDots{})))))))))))))))))))))) []
 endmodule []
 
 module GENERATED
