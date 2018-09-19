@@ -1,0 +1,639 @@
+\documentclass[UTF8,11pt]{article}
+
+  % Package for using the full page.
+  \usepackage{fullpage}
+  
+  % Package for writing algorithms (why do we need this one?).
+  \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+  
+  % Package for using colored texts.
+  \usepackage[dvipsnames]{xcolor}
+  
+  % Pakcage for using multiple optional parameters in new commands.
+  \usepackage{xargs}
+  
+  \usepackage{alltt}
+  \usepackage{tikz}
+  \usetikzlibrary{trees}
+
+  % Packages for writing comments and todo notes.
+  \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+  \newcommandx{\unsure}[2][1=]
+    {\todo[linecolor=red,backgroundcolor=red!25,
+	bordercolor=red,#1]
+	{#2}\xspace{}}
+  \newcommandx{\change}[2][1=]
+    {\todo[linecolor=blue,backgroundcolor=blue!25,
+	bordercolor=blue,#1]
+	{#2}\xspace{}}
+  \newcommandx{\info}[2][1=]
+    {\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,
+	bordercolor=OliveGreen,#1]
+	{#2}}
+  \newcommandx{\improvement}[2][1=]
+    {\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]
+	{#2}\xspace{}}
+  \newcommandx{\thiswillnotshow}[2][1=]
+    {\todo[disable,#1]
+	{#2}\xspace{}}
+
+  % What are there for?
+  % Select what to do with todonotes: 
+  % \usepackage[disable]{todonotes} % notes not showed
+  % \usepackage[draft]  {todonotes} % notes showed
+
+  % Select what to do with command \comment:  
+  % \newcommand{\comment}[1]
+      {}                                    %comment not showed
+  \newcommand{\comment}[1]
+    {\par {\bfseries \color{blue} #1 \par}} %comment showed
+  
+  % ams math packages.
+  \usepackage{amsmath, amssymb, amsthm}
+  
+  % Declare a global counter for theorem environments:
+  \newcounter{thmcounter}
+  
+  % Define new theorem styles and theorem environments.
+  \theoremstyle{plain}
+  
+  \newtheorem{theorem}    [thmcounter]{Theorem}
+  \newtheorem{corollary}  [thmcounter]{Corollary}
+  \newtheorem{lemma}      [thmcounter]{Lemma}
+  \newtheorem{proposition}[thmcounter]{Proposition}
+  
+  \theoremstyle{definition}
+  
+  \newtheorem{definition} [thmcounter]{Definition}
+  \newtheorem{example}    [thmcounter]{Example}
+  
+  \theoremstyle{remark}
+  
+  \newtheorem{remark}     [thmcounter]{Remark}
+  \newtheorem{notation}   [thmcounter]{Notation}
+    
+  % Package for changing fonts in the Verbatim environment:
+  \usepackage{fancyvrb}
+  
+  % Package for writing captions for align environment:
+  \usepackage{capt-of}
+  
+  % Package for URLs:
+  \usepackage{hyperref}  
+  
+  % Package for tables:
+  \usepackage[english]{babel}  
+  
+  % Package for quotations:
+  \usepackage{csquotes}
+  
+  % Package for customizing lists environments:
+  \usepackage{enumitem}
+  
+  % Package for writing long tables:
+  \usepackage{longtable}
+  
+  % Package for graphics
+  \usepackage{graphicx}
+  
+  \usepackage{xspace}
+  \usepackage{caption}
+  \usepackage{longtable}
+  
+  % Define ceiling and flooring symbols:
+  \usepackage{mathtools}
+  \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+  \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+
+  % Package for underlining and strikethrough texts.
+  \usepackage[normalem]{ulem}
+  
+  % Package for display-mode quotations.
+  \usepackage{csquotes}
+  
+  % Define double-bracket [[P]]
+  \usepackage{stmaryrd}
+  \newcommand{\Bracket}[1]{\llbracket#1\rrbracket}
+  
+  % Package for writing natural proof deductions
+  \usepackage{prftree}
+  
+  \usepackage{enumitem}
+  
+  % logic connectives
+  \newcommand{\imp}{\to}
+  \newcommand{\dimp}{\leftrightarrow}
+  \newcommand{\ddd}{,\dots,}
+  
+  % contexts
+  \newcommand{\CSub}[1]{C_{#1}}
+  \newcommand{\Csigma}{\CSub{\sigma}}
+  \newcommand{\Csigmai}{\CSub{\sigma,i}}
+  \newcommand{\Csigmaapp}[1]{\CSub{\sigma}[#1]}
+  \newcommand{\Csigmaiapp}[1]{\CSub{\sigma,i}[#1]}
+  \newcommand{\Capp}[1]{C[#1]}
+  
+  % name of the proof rules
+  \newcommand{\prule}[1]{\textsc{(#1)}}
+  
+  \newcommand{\modusponens}{\prule{Modus Ponens}\xspace}
+  \newcommand{\universalgeneralization}{\prule{Universal Generalization}\xspace}
+  \newcommand{\necessitation}{\prule{Necessitation}\xspace}
+  \newcommand{\existence}{\prule{Existence}\xspace}
+  \newcommand{\singletonvariable}{\prule{Singleton Variable}\xspace}
+  \newcommand{\propagationbottom}{\prule{Propagation$_\bot$}\xspace}
+  \newcommand{\propagationvee}{\prule{Propagation$_\vee$}\xspace}
+  \newcommand{\propagationexists}{\prule{Propagation$_\exists$}\xspace}
+  \newcommand{\variablesubstitution}{\prule{Variable Substitution}\xspace}
+  \newcommand{\framing}{\prule{Framing}\xspace}
+  \newcommand{\propositionaltautology}{\prule{Propositional Tautology}\xspace}
+  \newcommand{\forallrule}{\prule{$\forall$}\xspace}
+  \newcommand{\membership}{\prule{Membership}\xspace}
+  \newcommand{\membershipintroduction}{\prule{Membership Introduction}\xspace}
+  \newcommand{\membershipelimination}{\prule{Membership Elimination}\xspace}
+  \newcommand{\membershipneg}{\prule{Membership$_\neg$}\xspace}
+  \newcommand{\membershipwedge}{\prule{Membership$_\wedge$}\xspace}
+  \newcommand{\membershipexists}{\prule{Membership$_\exists$}\xspace}
+  \newcommand{\equalityelimination}{\prule{Equality Elimination}\xspace}
+  \newcommand{\membershipsymbol}{\prule{Membership Symbol}\xspace}
+  \newcommand{\membershipvariable}{\prule{Membership Variable}\xspace}
+  \newcommand{\functionalsubstitution}{\prule{Functional Substitution}\xspace}
+    
+  % Package for writing BNF syntax
+  \usepackage{syntax}
+  
+  % Package for lstlisting and definition of Kore
+  \usepackage{listings}
+  % Define colors
+  \definecolor{codegray}{rgb}{0.5,0.5,0.5}
+  \definecolor{backgray}{RGB}{250,250,250}
+  \definecolor{codegreen}{RGB}{50,205,50}
+  \definecolor{codeblue}{RGB}{50,50,255}
+  % Define Kore Language style
+  \lstdefinelanguage{kore}
+  {
+  	% print whole listing small and in serif fonts
+  	basicstyle=\ttfamily\footnotesize,
+  	% use /* */ for comments
+  	morecomment=[s]{/*}{*/},
+  	% print white for comments
+  	commentstyle=\color{codegray},
+  	% print line number in the left, in tiny fonts
+  	numbers=left,
+  	numberstyle=\tiny,
+  	% print all characters at their natural width
+  	columns=fullflexible,
+  	% print background color grey
+  	backgroundcolor=\color{backgray},
+  	% regard some characters as letters
+  	alsoletter={-\#\\},
+  	% list of declaration keywords
+  	keywordstyle=[1]\color{codeblue},
+  	morekeywords=[1]{
+  		module,
+  		endmodule,
+  		hooked-sort,
+  		sort,
+  		symbol,
+  		hooked-symbol,
+  		alias,
+  		axiom,
+  	},
+    % list of connectives
+    keywordstyle=[2]\color{codegreen},
+    morekeywords=[2]{
+    	\\not,
+    	\\or,
+    	\\implies,
+    	\\and,
+    	\\equals,
+    	\\exists,
+    	\\forall,
+    	\\iff
+    }
+  }
+
+  % Define |-fin
+  \newcommand{\vdashfin}{\vdash_\text{fin}}
+
+  % Define the colon ":" that is used in "x:s"
+  % with less spacing around.
+  \newcommand{\cln}{\texttt{:}}
+
+  % Define the curly K:
+  \newcommand{\K}{\mbox{$\mathbb{K}$}\xspace}
+  
+  % Define commands that are used in Sec 2.  
+  \newcommand{\Nat}{\textit{Nat}}
+  \newcommand{\String}{\textit{String}}
+  \newcommand{\Rat}{\textit{Rat}}
+  \newcommand{\KNat}{\textit{KNat}}
+  \newcommand{\Int}{\textit{Int}}
+  \newcommand{\Bool}{\textit{Bool}}
+  \newcommand{\List}{\textit{List}}
+  \newcommand{\KList}{\textit{KList}}
+  \newcommand{\nil}{\textit{nil}}
+  \newcommand{\cons}{\textit{cons}}
+  \newcommand{\append}{\textit{append}}
+  \newcommand{\Bag}{\textit{Bag}}
+  \newcommand{\Set}{\textit{Set}}
+  \newcommand{\Map}{\textit{Map}}
+  \newcommand{\emptyMap}{\textit{empty}}
+  \newcommand{\bindMap}{\textit{bind}}
+  \newcommand{\mergeMap}{\textit{merge}}
+  \newcommand{\ittrue}{\textit{true}}
+  \newcommand{\itfalse}{\textit{false}}
+  \newcommand{\itceil}{\textit{ceil}}
+  
+  \newcommand{\Pred}{\textit{Pred}}
+
+  \newcommand{\Context}{\textit{Context}}
+  \newcommand{\hole}{\boxempty}
+  \newcommand{\Exp}{\textit{Exp}}
+  \newcommand{\AExp}{\textit{AExp}}
+  \newcommand{\BExp}{\textit{BExp}}
+  \newcommand{\Stmt}{\textit{Stmt}}
+  \newcommand{\ite}{\textsf{ite}}
+  \newcommand{\ttrue}{\textit{true}}
+  \newcommand{\ffalse}{\textit{false}}
+  \newcommand{\app}{\textit{app}}
+  \newcommand{\KExp}{\mathit{\#Exp}}
+  \newcommand{\Klambdazero}{\mathit{Klambda0}}
+  \newcommand{\Kapp}{\mathit{Kapp}}
+  \newcommand{\Klambda}{\mathit{Klambda}}
+  \newcommand{\parametric}[2]{{#1}\raisebox{.2ex}{\texttt{\footnotesize{\{}}}#2\raisebox{.2ex}{\texttt{\footnotesize{\}}}}}
+  \newcommand{\parametricscript}[2]{{#1}\raisebox{.2ex}{\texttt{\tiny{\{}}}#2\raisebox{.2ex}{\texttt{\tiny{\}}}}}
+  
+  \newcommand{\zero}{\textit{zero}}
+  \newcommand{\Kzero}{\textit{Kzero}}
+  \newcommand{\Ksucc}{\textit{Ksucc}}
+  \newcommand{\KSymbolsucc}{\textit{KSymbolsucc}}
+  \newcommand{\Mod}{\textit{Mod}}
+  \newcommand{\denote}[1]{\llbracket{#1}\rrbracket}
+  \newcommand{\reduct}[2]{\mbox{${#1}\!\!\upharpoonright_{#2}$}}
+  \newcommand{\reductscript}[2]{\mbox{\tiny${#1}\!\!\upharpoonright_{#2}$}}
+  
+  \newcommand{\isEmpty}{\textit{isEmpty}}
+  
+  \newcommand{\ostoml}{\textsf{os2ml}}
+  
+  \newcommand{\builtin}{\textit{builtin}}
+  
+  % Define PATTERNS with ATTERNS are small capitals:
+  \newcommand{\PATTERNS}{\text{P\textsc{atterns}}}
+  \newcommand{\VARIABLES}{\text{V\textsc{ariables}}}
+  % Define sorts and symbols in the calculus K.
+  
+  \newcommand{\doubleslash}{/\!/{ }}
+  
+  \newcommand{\compose}{\circ}
+  \newcommand{\strict}[1]{\textsf{strict(#1)}}
+
+  \newcommand{\shp}{\includegraphics{hash-symbol}\kern-0.1em}
+  \newcommand{\smallshp}{\includegraphics[scale=0.8]{hash-symbol}\kern-0.1em}
+  \newcommand{\sharpsymbol}{\#}
+  \newcommand{\shs}{\shp s}
+  \newcommand{\shvs}{\shp vs}
+  \newcommand{\smallshs}{\smallshp s}
+  \newcommand{\sharpup}{\texttt{\sharpsymbol up}}
+  \newcommand{\sharpdown}{\texttt{\sharpsymbol down}}
+  % Sec 3.1 Truth
+  \newcommand{\KPred}{\mathit{\shp Pred}}
+  
+  % Sec 3.2 Strings
+  \newcommand{\KChar}{\texttt{\sharpsymbol Char}}
+  \newcommand{\KCharList}{\texttt{\sharpsymbol CharList}}
+  \newcommand{\KString}{\texttt{\sharpsymbol String}}
+  \newcommand{\Kepsilon}{\texttt{\sharpsymbol epsilon}}
+  \newcommand{\KconsKString}{\texttt{\sharpsymbol consKString}}
+  
+  %% We shouldn't need the follows.  
+  \newcommand{\Kconcat}{\texttt{\sharpsymbol concat}}
+  
+  \newcommand{\Kconstructor}{\texttt{\sharpsymbol constructor}}
+  \newcommand{\KconstructorP}[1]{\parametric{\Kconstructor}{#1}}
+  \newcommand{\Kinjective}{\texttt{\sharpsymbol injective}}
+  \newcommand{\KinjectiveP}[1]{\parametric{\Kinjective}{#1}}
+  
+  \newcommand{\KprovableP}[1]{\parametric{\Kdeduce}{#1}}
+  
+  % Sec 3.3 Sorts and Symbols
+  \newcommand{\KSort}{\texttt{\sharpsymbol Sort}}
+  \newcommand{\Ksort}{\texttt{\sharpsymbol sort}}
+  \newcommand{\KSymbol}{\texttt{\sharpsymbol Symbol}}
+  \newcommand{\Ksymbol}{\texttt{\sharpsymbol symbol}}
+  \newcommand{\KSymbolceil}{\texttt{\sharpsymbol `ceil}}
+  \newcommand{\KgetArgumentSorts}{\texttt{\sharpsymbol getArgumentSorts}}
+  \newcommand{\KgetReturnSort}{\texttt{\sharpsymbol getReturnSort}}
+  
+  % Sec 3.4 Finite Lists
+  \newcommand{\ttX}{\texttt{X}}
+  \newcommand{\ttChar}{\texttt{Char}}
+  \newcommand{\ttSort}{\texttt{Sort}}
+  \newcommand{\ttSymbol}{\texttt{Symbol}}
+  \newcommand{\ttVariable}{\texttt{Variable}}
+  \newcommand{\ttPattern}{\texttt{Pattern}}
+  \newcommand{\XList}{\texttt{\sharpsymbol XList}}
+  \newcommand{\KnilXList}{\texttt{\sharpsymbol nilXList}}
+  \newcommand{\KconsXList}{\texttt{\sharpsymbol consXList}}
+  \newcommand{\KappendXList}{\texttt{\sharpsymbol appendXList}}
+  \newcommand{\KinXList}{\texttt{\sharpsymbol inXList}}
+  \newcommand{\KdeleteXList}{\texttt{\sharpsymbol deleteXList}}
+  \newcommand{\KPatternList}{\texttt{\sharpsymbol PatternList}}
+  \newcommand{\KnilKPatternList}{\texttt{\sharpsymbol nilPatternList}}
+  \newcommand{\KconsKPatternList}{\texttt{\sharpsymbol consPatternList}}
+  \newcommand{\KappendKPatternList}{\texttt{\sharpsymbol appendPatternList}}
+  \newcommand{\KinKPatternList}{\texttt{\sharpsymbol inPatternList}}
+  \newcommand{\KdeleteKPatternList}{\texttt{\sharpsymbol deletePatternList}}
+  \newcommand{\KSortList}{\texttt{\sharpsymbol SortList}}
+  \newcommand{\KnilKSortList}{\texttt{\sharpsymbol nilSortList}}
+  \newcommand{\KconsKSortList}{\texttt{\sharpsymbol consSortList}}
+  \newcommand{\KappendKSortList}{\texttt{\sharpsymbol appendSortList}}
+  \newcommand{\KinKSortList}{\texttt{\sharpsymbol inSortList}}
+  \newcommand{\KdeleteKSortList}{\texttt{\sharpsymbol deleteSortList}}
+  \newcommand{\KnilKSymbolList}{\texttt{\sharpsymbol nilSymbolList}}
+  \newcommand{\KconsKSymbolList}{\texttt{\sharpsymbol consSymbolList}}
+  \newcommand{\KSymbolList}{\texttt{\sharpsymbol SymbolList}}
+  \newcommand{\KappendKSymbolList}{\texttt{\sharpsymbol appendSymbolList}}
+  \newcommand{\KinKSymbolList}{\texttt{\sharpsymbol inSymbolList}}
+  \newcommand{\KdeleteKSymbolList}{\texttt{\sharpsymbol deleteSymbolList}}
+  \newcommand{\KnilKCharList}{\texttt{\sharpsymbol nilCharList}}
+  \newcommand{\KconsKCharList}{\texttt{\sharpsymbol consCharList}}
+  \newcommand{\KVariableList}{\texttt{\sharpsymbol VariableList}\xspace}
+  \newcommand{\KnilKVariableList}{\texttt{\sharpsymbol nilVariableList}}
+  \newcommand{\KconsKVariableList}{\texttt{\sharpsymbol consVariableList}}
+  \newcommand{\KinKVariableList}{\texttt{\sharpsymbol inVariableList}}
+  \newcommand{\KappendKVariableList}{\texttt{\sharpsymbol appendVariableList}}
+  \newcommand{\KdeleteKVariableList}{\texttt{\sharpsymbol deleteVariableList}}
+  \newcommand{\KappendKCharList}{\texttt{\sharpsymbol appendKCharList}}
+  \newcommand{\KVariable}{\texttt{\sharpsymbol Variable}}
+  \newcommand{\KVariableAsKPattern}{\texttt{\sharpsymbol variableAsPattern}}
+  \newcommand{\KvariablePattern}{\texttt{\sharpsymbol variablePattern}}
+  \newcommand{\KPattern}{\texttt{\sharpsymbol Pattern}}
+  \newcommand{\Kvariable}{\texttt{\sharpsymbol variable}}
+  \newcommand{\Kand}{\texttt{\sharpsymbol  \slashsymbol and}}
+  \newcommand{\Kor}{\texttt{\sharpsymbol \slashsymbol  or}}
+  \newcommand{\Kimplies}{\texttt{\sharpsymbol  \slashsymbol implies}}
+  \newcommand{\Kiff}{\texttt{\sharpsymbol  \slashsymbol iff}}
+  \newcommand{\Knot}{\texttt{\sharpsymbol  \slashsymbol not}}
+  \newcommand{\Kapplication}{\texttt{\sharpsymbol application}}
+  \newcommand{\Kexists}{\texttt{\sharpsymbol \slashsymbol  exists}}
+  \newcommand{\Kforall}{\texttt{\sharpsymbol \slashsymbol  forall}}
+  \newcommand{\Kequals}{\texttt{\sharpsymbol \slashsymbol  equals}}
+  \newcommand{\Kmembership}{\Kin}
+  \newcommand{\Kin}{\texttt{\sharpsymbol \slashsymbol  in}}
+  \newcommand{\Kcontains}{\texttt{\sharpsymbol  \slashsymbol contains}}
+  \newcommand{\Ktop}{\texttt{\sharpsymbol \slashsymbol  top}}
+  \newcommand{\Kbottom}{\texttt{\sharpsymbol \slashsymbol  bottom}}
+  \newcommand{\Kfloor}{\texttt{\sharpsymbol \slashsymbol  floor}}
+  \newcommand{\Kceil}{\texttt{\sharpsymbol \slashsymbol  ceil}}
+  \newcommand{\Knext}{\texttt{\sharpsymbol \slashsymbol next}}
+  \newcommand{\Krewrites}{\texttt{\sharpsymbol \slashsymbol rewrites}}
+  
+  \newcommand{\KVariableListAsKPatternList}
+    {\texttt{\sharpsymbol variableListAsPatternList}\xspace}
+  
+  \newcommand{\Kdv}{\texttt{\sharpsymbol \slashsymbol dv}}
+  
+  \newcommand{\KgetFV}{\texttt{\sharpsymbol getFV}}
+  \newcommand{\KgetFVFromPatterns}{\texttt{\sharpsymbol getFVFromPatterns}}
+  \newcommand{\KoccursFree}{\texttt{\sharpsymbol occursFree}}
+  \newcommand{\KfreshName}{\texttt{\sharpsymbol freshName}}
+  \newcommand{\Kcons}{\texttt{\sharpsymbol cons}}
+  \newcommand{\Knil}{\texttt{\sharpsymbol nil}}
+  \newcommand{\KSymbolzero}{\texttt{\sharpsymbol Symbolzero}}
+  \newcommand{\KSymbolcons}{\texttt{\sharpsymbol Symbolcons}}
+  \newcommand{\KSymbolnil}{\texttt{\sharpsymbol Symbolnil}}
+  
+  \newcommand{\KSignature}{\texttt{\sharpsymbol Signature}}
+  \newcommand{\Ksignature}{\texttt{\sharpsymbol signature}}
+  \newcommand{\KgetSorts}{\texttt{\sharpsymbol getSorts}}
+  \newcommand{\KgetSymbols}{\texttt{\sharpsymbol getSymbols}}
+  \newcommand{\KsortDeclared}[1]{
+  	\parametric{\texttt{\sharpsymbol sortDeclared}}{#1}}
+  \newcommand{\KsortsDeclared}[1]{
+        \parametric{\texttt{\sharpsymbol sortsDeclared}}{#1}}
+  \newcommand{\KsymbolDeclared}[1]{
+  	\parametric{\texttt{\sharpsymbol symbolDeclared}}{#1}}
+  \newcommand{\KaxiomDeclared}{\texttt{\sharpsymbol axiomDeclared}}
+  \newcommand{\Kderivable}{\Kdeduce}
+  
+  \newcommand{\Ksubsort}[1]{\parametric{\texttt{\sharpsymbol subsort}}{#1}}
+  \newcommand{\Ksubsorts}[1]{\parametric{\texttt{\sharpsymbol subsorts}}{#1}}
+  \newcommand{\KSortConnectedComponent}{\texttt{\sharpsymbol 
+  SortConnectedComponent}}
+  \newcommand{\KsubsortOverloading}[1]{
+  	\parametric{\texttt{\sharpsymbol subsortOverloading}}{#1}}
+  
+  \newcommand{\KwellFormed}{\texttt{\sharpsymbol wellFormed}}
+  \newcommand{\KwellFormedPatterns}{\texttt{\sharpsymbol wellFormedPatterns}}
+  \newcommand{\KgetSort}{\texttt{\sharpsymbol getSort}}
+  \newcommand{\KgetSortsFromPatterns}{\texttt{\sharpsymbol 
+  getSortsFromPatterns}}
+  \newcommand{\KisSort}{\texttt{\sharpsymbol isSort}}
+  \newcommand{\Ksubstitute}{\texttt{\sharpsymbol substitute}}
+  \newcommand{\KsubstitutePatterns}{\texttt{\sharpsymbol substitutePatterns}}
+  
+  \newcommand{\KTheory}{\texttt{\sharpsymbol Theory}}
+  \newcommand{\Ktheory}{\texttt{\sharpsymbol theory}}
+  \newcommand{\KwellFormedTheory}{\texttt{\sharpsymbol wellFormedTheory}}
+  
+  \newcommand{\Kdeduce}{\textup{\texttt{\sharpsymbol provable}}}
+  
+  \newcommand{\Ksc}[1]{\parametric{\textup{\texttt{\sharpsymbol sc}}}{#1}}
+  
+  % The italic font of "ceil" used in math mode.
+  \newcommand{\cl}{\mathit{ceil}}
+  
+  \newcommand{\doublecolon}{::}
+  % Use quotation marks "..." in math mode.
+  \newcommand{\quot}[1]{\mathrm{``#1"}}
+  \newcommand{\quottt}[1]{\textrm{\lq\texttt{#1}\rq}}
+  \newcommand{\qquottt}[1]{\textrm{``\texttt{#1}''}}
+
+  \newcommand{\Pattern}{\textsc{Pattern}\xspace}
+  \newcommand{\ra}{\rightarrow}
+  \newcommand{\lra}{\leftrightarrow}
+  \newcommand{\FV}{{\it FV}}
+  
+  \newcommand{\name}{\mathit{name}}
+  \newcommand{\llist}{\mathit{list}}
+  \newcommand{\smalltt}[1]{\texttt{\small #1} }
+  \newcommand{\sort}{\smalltt{sort}}
+  \newcommand{\symb}{\smalltt{symbol}}
+  \newcommand{\axiom}{\smalltt{axiom}}
+  
+  \newcommand{\inj}[2]{\parametric{\mathit{inj}}{#1, #2}}
+  \newcommand{\retract}[2]{\parametric{\mathit{retract}}{#1, #2}}
+  \newcommand{\factorial}{\textit{factorial}}
+  % User-defined sorts & symbols in the meta-theory
+  \newcommand{\KqNat}{\texttt{\shp `Nat}{ }}
+  \newcommand{\KqList}{\texttt{\shp `List}{ }}
+  \newcommand{\Kqzero}{\texttt{\shp `zero}{ }}
+  \newcommand{\Kqsucc}{\texttt{\shp `succ}{ }}
+  \newcommand{\Kqplus}{\texttt{\shp `plus}{ }}
+  \newcommand{\Kqnil}{\texttt{\shp `nil}{ }}
+  \newcommand{\Kqcons}{\texttt{\shp `cons}{ }}
+  \newcommand{\Kqappend}{\texttt{\shp `append}{ }}
+  \newcommand{\KqK}{\texttt{\shp `K}{}}
+  \newcommand{\Kqinj}{\texttt{\shp `inj}}
+  
+  % Define the slash symbol
+  \newcommand{\slashsymbol}{\symbol{92}}
+  % Define slashed ttfamily words
+  \newcommand{\slsh}[1]{\texttt{\slashsymbol#1}}
+  \newcommand{\sland}{\slsh{and}}
+  \newcommand{\slor}{\slsh{or}}
+  \newcommand{\slnot}{\slsh{not}}
+  \newcommand{\slimplies}{\slsh{implies}}
+  \newcommand{\sliff}{\slsh{iff}}
+  \newcommand{\slequals}{\slsh{equals}}
+  \newcommand{\slexists}{\slsh{exists}}
+  \newcommand{\slforall}{\slsh{forall}}
+  \newcommand{\sltop}{\slsh{top}}
+  \newcommand{\slbottom}{\slsh{bottom}}
+  \newcommand{\slceil}{\slsh{ceil}}
+  \newcommand{\slfloor}{\slsh{floor}}
+  \newcommand{\slin}{\slsh{in}}
+  \newcommand{\slnext}{\slsh{next}}
+  \newcommand{\slrewrites}{\slsh{rewrites}}
+  
+  \newcommand{\sldv}{\slsh{dv}}
+  
+  \newcommand{\itlogic}{\mathit{logic}}
+  \newcommand{\itconnective}{\mathit{connective}}
+  \newcommand{\itsort}{\mathit{sort}}
+  \newcommand{\itsymbol}{\mathit{symbol}}
+  \newcommand{\itdeclared}{\mathit{declared}}
+  \newcommand{\itsortDeclared}{\mathit{sortDeclared}}
+  \newcommand{\collapse}{\mathit{collapse}}
+  
+  \newcommand{\ttv}{\texttt{v}}
+  \newcommand{\ttp}{\texttt{p}}
+  \newcommand{\itvp}{\mathit{vp}}
+  
+  \newcommand{\att}{\mathit{att}}
+  \newcommand{\verbose}{\mathit{verbose}}
+  \newcommand{\var}{\mathit{var}}
+  
+
+  
+  % Define syntactic category <category>
+  \newcommand{\syntacc}[1]{\text{$\langle$\textit{#1}$\rangle$}}
+
+  % Title and authors
+  \title{Declarative Disambiguation Filters}
+  \author{Radu Mereu{\c t}{\u a} \\
+          Faculty of Computer Science, Ia{\c s}i}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Introduction}
+\label{sec:introduction}
+
+
+When talking about a context-free grammar, one may expect a grammar such as:
+\begin{alltt}
+AddExp ::= AddExp "+" MulExp [label(plus)]
+MulExp ::= MulExp "*" Term [label(mul)]
+Term ::= r"[0-9]+" [token]
+\end{alltt}
+
+Then, for a simple example such as \verb^1+2*3^, with the start symbol \verb^AddExp^ would produce a non ambiguous tree such as: \verb^plus(1, mul(2, 3))^.
+
+But, when working with rewriting, it is more convenient to have a single sort for all expression types. This means the grammar would look something like:
+\begin{alltt}
+Exp ::= Exp "+" Exp [label(plus)]
+Exp ::= Exp "*" Exp [label(mul)]
+Exp ::= r"[0-9]+" [token]
+\end{alltt}
+
+\noindent but in this case, the output of the previous parse would be ambiguous: 
+
+\verb^amb(plus(1, mul(2,3)), mul(plus(1,2), 3))^.
+
+Something extra is needed to keep the original intended result of parsing. For this reason, priorities and associativity were introduced.
+
+\begin{alltt}
+Exp ::= Exp "*" Exp [label(mul), left]
+Exp ::= Exp "+" Exp [label(plus), left]
+Exp ::= Exp "-" Exp [label(minus), left]
+Exp ::= "(" Exp ")" [bracket]
+priorities mul > plus minus
+left plus minus
+\end{alltt}
+
+\noindent or, more concise:
+
+\begin{alltt}
+Exp ::= Exp "*" Exp [label(mul), left]
+      > left: 
+        Exp "+" Exp [label(plus), left]
+      | Exp "-" Exp [label(minus), left]
+Exp ::= "(" Exp ")" [bracket]
+\end{alltt}
+
+Priorities and associativity are binary operations between productions which are used by the parser to tell which branches to eliminate from an ambiguous tree. It makes the check at the child level, and propagates a negative result upwards until the first amb node.
+
+\section{Priorities}
+\label{sec:priorities}
+
+Priority is a relation between two distinct productions and specifies which parent-child patterns are not allowed to appear in the final AST. From the grammar above, we get \verb^mul > plus^, meaning \verb^mul^ is not allowed to be a direct child of \verb^plus^.
+
+\begin{tikzpicture}[level distance=0.7cm,
+  level 1/.style={sibling distance=6cm},
+  level 2/.style={sibling distance=3cm},
+  level 3/.style={sibling distance=1.5cm}]
+  \node {amb}
+    child {node {plus}
+      child {node {1}}
+      child {node {mul}
+        child {node {2}}
+        child {node {3}}
+      }
+    }
+    child {node {mul}
+    child {node {plus}
+      child {node {1}}
+      child {node {2}}
+      }
+      child {node {3}}
+    };
+\end{tikzpicture}
+
+Therefore the right child of \verb^amb^ will be eliminated. Since an \verb^amb^ node with only one child can be replaced by the child, we are left with the original parse tree.
+
+
+%TODO: corner cases like array
+
+In SDF the semantics of priorities meant there were cases in which the error could propagate to the top level, resulting in a parsing error. Rascal MPL solved this by restricting the application of this check only to the outermost non-terminals of a production.
+
+\section{Associativity}
+\label{sec:associativity}
+
+
+\section{Prefer/Avoid - top level choice}
+\label{sec:prefer-avoid}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
