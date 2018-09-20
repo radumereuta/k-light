@@ -606,10 +606,72 @@ Priority is a relation between two distinct productions and specifies which pare
 
 Therefore the right child of \verb^amb^ will be eliminated. Since an \verb^amb^ node with only one child can be replaced by the child, we are left with the original parse tree.
 
+To override the application priorities, it is enough to use parenthesis (bracket production). The input \verb^(1 + 2) * 3^ will produce the following non ambiguous tree:
 
-%TODO: corner cases like array
+\begin{tikzpicture}[level distance=0.7cm,
+  level 1/.style={sibling distance=3cm},
+  level 2/.style={sibling distance=2cm},
+  level 3/.style={sibling distance=1.5cm}]
+  \node {mul}
+    child {node {bracket}
+      child {node {plus}
+        child {node {1}}
+        child {node {2}}
+      }
+    }
+    child {node {3}};
+\end{tikzpicture}
+\noindent but because the \verb^bracket^ node is between \verb^mul^ and \verb^plus^, no action is taken and the AST remains valid.
 
-In SDF the semantics of priorities meant there were cases in which the error could propagate to the top level, resulting in a parsing error. Rascal MPL solved this by restricting the application of this check only to the outermost non-terminals of a production.
+% corner cases like array - apply priorities only to the outermost non-terminals
+
+Priorities are designed mostly for binary arithmetic operators, but are also useful for productions where one of the sides ends with a terminal, like array:
+
+\begin{alltt}
+Exp ::= Exp "[" Exp "]" [label(array)]
+      > Exp "*" Exp     [label(mul), left]
+      > Exp "+" Exp     [label(plus), left]
+\end{alltt}
+
+The input \verb^1 + 2 [ 3 * 4 ]^ produces the following ambiguous tree:
+
+\begin{tikzpicture}[level distance=0.7cm,
+  level 1/.style={sibling distance=7cm},
+  level 2/.style={sibling distance=3cm},
+  level 3/.style={sibling distance=1.5cm}]
+  \node {amb}
+    child {node {plus}
+      child {node {1}}
+      child {node {array}
+        child {node {2}}
+        child {node {mul}
+          child {node{3}}
+          child {node{4}}
+        }
+      }
+    }
+    child {node {array}
+    child {node {plus}
+      child {node {1}}
+      child {node {2}}
+      }
+        child {node {mul}
+          child {node{3}}
+          child {node{4}}
+        }
+    };
+\end{tikzpicture}
+
+Taking into account the priority relation from the grammar, we can eliminate the right branch of the ambiguity because \verb^plus^ cannot be a direct child of \verb^array^. Which leaves one left branch where we have \verb^mul^ as a direct child of \verb^array^. But if we apply the priority relation in this case, the entire tree is eliminated, resulting in a parsing error. The fact that the \verb^array^ production is guarded in the right hand side, means the parser will not produce a parse where \verb^mul^ is a parent of \verb^array^. The solution in this case, is to restrict the application of the priority filter only to the outermost non-terminals of productions.
+
+%TODO: formalize with rewrite fractions
+
+The semantics of priorities are inspired from the same concept found in SDF \cite{sdf}, but there, priorities were applied on all non-terminals, meaning the example above would result in a parse error. The situation could be avoided by introducing a new sort in the right hand side of \verb^array^ and a chain production to link to the original sort. This would create an extra node in the final AST and the priority checker would not apply. This problem was avoided in Rascal MPL \cite{rascal} by applying the priority checker only to the outermost non-terminals.
+
+%TODO: cite SDF and Rascal MPL
+
+%TODO: apply priorities over inj - useful when talking about rewrite
+
 
 \section{Associativity}
 \label{sec:associativity}
@@ -618,19 +680,9 @@ In SDF the semantics of priorities meant there were cases in which the error cou
 \section{Prefer/Avoid - top level choice}
 \label{sec:prefer-avoid}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+%TODO: what is prefer/avoid good for
+%TODO: maybe extend it with numerical/float prefer
+%TODO: go into SDF disambiguation medkit and say why this would not be enough to properly disambiguate binary operators
 
 
 
