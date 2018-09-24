@@ -1,0 +1,2 @@
+
+#KDefinition{}(#emptyKRequireList{}(),#KModuleList{}(#emptyKModuleList{}(),#KModule{}(\dv{KModuleName{}}("TEST"),#emptyKImportList{}(),#KSentenceList{}(#emptyKSentenceList{}(),#KSyntaxProduction{}(\dv{KSort{}}("S"),#KProductionWAttr{}(#regularTermina{}(\dv{KString{}}("\"\"")),#KAttributesDeclaration{}(#TagContent{}(\dv{KEY{}}("symbol"),\dv{TAGList{}}("inj")))))))))
