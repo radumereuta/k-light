@@ -6,8 +6,10 @@ Sorts are parametric.
 In the tests folder there are a few examples which include a variety of productions.
 
 The *.k files are the input.
+
 The *.kore files contain a simple translation from K to full KORE. No checks are being performed. Translation is in `TreeNodesToOuterKORE.scala`.
-The *.kore2 files contain a one to one translation from K to AST KORE. This should be something similar to the meta level representation of a definition.
+
+The *.kore2 files contain a one to one translation from K to AST KORE. This should be something similar to the meta level representation of a definition. Translation is in `TreeNodesToKORE.scala`.
 
 These are intended to be used in k-in-k for testing purposes.
 
