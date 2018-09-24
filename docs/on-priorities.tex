@@ -12,6 +12,7 @@
   % Pakcage for using multiple optional parameters in new commands.
   \usepackage{xargs}
   
+  \usepackage{proof}
   \usepackage{alltt}
   \usepackage{tikz}
   \usetikzlibrary{trees}
@@ -621,6 +622,7 @@ To override the application priorities, it is enough to use parenthesis (bracket
     }
     child {node {3}};
 \end{tikzpicture}
+
 \noindent but because the \verb^bracket^ node is between \verb^mul^ and \verb^plus^, no action is taken and the AST remains valid.
 
 % corner cases like array - apply priorities only to the outermost non-terminals
@@ -671,6 +673,22 @@ The semantics of priorities are inspired from the same concept found in SDF \cit
 %TODO: cite SDF and Rascal MPL
 
 %TODO: apply priorities over inj - useful when talking about rewrite
+
+
+
+\infer{\bot}{%
+    mul(plus(\_),\_)
+}
+\infer{\bot}{%
+    mul(\_,plus(\_))
+}
+\infer{\bot}{%
+    array(plus(\_),\_)
+}
+\infer{\bot}{%
+    array(mul(\_),\_)
+}
+
 
 
 \section{Associativity}
