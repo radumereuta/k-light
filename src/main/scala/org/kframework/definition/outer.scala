@@ -327,7 +327,11 @@ case class SyntaxSort(sort: Sort, att: Att = Att(), location: Option[Location], 
 
 case class Production(sort: Sort, items: Seq[ProductionItem], att: Att, location: Option[Location], source: Source)
   extends SyntaxSentence with ProductionToString {
-  lazy val symbol: Option[String] = att.get("symbol").flatten
+  lazy val symbol: Option[String] =
+    if (att.contains("symbol"))
+      att.get("symbol").flatten
+    else
+      att.get("klabel").flatten // backwards compatibility
 
   override def equals(that: Any): Boolean = that match {
     case p@Production(`sort`, `items`, _, _, _) => this.symbol == p.symbol
