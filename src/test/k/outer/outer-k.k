@@ -20,15 +20,15 @@ module ATTRIBUTES
   imports KSTRING
   syntax KEY        ::= r"[a-z][A-Za-z\\-0-9]*" [token]
   syntax TAGList    ::= TAGCONTENT              [token]
-  syntax TAGCONTENT ::= TAGCONTENT TC           [symbol(#TAGCONTENTList)] // dummy symbol
-                      | TC                      [symbol(#TAGCONTENTTC)]   // dummy symbol
-                      | ""                      [symbol(#NOTAGCONTENT)]   // dummy symbol
-  syntax TC ::= r"[^\\n\\r\\(\\)\\\"]+"         [symbol('TC)]             // dummy symbol
+  syntax TAGCONTENT ::= TAGCONTENT TC           [klabel(tAGCONTENTList)] // dummy symbol
+                      | TC                      [klabel(tAGCONTENTTC)]   // dummy symbol
+                      | ""                      [klabel(tOTAGCONTENT)]   // dummy symbol
+  syntax TC ::= r"[^\\n\\r\\(\\)\\\"]+"         [klabel(TC)]             // dummy symbol
               | "(" TAGCONTENT ")"
 
-  syntax Attr ::= KEY                 [symbol(#TagSimple)]
-                | KEY "(" TAGList ")" [symbol(#TagContent)]
-                | KEY "(" KString ")" [symbol(#TagString)]
+  syntax Attr ::= KEY                 [klabel(tagSimple)]
+                | KEY "(" TAGList ")" [klabel(tagContent)]
+                | KEY "(" KString ")" [klabel(tagString)]
 endmodule
 
 // To be used for first-level parsing/pretty-printing of global KORE
@@ -39,78 +39,77 @@ module SYNTAX-DECL
   imports BUBBLE
   imports ATTRIBUTES
 
-  syntax KDefinition   ::= KRequireList KModuleList [symbol(#KDefinition)]
+  syntax KDefinition   ::= KRequireList KModuleList [klabel(kDefinition)]
 
   syntax KRequire      ::= "require" KString
-                               [symbol(#KRequire)]
+                               [klabel(kRequire)]
 
-  syntax KRequireList  ::= ""  [symbol(#emptyKRequireList)]
+  syntax KRequireList  ::= ""  [klabel(emptyKRequireList)]
                          | KRequireList KRequire
-                               [symbol(#KRequireList), unit(#emptyKRequireList)]
+                               [klabel(KRequireList), unit(emptyKRequireList)]
 
   syntax KModule       ::= "module" KModuleName OptionalAttributes
                                     KImportList
                                     KSentenceList
                            "endmodule"
-                               [symbol(#KModule)]
-  syntax KModuleList   ::= ""  [symbol(#emptyKModuleList)]
-                         | KModuleList KModule [symbol(#KModuleList), unit(#emptyKModuleList)]
+                               [klabel(kModule)]
+  syntax KModuleList   ::= ""  [klabel(emptyKModuleList)]
+                         | KModuleList KModule [klabel(kModuleList), unit(emptyKModuleList)]
 
-  syntax KImport       ::= "imports" KModuleName [symbol(#KImport)]
+  syntax KImport       ::= "imports" KModuleName [klabel(kImport)]
 
-  syntax KImportList   ::= ""  [symbol(#emptyKImportList)]
-                         | KImportList KImport [symbol(#KImportList), unit(#emptyKImportList)]
+  syntax KImportList   ::= ""  [klabel(emptyKImportList)]
+                         | KImportList KImport [klabel(kImportList), unit(emptyKImportList)]
 
-  syntax KSentenceList ::= ""  [symbol(#emptyKSentenceList)]
-                         | KSentenceList KSentence [symbol(#KSentenceList), unit(#kemptyKSentenceList)]
+  syntax KSentenceList ::= ""  [klabel(emptyKSentenceList)]
+                         | KSentenceList KSentence [klabel(kSentenceList), unit(kemptyKSentenceList)]
 
-  syntax KSentence ::= "syntax" KSort OptionalAttributes [symbol(#KSyntaxSort)]
-                     | "syntax" KSort "::=" PrioritySeqBlock [symbol(#KSyntaxProduction)]
-                     | "syntax" "priority"   KPrioritySeq OptionalAttributes [symbol(#KSyntaxPriority)]
-                     | "syntax" "priorities" KPrioritySeq OptionalAttributes [symbol(#KSyntaxPriorities)]
-                     | "syntax" "left" KNeTagSet OptionalAttributes [symbol(#KSyntaxLeft)]
-                     | "syntax" "right" KNeTagSet OptionalAttributes [symbol(#KSyntaxRight)]
-                     | "syntax" "non-assoc" KNeTagSet OptionalAttributes [symbol(#KSyntaxNonAssoc)]
+  syntax KSentence ::= "syntax" KSort OptionalAttributes [klabel(kSyntaxSort)]
+                     | "syntax" KSort "::=" PrioritySeqBlock [klabel(kSyntaxProduction)]
+                     | "syntax" "priority"   KPrioritySeq OptionalAttributes [klabel(kSyntaxPriority)]
+                     | "syntax" "priorities" KPrioritySeq OptionalAttributes [klabel(kSyntaxPriorities)]
+                     | "syntax" "left" KNeTagSet OptionalAttributes [klabel(kSyntaxLeft)]
+                     | "syntax" "right" KNeTagSet OptionalAttributes [klabel(kSyntaxRight)]
+                     | "syntax" "non-assoc" KNeTagSet OptionalAttributes [klabel(kSyntaxNonAssoc)]
 
-  syntax KPrioritySeq ::= KPrioritySeq ">" KNeTagSet   [symbol(#KPrioritySeq)]
+  syntax KPrioritySeq ::= KPrioritySeq ">" KNeTagSet   [klabel(kPrioritySeq)]
                         | KNeTagSet
-  syntax KNeTagSet    ::= Tag KNeTagSet                [symbol(#KTagSet)]
+  syntax KNeTagSet    ::= Tag KNeTagSet                [klabel(kTagSet)]
                         | Tag
   syntax Tag ::= r"[a-z][A-Za-z0-9\\-]*" [token]
 
   syntax KProduction ::= KProductionItem
-                       | KProduction KProductionItem [symbol(#KProduction), unit(#emptyKProduction)]
-  syntax KProductionItem ::= KSort       [symbol(#NonTerminal)]
-                           | KString     [symbol(#Terminal)]
-                           | "r" KString [symbol(#RegexTerminal)]
-                           | "NeList" "{" KSort "," KString "}" [symbol(#NeList)]
-                           |   "List" "{" KSort "," KString "}" [symbol(#List)]
-  syntax TokenContent ::= r"[^\\n\\r}]" [token]
-  syntax PrioritySeqBlock ::= PrioritySeqBlock ">" AssocAttribute ProdBlock [symbol(#PrioritySeqBlock)]
+                       | KProduction KProductionItem [klabel(kProduction), unit(emptyKProduction)]
+  syntax KProductionItem ::= KSort       [klabel(nonTerminal)]
+                           | KString     [klabel(terminal)]
+                           | "r" KString [klabel(regexTerminal)]
+                           | "NeList" "{" KSort "," KString "}" [klabel(neListProd)]
+                           |   "List" "{" KSort "," KString "}" [klabel(listProd)]
+  syntax PrioritySeqBlock ::= PrioritySeqBlock ">" AssocAttribute ProdBlock [klabel(prioritySeqBlock)]
                             | ProdBlock
-  syntax AssocAttribute ::= ""           [symbol(#NoAttribute)]
-                          | "left:"      [symbol(#LeftAttribute)]
-                          | "right:"     [symbol(#RightAttribute)]
-                          | "non-assoc:" [symbol(#NonAssocAttribute)]
-  syntax ProdBlock ::= ProdBlock "|" KProductionWAttr [symbol(#ProdBlock)]
+  syntax AssocAttribute ::= ""           [klabel(noAttribute)]
+                          | "left:"      [klabel(leftAttribute)]
+                          | "right:"     [klabel(rightAttribute)]
+                          | "non-assoc:" [klabel(nonAssocAttribute)]
+  syntax ProdBlock ::= ProdBlock "|" KProductionWAttr [klabel(prodBlock)]
                      | KProductionWAttr
-  syntax KProductionWAttr ::= KProduction OptionalAttributes [symbol(#KProductionWAttr)]
-                            | Tag "(" KSortList ")" OptionalAttributes [symbol(#KFuncProductionWAttr)]
-                            |     "(" KSortList ")" OptionalAttributes [symbol(#KTupleProductionWAttr)]
-  syntax KSortList ::= KSortList "," KSort [symbol(#KSortList)]
+  syntax KProductionWAttr ::= KProduction OptionalAttributes [klabel(kProductionWAttr)]
+                            | Tag "(" KSortList ")" OptionalAttributes [klabel(kFuncProductionWAttr)]
+                            |     "(" KSortList ")" OptionalAttributes [klabel(kTupleProductionWAttr)]
+  syntax KSortList ::= KSortList "," KSort [klabel(kSortList)]
                      | KSort
-  // We use #KAttributes as top symbol in the K term holding the attributes
+  // We use KAttributes as top symbol in the K term holding the attributes
   syntax OptionalAttributes ::= KAttributesDeclaration
-                              | "" [symbol(#NoKAttributesDeclaration)]
-  syntax KAttributesDeclaration ::= "[" AttrList "]" [symbol(#KAttributesDeclaration)]
-  syntax AttrList ::= AttrList "," Attr [symbol(#KAttributesList)]
+                              | "" [klabel(noKAttributesDeclaration)]
+  syntax KAttributesDeclaration ::= "[" AttrList "]" [klabel(kAttributesDeclaration)]
+  syntax AttrList ::= AttrList "," Attr [klabel(kAttributesList)]
                     | Attr
 
-  syntax KSentence ::= "configuration" Contents [symbol(#KConfiguration)]
-                     | "rule"    Contents [symbol(#KRule)]
-                     | "context" Contents [symbol(#KContext)]
-  syntax Contents ::= Bubble                        [symbol(#NoAttrs)]
-                    | Bubble KAttributesDeclaration [symbol(#Attrs), prefer]
+  syntax KSentence ::= "configuration" Contents [klabel(kConfiguration)]
+                     | "rule"    Contents [klabel(kRule)]
+                     | "context" Contents [klabel(kContext)]
+  syntax Contents ::= Bubble                        [klabel(noAttrs)]
+                    | Bubble KAttributesDeclaration [klabel(attrs), prefer]
   // The following can still change
   syntax KModuleName ::= r"[A-Z][A-Z\\-]*"    [token]
   syntax KSort       ::= r"[A-Z][A-Za-z0-9]*" [token]
