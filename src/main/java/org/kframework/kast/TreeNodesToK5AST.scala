@@ -10,7 +10,7 @@ import scala.collection.JavaConverters._
 object TreeNodesToK5AST {
 
   def apply(t: Term): String = t match {
-    case c@Constant(s, p) => "#token(" + StringUtil.enquoteCString(p.sort.localName) + "," + StringUtil.enquoteCString(s) + ")"
+    case c@Constant(s, p) => "#token(" + StringUtil.enquoteCString(s) + "," + StringUtil.enquoteCString(p.sort.localName) + ")"
     case tc@TermCons(items, p) => p.symbol.get + "(" +
       (if (items.isEmpty)
         ".KList"
