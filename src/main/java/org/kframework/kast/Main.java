@@ -26,10 +26,10 @@ public class Main {
             FileUtil.testFileUtil()::resolveWorkingDirectory,
             new KExceptionManager(new GlobalOptions()));
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         if (args.length != 3) {
             System.err.println("Usage: <grammar.k> <start-symbol> <file-to-parse>");
-            return;
+            System.exit(1);
         }
         File grammarFile = new File(args[0]);
         String startSymbol = args[1];
@@ -50,8 +50,10 @@ public class Main {
             for (ParseFailedException pfe : rez._1.left().get()) {
                 System.err.println(pfe.getKException().toString());
             }
+            System.exit(2);
         } else {
             System.out.println(TreeNodesToK5AST.apply(rez._1.right().get()));
         }
+        System.exit(0);
     }
 }
