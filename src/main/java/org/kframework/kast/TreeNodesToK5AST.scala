@@ -17,6 +17,7 @@ object TreeNodesToK5AST {
       else
         (new util.ArrayList(items).asScala.reverse map apply).mkString(",")) +
       ")"
-    case Ambiguity(items) => "amb(" + (items.asScala map apply).mkString(",") + ")"
+    case Ambiguity(items) => //"amb(" + (items.asScala map apply).mkString(",") + ")"
+      items.asScala.foldRight("bottom(.KList)") { (i, acc) => "amb(" + apply(i) + "," + acc + ")" }
   }
 }
