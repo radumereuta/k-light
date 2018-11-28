@@ -18,6 +18,7 @@ import java.util.Set;
 public class CDisambVisitor extends SetsTransformerWithErrors<ParseFailedException> {
 
     private Set<String> types = new HashSet<>();
+    private boolean inTypedef = false;
 
     @Override
     public Either<java.util.Set<ParseFailedException>, Term> apply(TermCons tc) {
@@ -28,51 +29,58 @@ public class CDisambVisitor extends SetsTransformerWithErrors<ParseFailedExcepti
             types = typesBackup;
             return rez;
         }
+        if (tc.production().klabel().get().equals("Identifier2DirectDeclarator") && inTypedef) {
+            Constant id = (Constant) tc.items().iterator().next();
+            if (types.contains(id.value())) { // used as type when it shouldn't
+                String msg = id.value() + " is not a type.";
+                KException kex = new KException(KException.ExceptionType.ERROR, KException.KExceptionGroup.CRITICAL, msg, tc.source().get(), tc.location().get());
+                return Left.apply(Sets.newHashSet(new PriorityException(kex)));
+            } else
+                types.add(id.value()); // new type decl
+        }
+        if (tc.production().klabel().get().equals("Identifier2TypedefName")) {
+            Constant id = (Constant) tc.items().iterator().next();
+            if (!types.contains(id.value())) {  // name used as a type decl
+                String msg = id.value() + " is not a type.";
+                KException kex = new KException(KException.ExceptionType.ERROR, KException.KExceptionGroup.CRITICAL, msg, tc.source().get(), tc.location().get());
+                return Left.apply(Sets.newHashSet(new PriorityException(kex)));
+            }
+        }
+        if (tc.production().klabel().get().equals("Identifier2PrimaryExpression")) {
+            Constant id = (Constant) tc.items().iterator().next();
+            if (types.contains(id.value())) {  // type used as new type decl
+                String msg = id.value() + " is a type.";
+                KException kex = new KException(KException.ExceptionType.ERROR, KException.KExceptionGroup.CRITICAL, msg, tc.source().get(), tc.location().get());
+                return Left.apply(Sets.newHashSet(new PriorityException(kex)));
+            }
+        }
+        if (tc.production().klabel().get().equals("typedef"))
+            inTypedef = true;
+        if (tc.production().klabel().get().equals("Declaration")) {
+            Either<Set<ParseFailedException>, Term> rez = super.apply(tc);
+            inTypedef = false;
+            return rez;
+        }
         return super.apply(tc);
     }
 
     public Either<java.util.Set<ParseFailedException>, Term> apply(Ambiguity amb) {
-        Either<Set<ParseFailedException>, Term> rez = new CEliminateVisitor().apply(amb);
-        if (rez.isLeft()) return rez;
-        new CCollectVisitor().apply(rez.right().get());
+        Either<Set<ParseFailedException>, Term> rez = null;
+        Set<String> typesfwd = new HashSet<>(types);
+        Set<String> typesback = null;
 
-        return super.apply(rez.right().get());
-    }
-
-    private class CEliminateVisitor extends SetsTransformerWithErrors<ParseFailedException> {
-        @Override
-        public Either<java.util.Set<ParseFailedException>, Term> apply(TermCons tc) {
-            assert tc.production() != null : this.getClass() + ":" + " production not found." + tc;
-            if (tc.production().klabel().get().equals("Identifier2TypedefName")) {
-                Constant id = (Constant) tc.items().iterator().next();
-                if (!types.contains(id.value())) {
-                    String msg = id.value() + " is not a type.";
-                    KException kex = new KException(KException.ExceptionType.ERROR, KException.KExceptionGroup.CRITICAL, msg, tc.source().get(), tc.location().get());
-                    return Left.apply(Sets.newHashSet(new PriorityException(kex)));
-                }
+        for (Term i : amb.items()) {
+            Either<Set<ParseFailedException>, Term> temp = super.apply(i);
+            if (temp.isRight()) {
+                assert typesback == null;
+                typesback = types;
+                rez = temp;
             }
-            if (tc.production().klabel().get().equals("Identifier2PrimaryExpression")) {
-                Constant id = (Constant) tc.items().iterator().next();
-                if (types.contains(id.value())) {
-                    String msg = id.value() + " is a type.";
-                    KException kex = new KException(KException.ExceptionType.ERROR, KException.KExceptionGroup.CRITICAL, msg, tc.source().get(), tc.location().get());
-                    return Left.apply(Sets.newHashSet(new PriorityException(kex)));
-                }
-            }
-            return super.apply(tc);
+            types = typesfwd;
         }
-    }
+        assert typesback != null;
+        types = typesback;
 
-    private class CCollectVisitor extends SafeTransformer {
-        @Override
-        public Term apply(TermCons tc) {
-            assert tc.production() != null : this.getClass() + ":" + " production not found." + tc;
-            if (tc.production().klabel().get().equals("Identifier2DirectDeclarator")) {
-                Constant id = (Constant) tc.items().iterator().next();
-                types.add(id.value());
-            }
-
-            return super.apply(tc);
-        }
+        return rez;
     }
 }
