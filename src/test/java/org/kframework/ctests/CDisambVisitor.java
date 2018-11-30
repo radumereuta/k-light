@@ -10,6 +10,7 @@ import scala.util.Either;
 import scala.util.Left;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -29,19 +30,26 @@ public class CDisambVisitor extends SetsTransformerWithErrors<ParseFailedExcepti
             types = typesBackup;
             return rez;
         }
-        if (tc.production().klabel().get().equals("Identifier2DirectDeclarator") && inTypedef) {
+        if (tc.production().klabel().get().equals("StructOrUnionDecl")) { // entering a struct decl so temporarily disable inTypedef
+            boolean tempInTypedef = inTypedef;
+            inTypedef = false;
+            Either<Set<ParseFailedException>, Term> rez = super.apply(tc);
+            inTypedef = tempInTypedef;
+            return rez;
+        }
+        if (tc.production().klabel().get().equals("Identifier2DirectDeclarator")) {
             Constant id = (Constant) tc.items().iterator().next();
             if (types.contains(id.value())) { // used as type when it shouldn't
-                String msg = id.value() + " is not a type.";
+                String msg = id.value() + " is not a typedef.";
                 KException kex = new KException(KException.ExceptionType.ERROR, KException.KExceptionGroup.CRITICAL, msg, tc.source().get(), tc.location().get());
                 return Left.apply(Sets.newHashSet(new PriorityException(kex)));
-            } else
-                types.add(id.value()); // new type decl
+            } else if (inTypedef) // new type decl
+                types.add(id.value());
         }
         if (tc.production().klabel().get().equals("Identifier2TypedefName")) {
             Constant id = (Constant) tc.items().iterator().next();
             if (!types.contains(id.value())) {  // name used as a type decl
-                String msg = id.value() + " is not a type.";
+                String msg = id.value() + " is not a typedef.";
                 KException kex = new KException(KException.ExceptionType.ERROR, KException.KExceptionGroup.CRITICAL, msg, tc.source().get(), tc.location().get());
                 return Left.apply(Sets.newHashSet(new PriorityException(kex)));
             }
@@ -49,7 +57,7 @@ public class CDisambVisitor extends SetsTransformerWithErrors<ParseFailedExcepti
         if (tc.production().klabel().get().equals("Identifier2PrimaryExpression")) {
             Constant id = (Constant) tc.items().iterator().next();
             if (types.contains(id.value())) {  // type used as new type decl
-                String msg = id.value() + " is a type.";
+                String msg = id.value() + " is a typedef.";
                 KException kex = new KException(KException.ExceptionType.ERROR, KException.KExceptionGroup.CRITICAL, msg, tc.source().get(), tc.location().get());
                 return Left.apply(Sets.newHashSet(new PriorityException(kex)));
             }
@@ -65,22 +73,20 @@ public class CDisambVisitor extends SetsTransformerWithErrors<ParseFailedExcepti
     }
 
     public Either<java.util.Set<ParseFailedException>, Term> apply(Ambiguity amb) {
-        Either<Set<ParseFailedException>, Term> rez = null;
-        Set<String> typesfwd = new HashSet<>(types);
-        Set<String> typesback = null;
+        Set<String> typesback = new HashSet<>(types);
+        Iterator<Term> it = amb.items().iterator();
 
-        for (Term i : amb.items()) {
-            Either<Set<ParseFailedException>, Term> temp = super.apply(i);
-            if (temp.isRight()) {
-                assert typesback == null;
-                typesback = types;
-                rez = temp;
-            }
-            types = typesfwd;
-        }
-        assert typesback != null;
+        Either<Set<ParseFailedException>, Term> t1 = super.apply(it.next());
+        assert amb.items().size() == 2 : "Error in grammar, expected 2 ambiguities: " + t1.right().get().source() + ":" + t1.right().get().location();;
+        Set<String> typesT1 = types;
         types = typesback;
-
-        return rez;
+        Either<Set<ParseFailedException>, Term> t2 = super.apply(it.next());
+        if (t1.isLeft()) {
+            return t2;
+        } else {
+            assert t2.isLeft() : "Could not disambiguate: " + t2.right().get().source() + ":" + t2.right().get().location();
+            types = typesT1;
+            return t1;
+        }
     }
 }

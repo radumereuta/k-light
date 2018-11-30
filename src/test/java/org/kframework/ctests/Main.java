@@ -8,6 +8,7 @@ import org.kframework.definition.Definition;
 import org.kframework.definition.Module;
 import org.kframework.parser.concrete2kore.ParseInModule;
 import org.kframework.parser.concrete2kore.ParserUtils;
+import org.kframework.parser.concrete2kore.disambiguation.AmbFilter;
 import org.kframework.parser.concrete2kore.generator.RuleGrammarGenerator;
 import org.kframework.treeNodes.ReverseChildren;
 import org.kframework.treeNodes.Term;
@@ -57,14 +58,25 @@ public class Main {
                         //String err = new String(po.stderr);
                         //System.out.println("[S]       " + fp.toString());
                         Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> rez =
-                                parser.parseString(FileUtil.load(fp.toFile()), Sort(startSymbol), Source.apply(fp.toString()));
+                                parser.parseStringKeepAmb(FileUtil.load(fp.toFile()), Sort(startSymbol), Source.apply(fp.toString()));
+
                         long totalTime = System.currentTimeMillis() - startTime;
                         if (rez._1().isLeft()) {
                             System.out.println("[Error]   " + fp.toString() + "   (" + totalTime + " ms)   " + rez._1.left().get().iterator().next().getKException().getLocation() + ":" + rez._1.left().get().iterator().next().getKException().getMessage());
                             return "[Error]";
-                        } else if (rez._2().size() != 0) {
-                            System.out.println("[Warning] " + fp.toString() + "   (" + totalTime + " ms)   " + rez._2.size());
-                            return "[Warning]";
+                        } else {
+                            Term rez1 = ReverseChildren.apply(rez._1.right().get());
+                            Either<Set<ParseFailedException>, Term> rez2 = new CDisambVisitor().apply(rez1);
+                            if (rez2.isLeft()) {
+                                System.out.println("[TError]  " + fp.toString() + "   (" + totalTime + " ms)   " + rez2.left().get().iterator().next().getKException().getLocation() + ":" + rez2.left().get().iterator().next().getKException().getMessage());
+                                return "[Error]";
+                            }
+                            Tuple2<Either<Set<ParseFailedException>, Term>, Set<ParseFailedException>> rez3 = new AmbFilter().apply(rez2.right().get());
+
+                            if (rez3._2().size() != 0) {
+                                System.out.println("[Warning] " + fp.toString() + "   (" + totalTime + " ms)   " + rez._2.size());
+                                return "[Warning]";
+                            }
                         }
                         System.out.println("[ok]      " + fp.toString() + " (" + totalTime + " ms)   ");
                         return "[ok]";
@@ -103,7 +115,10 @@ public class Main {
         Term rez = ReverseChildren.apply(rez1._1.right().get());
 
         Either<Set<ParseFailedException>, Term> rez2 = new CDisambVisitor().apply(rez);
-        System.out.println(ReverseChildren.apply(rez2.right().get()).toString());
+        if (rez2.isRight())
+            System.out.println(ReverseChildren.apply(rez2.right().get()).toString());
+        else
+            System.out.println(rez2.left().get().toString());
     }
 
     @Test @Ignore
