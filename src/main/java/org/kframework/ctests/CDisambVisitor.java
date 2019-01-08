@@ -8,6 +8,7 @@ import org.kframework.utils.errorsystem.ParseFailedException;
 import org.kframework.utils.errorsystem.PriorityException;
 import scala.util.Either;
 import scala.util.Left;
+import scala.util.Right;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,6 +33,19 @@ public class CDisambVisitor extends SetsTransformerWithErrors<ParseFailedExcepti
         }
         if (tc.production().klabel().get().equals("StructOrUnionDecl")) { // entering a struct decl so temporarily disable inTypedef
             boolean tempInTypedef = inTypedef;
+            inTypedef = false;
+            Either<Set<ParseFailedException>, Term> rez = super.apply(tc);
+            inTypedef = tempInTypedef;
+            return rez;
+        }
+        if (tc.production().klabel().get().equals("FunctionProtoType")) {
+            // entering a pointer to function decl so temporarily disable inTypedef for the right child
+            boolean tempInTypedef = inTypedef;
+            assert tc.items().size() == 2 : "Error. Expected FunctionProtoType to have exactly 2 children.";
+            Iterator<Term> it = tc.items().iterator();
+            Either<Set<ParseFailedException>, Term> t1 = super.apply(it.next());
+            if (t1.isLeft()) return t1;
+
             inTypedef = false;
             Either<Set<ParseFailedException>, Term> rez = super.apply(tc);
             inTypedef = tempInTypedef;
