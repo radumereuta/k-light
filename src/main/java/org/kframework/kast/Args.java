@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Args {
-    @Parameter(arity = 3)
+    @Parameter(description = "<grammar.k> <start-symbol> <file-to-parse>", arity = 3)
     public List<String> parameters = new ArrayList<>();
 
     @Parameter(names={"--help", "-h"}, description="Print this help message", help = true)

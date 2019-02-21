@@ -31,7 +31,7 @@ public class Main {
     public static void main(String[] args) {
         Args jargs = new Args();
         JCommander jc = JCommander.newBuilder().addObject(jargs).build();
-        jc.setProgramName("k-light2k5 <grammar.k> <start-symbol> <file-to-parse>");
+        jc.setProgramName("k-light2k5");
         jc.parse(args);
 
         if (jargs.help) {

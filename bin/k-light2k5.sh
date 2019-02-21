@@ -14,4 +14,4 @@ classpath="$mvn_dir/commons-io/commons-io/2.4/commons-io-2.4.jar":\
 "$target_dir/k-light-1.0-SNAPSHOT.jar"
 
 
-java -cp "$classpath" org.kframework.kast.Main "$1" "$2" "$3"
+java -cp "$classpath" org.kframework.kast.Main "$@"
