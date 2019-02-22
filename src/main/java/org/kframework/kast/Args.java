@@ -17,4 +17,7 @@ public class Args {
 
     @Parameter(names={"--meta"}, description="Print terms at the meta-level.")
     public boolean meta = false;
+
+    @Parameter(names={"--module"}, description="Parse text in specified module.")
+    public String modName;
 }

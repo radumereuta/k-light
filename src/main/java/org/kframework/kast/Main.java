@@ -40,7 +40,9 @@ public class Main {
             File grammarFile = new File(jargs.parameters.get(0));
             String startSymbol = jargs.parameters.get(1);
             File inputFile = new File(jargs.parameters.get(2));
-            String modName = grammarFile.getName().substring(0, grammarFile.getName().length() - 2).toUpperCase();
+            String modName = jargs.modName;
+            if (modName == null) modName = grammarFile.getName().substring(0, grammarFile.getName().length() - 2).toUpperCase();
+
             List<File> lookupDirs = jargs.includes.stream()
                     .map(FileUtil.testFileUtil()::resolveWorkingDirectory).collect(Collectors.toList());
             lookupDirs.add(grammarFile.getParentFile());
