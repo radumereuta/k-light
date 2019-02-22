@@ -56,15 +56,16 @@ public class Main {
                             Sort(startSymbol),
                             Source.apply(inputFile.getAbsolutePath()));
             if (rez._1.isLeft()) {
-                for (ParseFailedException pfe : rez._1.left().get()) {
+                for (ParseFailedException pfe : rez._1.left().get())
                     System.err.println(pfe.getKException().toString());
-                }
                 System.exit(2);
             } else {
-                if (jargs.meta)
+                if (jargs.output.equals(Args.Output.kast))
+                    System.out.println(TreeNodesToK5AST.apply(rez._1.right().get()));
+                else if (jargs.output.equals(Args.Output.metaKast))
                     System.out.println(TreeNodesToK5MetaAST.apply(rez._1.right().get()));
                 else
-                    System.out.println(TreeNodesToK5AST.apply(rez._1.right().get()));
+                    throw new RuntimeException("Option " + jargs.output + " not implemeted yet.");
             }
         }
         System.exit(0);

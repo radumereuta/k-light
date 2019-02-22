@@ -33,7 +33,8 @@ object TreeNodesToK5MetaAST {
       (if (items.isEmpty)
         "#EmptyKList(.KList)"
       else
-        new util.ArrayList(items).asScala.foldRight(".KList"){ (i, acc) => "#KList(" + apply(i) + "," + acc + ")"} + ")")
+        new util.ArrayList(items).asScala.foldRight("#EmptyKList(.KList)"){ (i, acc) => "#KList(" + apply(i) + "," + acc + ")"}) +
+      ")"
     case Ambiguity(items) => //"amb(" + (items.asScala map apply).mkString(",") + ")"
       items.asScala.foldRight("bottom(.KList)") { (i, acc) => "amb(" + apply(i) + "," + acc + ")" }
   }
