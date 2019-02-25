@@ -26,14 +26,14 @@ object TreeNodesToK5MetaAST {
 
   def apply(t: Term): String = t match {
     case c@Constant(s, p) => "#KToken(" +
-      "#token(" + StringUtil.enquoteCString(s) + ", \"KLabel\"), " +
-      "#token(" + StringUtil.enquoteCString(p.sort.localName) + ", \"String\"))"
+      "#token(" + StringUtil.enquoteCString(s) + ", \"MetaValue\"), " +
+      "#token(" + StringUtil.enquoteCString(p.sort.localName) + ", \"MetaKSort\"))"
     case tc@TermCons(items, p) => "#KApply(" +
-      "#token(" + StringUtil.enquoteCString(p.symbol.get) + ", \"KLabel\"), " +
+      "#token(" + StringUtil.enquoteCString(p.symbol.get) + ", \"MetaKLabel\"), " +
       (if (items.isEmpty)
         "#EmptyKList(.KList)"
       else
-        new util.ArrayList(items).asScala.foldRight("#EmptyKList(.KList)"){ (i, acc) => "#KList(" + apply(i) + "," + acc + ")"}) +
+        new util.ArrayList(items).asScala.reverse.foldRight("#EmptyKList(.KList)"){ (i, acc) => "#KList(" + apply(i) + "," + acc + ")"}) +
       ")"
     case Ambiguity(items) => //"amb(" + (items.asScala map apply).mkString(",") + ")"
       items.asScala.foldRight("bottom(.KList)") { (i, acc) => "amb(" + apply(i) + "," + acc + ")" }

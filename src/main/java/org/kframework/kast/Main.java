@@ -3,6 +3,7 @@ package org.kframework.kast;
 import com.beust.jcommander.JCommander;
 import org.kframework.attributes.Source;
 import org.kframework.definition.Definition;
+import org.kframework.kore.TreeNodesToKORE;
 import org.kframework.parser.concrete2kore.ParseInModule;
 import org.kframework.parser.concrete2kore.ParserUtils;
 import org.kframework.parser.concrete2kore.generator.RuleGrammarGenerator;
@@ -64,6 +65,10 @@ public class Main {
                     System.out.println(TreeNodesToK5AST.apply(rez._1.right().get()));
                 else if (jargs.output.equals(Args.Output.metaKast))
                     System.out.println(TreeNodesToK5MetaAST.apply(rez._1.right().get()));
+                else if (jargs.output.equals(Args.Output.kore))
+                    System.out.println(TreeNodesToKORE.print(rez._1.right().get()));
+                else if (jargs.output.equals(Args.Output.infoKore))
+                    System.out.println(TreeNodesToKORE.printWithInfo(rez._1.right().get()));
                 else
                     throw new RuntimeException("Option " + jargs.output + " not implemeted yet.");
             }

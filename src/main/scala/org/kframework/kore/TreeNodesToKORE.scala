@@ -10,28 +10,48 @@ import scala.collection.JavaConverters._
 
 object TreeNodesToKORE {
 
+  /**
+    * Print the resulting AST with info nodes that contain location information
+    * @param t input treeNode
+    * @return String representation in the KORE format
+    */
+  def printWithInfo(t: Term): String = {
+    val vis: TreeNodesToKOREVisitor = new TreeNodesToKOREVisitor(true)
+    vis.printWithInfo(t)
+  }
+
+  /**
+    * Print the resulting AST
+    * @param t input treeNode
+    * @return String representation in the KORE format
+    */
   def print(t: Term): String = {
-    val vis: TreeNodesToKOREVisitor = new TreeNodesToKOREVisitor()
-    vis.visit(t)
-    val root:String = vis.apply(t)
-    val sort:String = t match {
-      case Ambiguity(items) => items.iterator().next().asInstanceOf[ProductionReference].production.sort.localName + "{}"
-      case p:ProductionReference => p.production.sort.localName + "{}"
-    }
-    val rez = vis.shared.foldRight(
-      vis.shared.foldRight(root) { (i, acc) =>
-        "    \\and{" + sort + "}(\n" +
-        "        \\equals{" + i._2.get._3 + "," + sort + "}(" + i._2.get._1 + "," + i._2.get._2 + "),\n" + acc + ")"}
-    ) { (i, acc) => "\\exists{" + sort + "}(" + i._2.get._1 + ",\n" + acc + ")" }
-    "\n" + rez
+    val vis: TreeNodesToKOREVisitor = new TreeNodesToKOREVisitor(false)
+    vis.printWithInfo(t)
   }
 }
 
-private class TreeNodesToKOREVisitor {
+private class TreeNodesToKOREVisitor(info:Boolean) {
   var shared: Map[Term, Option[(String, String, String)]] = Map.empty // mark all the nodes which appear multiple times in the AST
   private var visited: Set[Term] = Set.empty
   private var seed: Int = 0
   private var doShare = false
+
+
+  def printWithInfo(t:Term): String = {
+    visit(t)
+    val root:String = apply(t)
+    val sort:String = t match {
+      case Ambiguity(items) => items.iterator().next().asInstanceOf[ProductionReference].production.sort.localName + "{}"
+      case p:ProductionReference => p.production.sort.localName + "{}"
+    }
+    val rez = shared.foldRight(
+      shared.foldRight(root) { (i, acc) =>
+        "    \\and{" + sort + "}(\n" +
+          "        \\equals{" + i._2.get._3 + "," + sort + "}(" + i._2.get._1 + "," + i._2.get._2 + "),\n" + acc + ")"}
+    ) { (i, acc) => "\\exists{" + sort + "}(" + i._2.get._1 + ",\n" + acc + ")" }
+    "\n" + rez
+  }
 
   // find and mark all the nodes which appear multiple times in the AST
   def visit(t:Term):Unit = {
@@ -81,7 +101,7 @@ private class TreeNodesToKOREVisitor {
   }
   // meta information wrap
   private def printInfo(t: ProductionReference, printedTerm:String): String = {
-    // return printedTerm // uncomment to not print info - makes it easier to read terms
+    if (info)
     "info{" + t.production.sort.localName + "{}}(" +
       "input{}(\\dv{KInt{}}(\"" + t.location.get().startLine +
       "\"),\\dv{KInt{}}(\"" + t.location.get().startColumn +
@@ -89,5 +109,7 @@ private class TreeNodesToKOREVisitor {
       "\"),\\dv{KInt{}}(\"" + t.location.get().endColumn + "\"))," +
       printedTerm +
       ")"
+    else
+      printedTerm // do not print the large info nodes to make the AST more readable
   }
 }
