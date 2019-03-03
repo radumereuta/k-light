@@ -25,15 +25,15 @@ object TreeNodesToK5AST {
 object TreeNodesToK5MetaAST {
 
   def apply(t: Term): String = t match {
-    case c@Constant(s, p) => "#KToken(" +
+    case c@Constant(s, p) => "metaKToken(" +
       "#token(" + StringUtil.enquoteCString(s) + ", \"MetaValue\"), " +
       "#token(" + StringUtil.enquoteCString(p.sort.localName) + ", \"MetaKSort\"))"
-    case tc@TermCons(items, p) => "#KApply(" +
+    case tc@TermCons(items, p) => "metaKApply(" +
       "#token(" + StringUtil.enquoteCString(p.symbol.get) + ", \"MetaKLabel\"), " +
       (if (items.isEmpty)
-        "#EmptyKList(.KList)"
+        "metaEmptyKList(.KList)"
       else
-        new util.ArrayList(items).asScala.reverse.foldRight("#EmptyKList(.KList)"){ (i, acc) => "#KList(" + apply(i) + "," + acc + ")"}) +
+        new util.ArrayList(items).asScala.reverse.foldRight("metaEmptyKList(.KList)"){ (i, acc) => "metaKList(" + apply(i) + "," + acc + ")"}) +
       ")"
     case Ambiguity(items) => //"amb(" + (items.asScala map apply).mkString(",") + ")"
       items.asScala.foldRight("bottom(.KList)") { (i, acc) => "amb(" + apply(i) + "," + acc + ")" }
