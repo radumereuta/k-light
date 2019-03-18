@@ -226,14 +226,14 @@ public class ParserUtils {
         Optional<Module> opt = modules.stream().filter(m -> m.name().equals(mainModuleName)).findFirst();
         if (!opt.isPresent()) {
             throw KEMException.compilerError("Could not find main module with name " + mainModuleName
-                    + " in definition. Use --main-module to specify one.");
+                    + " in definition. Use --module to specify one.");
         }
         Module mainModule = opt.get();
         opt = modules.stream().filter(m -> m.name().equals(syntaxModuleName)).findFirst();
         Module syntaxModule;
         if (!opt.isPresent()) {
             kem.registerCompilerWarning("Could not find main syntax module with name " + syntaxModuleName
-                    + " in definition.  Use --syntax-module to specify one. Using " + mainModuleName + " as default.");
+                    + " in definition.  Use --module to specify one. Using " + mainModuleName + " as default.");
             syntaxModule = mainModule;
         } else {
             syntaxModule = opt.get();
