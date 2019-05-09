@@ -177,7 +177,7 @@ public class Production extends ASTNode implements Interfaces.MutableList<Produc
             if (sort.equals(Sort.KLABEL) && getArity() == 0)
                 return null;
             else
-                klabel = getPrefixLabel();
+                klabel = getPrefixLabel() + "_" + ownerModuleName;
         }
         return klabel.replace(" ", "");
     }

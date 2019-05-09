@@ -30,7 +30,7 @@ trait HasChildren {
 }
 
 case class Constant private(value: String, production: Production) extends ProductionReference {
-  override def toString = "#token(" + production.sort + ",\"" + StringEscapeUtils.escapeJava(value) + "\")"
+  override def toString = "#token(" + "\"" + StringEscapeUtils.escapeJava(value) + "\",\"" + production.sort.localName + "\")"
 }
 
 // note that items is reversed because it is more efficient to generate it this way during parsing
@@ -40,7 +40,9 @@ case class TermCons private(items: PStack[Term], production: Production)
   def `with`(i: Int, e: Term) = TermCons(items.`with`(items.size() - 1 - i, e), production, location, source)
 
   def replaceChildren(newChildren: Collection[Term]) = TermCons(ConsPStack.from(newChildren), production, location, source)
-  override def toString() = production.klabel.getOrElse("NOKLABEL") + "(" + (new ArrayList(items).asScala.reverse mkString ",") + ")"
+  override def toString() = "`" + production.klabel.getOrElse("NOKLABEL") + "`(" +
+    (if (items.isEmpty) ".KList" else new ArrayList(items).asScala.reverse mkString ",") +
+    ")"
   def map(newChildren: Collection[Term]) = TermCons(ConsPStack.from(newChildren), production, location, source)
 
   override lazy val hashCode: Int = production.hashCode
