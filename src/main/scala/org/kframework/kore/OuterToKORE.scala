@@ -38,10 +38,10 @@ object OuterToKORE {
   def apply(s: Sentence, m:Module, d:Definition): String = s match {
     case SyntaxSort(_, _, _, _) => ""
     case p@Production(sort, items, att, _, _) =>
-      if (p.att.contains("token") || p.symbol.isEmpty || p.symbol.get.equals("inj") || p.symbol.get.equals("cast") || p.symbol.get.equals("bracket") || p.symbol.get.equals("\\rewrites")) return ""
+      if (p.att.contains("token") || p.klabel.isEmpty || p.klabel.get.equals("inj") || p.klabel.get.equals("cast") || p.klabel.get.equals("bracket") || p.klabel.get.equals("\\rewrites")) return ""
       val sin = (items.filter((i) => i.isInstanceOf[NonTerminal]) map apply).mkString(", ")
-      val inType = if (p.symbol.get == "inj" || p.symbol.get == "cast") sin + "," + sort.localName + "{}" else ""
-      "  symbol " + p.symbol.get + "{" + inType + "}(" + sin + "):" + sort.localName + "{} []"
+      val inType = if (p.klabel.get == "inj" || p.klabel.get == "cast") sin + "," + sort.localName + "{}" else ""
+      "  symbol " + p.klabel.get + "{" + inType + "}(" + sin + "):" + sort.localName + "{} []"
     case b@Bubble(_, _, _, _, _) => "  /* input(" + b.att.get("start").orElse(Some(Some("K"))).get.get + "): " + b.contents + "*/\n" +
       "  axiom{} " + parseToKORE(b, m, d) + " []"
     case ModuleComment(_, _, _, _) => ""

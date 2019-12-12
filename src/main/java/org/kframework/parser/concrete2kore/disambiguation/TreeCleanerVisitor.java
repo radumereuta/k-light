@@ -24,12 +24,12 @@ public class TreeCleanerVisitor extends SetsTransformerWithErrors<ParseFailedExc
             Either<Set<ParseFailedException>, Term> rez = new TreeCleanerVisitor2(tc).apply(tc.get(0));
             if (rez.isLeft())
                 return rez;
-            if (tc.production().symbol().isEmpty())
+            if (tc.production().klabel().isEmpty())
                 return apply(rez.right().get());
         } else {
             int a = 1 + 2;
         }
-        if (!tc.production().att().contains("bracket") && tc.production().symbol().isEmpty()) {
+        if (!tc.production().att().contains("bracket") && tc.production().klabel().isEmpty()) {
             return Left.apply(Sets.newHashSet(new ParseFailedException(new KException(
                     KException.ExceptionType.ERROR, KException.KExceptionGroup.INNER_PARSER,
                     "Only subsort productions are allowed to have no symbol attribute", tc.source().get(), tc.location().get()))));

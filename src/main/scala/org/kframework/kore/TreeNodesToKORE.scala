@@ -87,13 +87,13 @@ private class TreeNodesToKOREVisitor(info:Boolean) {
   }
   // cases for the types of nodes - actual printing of the node
   private def doMatch(t:Term): String = t match {
-    case c@Constant(s, p) => printInfo(c, "\\dv{" + p.sort.localName + "{}}(" + StringUtil.enquoteCString(s) + ")")
-    case tc@TermCons(items, p) => printInfo(tc, p.symbol.get match {
+    case c@Constant(s, p) => printInfo(c, "\\dv{Sort" + p.sort.localName + "{}}(" + StringUtil.enquoteCString(s) + ")")
+    case tc@TermCons(items, p) => printInfo(tc, p.klabel.get match {
       case "inj" => "inj{" + p.items.iterator.next().asInstanceOf[NonTerminal].sort.localName + "{}," + p.sort.localName + "{}}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
       case "cast" => "cast{" + p.sort.localName + "{}}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
       case "bracket" => "bracket{" + p.sort.localName + "{}}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
       case "\\rewrites" => "\\rewrites{" + p.sort.localName + "{}}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
-      case _ => p.symbol.get + "{}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
+      case _ => "Lbl" + p.klabel.get + "{}(" + (new util.ArrayList(items).asScala.reverse map apply).mkString(",") + ")"
     })
     case Ambiguity(items) =>
       val sort: String = items.iterator.next().asInstanceOf[ProductionReference].production.sort.localName

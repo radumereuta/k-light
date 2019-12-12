@@ -181,8 +181,8 @@ case class Module(name: String, imports: Set[Module], unresolvedLocalSentences: 
 
   lazy val productionsFor: Map[String, Set[Production]] =
     productions
-      .collect({ case p if p.symbol.isDefined => p })
-      .groupBy(_.symbol.get)
+      .collect({ case p if p.klabel.isDefined => p })
+      .groupBy(_.klabel.get)
       .map { case (l, ps) => (l, ps) }
 
   lazy val productionsForSort: Map[Sort, Set[Production]] =
@@ -327,18 +327,14 @@ case class SyntaxSort(sort: Sort, att: Att = Att(), location: Option[Location], 
 
 case class Production(sort: Sort, items: Seq[ProductionItem], att: Att, location: Option[Location], source: Source)
   extends SyntaxSentence with ProductionToString {
-  lazy val symbol: Option[String] =
-    if (att.contains("symbol"))
-      att.get("symbol").flatten
-    else
-      att.get("klabel").flatten // backwards compatibility
+  lazy val klabel: Option[String] = att.get("klabel").flatten
 
   override def equals(that: Any): Boolean = that match {
-    case p@Production(`sort`, `items`, _, _, _) => this.symbol == p.symbol
+    case p@Production(`sort`, `items`, _, _, _) => this.klabel == p.klabel
     case _ => false
   }
 
-  override lazy val hashCode: Int = (sort.hashCode() * 31 + items.hashCode()) * 31 + symbol.hashCode()
+  override lazy val hashCode: Int = (sort.hashCode() * 31 + items.hashCode()) * 31 + klabel.hashCode()
 
   def isSyntacticSubsort: Boolean =
     items.size == 1 && items.head.isInstanceOf[NonTerminal]

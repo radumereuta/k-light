@@ -19,7 +19,7 @@ object TreeNodesToOuterKORE {
     case Constant(s, p) => s
     case tc@TermCons(items, p) =>
       val itms = new util.ArrayList(items).asScala.reverse
-      p.symbol.get match {
+      p.klabel.get match {
       case "#KDefinition" => "[]\n" + apply(itms)
       case "#KModule" =>
         "module " + apply(items.get(2)) + "\n" +
@@ -49,7 +49,7 @@ object TreeNodesToOuterKORE {
 
   // collect production items
   def collectPItems(t:Term): List[String] = t match {
-    case TermCons(items, p) => p.symbol.get match {
+    case TermCons(items, p) => p.klabel.get match {
       case "#KProduction" => collectPItems(items.get(1)) ++ collectPItems(items.get(0))
       case "#nonTerminal" => List(apply(items.get(0)))
       case "#regularTermina" => List.empty
@@ -58,7 +58,7 @@ object TreeNodesToOuterKORE {
   }
 
   def applySyntax(paramList:String, prodSort:String, t:Term): String = t match {
-    case tc@TermCons(items, p) => p.symbol.get match {
+    case tc@TermCons(items, p) => p.klabel.get match {
       case "#KProductionWAttr" =>
         val symbol = getSymbol(tc)
         val parsingOnly = getTagValue(tc, "parsingOnly")
@@ -75,7 +75,7 @@ object TreeNodesToOuterKORE {
   def getSymbol(t:Term): Option[String] = getTagValue(t, Constants.SYMBOL)
   def getTagValue(t:Term, tag:String): Option[String] = t match {
     case Constant(_, _) => Option.empty
-    case TermCons(items, p) => p.symbol.get match {
+    case TermCons(items, p) => p.klabel.get match {
       case "#TagSimple" =>
         val key:Constant = items.get(0).asInstanceOf[Constant]
         if (key.value.equals(tag))

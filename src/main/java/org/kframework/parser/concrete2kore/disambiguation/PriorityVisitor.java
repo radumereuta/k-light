@@ -79,8 +79,8 @@ public class PriorityVisitor extends SetsTransformerWithErrors<ParseFailedExcept
             if (tc.production().att().contains("bracket")) return Right.apply(tc);
             //if (Side.RIGHT  == side && !(tc.production().items().apply(0) instanceof NonTerminal)) return Right.apply(tc);
             //if (Side.LEFT == side && !(tc.production().items().apply(tc.production().items().size() - 1) instanceof NonTerminal)) return Right.apply(tc);
-            Tag parentLabel = new Tag(parent.production().symbol().get());
-            Tag localLabel = new Tag(tc.production().symbol().get());
+            Tag parentLabel = new Tag(parent.production().klabel().get());
+            Tag localLabel = new Tag(tc.production().klabel().get());
             if (priorities.lessThan(parentLabel, localLabel)) {
                 String msg = "Priority filter exception. Cannot use " + localLabel + " as a child of " + parentLabel;
                 KException kex = new KException(KException.ExceptionType.ERROR, KException.KExceptionGroup.CRITICAL, msg, tc.source().get(), tc.location().get());

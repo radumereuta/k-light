@@ -11,7 +11,7 @@ object TreeNodesToK5AST {
 
   def apply(t: Term): String = t match {
     case c@Constant(s, p) => "#token(" + StringUtil.enquoteCString(s) + "," + StringUtil.enquoteCString(p.sort.localName) + ")"
-    case tc@TermCons(items, p) => p.symbol.get + "(" +
+    case tc@TermCons(items, p) => p.klabel.get + "(" +
       (if (items.isEmpty)
         ".KList"
       else
@@ -29,7 +29,7 @@ object TreeNodesToK5MetaAST {
       "#token(" + StringUtil.enquoteCString(s) + ", \"MetaValue\"), " +
       "#token(" + StringUtil.enquoteCString(p.sort.localName) + ", \"MetaKSort\"))"
     case tc@TermCons(items, p) => "metaKApply(" +
-      "#token(" + StringUtil.enquoteCString(p.symbol.get) + ", \"MetaKLabel\"), " +
+      "#token(" + StringUtil.enquoteCString(p.klabel.get) + ", \"MetaKLabel\"), " +
       (if (items.isEmpty)
         "metaEmptyKList(.KList)"
       else

@@ -48,14 +48,14 @@ public class UserList {
                 if (p.items().size() == 3) {
                     Terminal t = (Terminal) p.items().tail().head();
                     ul.separator = t.value();
-                    ul.symbol = p.symbol().get();
+                    ul.symbol = p.klabel().get();
                     ul.attrs = p.att().remove(Constants.SYMBOL);
                     // should work without the Att.userList() att, i.e. for any list -- see #1892
                     ul.nonEmpty = ul.attrs.get(Att.userList()).get().get().equals("+");
                     ul.childSort = ((NonTerminal) p.items().head()).sort();
                     ul.pList = p;
                 } else if (p.items().size() == 1 && p.items().head() instanceof Terminal) {
-                    ul.terminatorSymbol = p.symbol().get();
+                    ul.terminatorSymbol = p.klabel().get();
                     ul.pTerminator = p;
                 } else
                     throw new AssertionError("Didn't expect this type of production when recognizing userList patterns!");
