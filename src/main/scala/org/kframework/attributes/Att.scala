@@ -29,7 +29,7 @@ object Att {
   val generatedByAutomaticSubsorting = "generatedByAutomaticSubsorting"
   val allowChainSubsort = "allowChainSubsort"
   val generatedBy = "generatedBy"
-  val kLabelAttribute:String = "symbol"
+  val kLabelAttribute:String = "klabel"
   val syntaxModule = "syntaxModule"
 
 }

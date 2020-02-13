@@ -3,7 +3,7 @@ package org.kframework.kore
 import java.util
 
 import org.kframework.treeNodes.{Term, _}
-import org.kframework.utils.{Constants, StringUtil}
+import org.kframework.utils.StringUtil
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
@@ -60,10 +60,10 @@ object TreeNodesToOuterKORE {
   def applySyntax(paramList:String, prodSort:String, t:Term): String = t match {
     case tc@TermCons(items, p) => p.klabel.get match {
       case "#KProductionWAttr" =>
-        val symbol = getSymbol(tc)
+        val klabel = getKLabel(tc)
         val parsingOnly = getTagValue(tc, "parsingOnly")
-        if (symbol.isDefined && parsingOnly.isEmpty)
-          "  symbol " + symbol.get + paramList + "(" + collectPItems(items.get(1)).mkString(",") + "): " + prodSort + " []\n"
+        if (klabel.isDefined && parsingOnly.isEmpty)
+          "  symbol " + klabel.get + paramList + "(" + collectPItems(items.get(1)).mkString(",") + "): " + prodSort + " []\n"
         else
           ""
       case _ => (items.asScala map { (i) => applySyntax(paramList, prodSort, i)}).mkString("")
@@ -72,7 +72,7 @@ object TreeNodesToOuterKORE {
       value
   }
 
-  def getSymbol(t:Term): Option[String] = getTagValue(t, Constants.SYMBOL)
+  def getKLabel(t:Term): Option[String] = getTagValue(t, "klabel")
   def getTagValue(t:Term, tag:String): Option[String] = t match {
     case Constant(_, _) => Option.empty
     case TermCons(items, p) => p.klabel.get match {
@@ -97,7 +97,7 @@ object TreeNodesToOuterKORE {
         else
           Option.empty
       case _ =>
-        // find first node that defines a symbol
+        // find first node that defines a klabel
         (items.asScala map {(a) => getTagValue(a, tag)}).foldRight(Option.empty[String]){(i, acc) => { if (acc.isDefined) acc else if (i.isDefined) i else Option.empty}}
     }
   }

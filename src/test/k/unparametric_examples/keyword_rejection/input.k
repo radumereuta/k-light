@@ -5,9 +5,9 @@
 module COMMON
 syntax Layout ::= r"([\\ \n\r\t])*" [token]
 syntax Id
-syntax Exp ::= Id [symbol(inj)]
-  | Exp Exp [symbol(app)]
-  | "callcc" Exp [symbol(callcc)]
+syntax Exp ::= Id [klabel(inj)]
+  | Exp Exp [klabel(app)]
+  | "callcc" Exp [klabel(callcc)]
 endmodule
  
 module INPUT

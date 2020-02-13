@@ -25,6 +25,9 @@ public class CheckListDecl {
                     if (p.getItems().size() == 1 && p.getItems().get(0) instanceof UserList) { // Syntax Es ::= List{E,""}
                         Sort listSort = s.getDeclaredSort().getSort(); // Es
                         Sort elemSort = ((UserList) p.getItems().get(0)).getSort(); // E
+                        if (listSort.isBaseSort()) {
+                            throw KExceptionManager.compilerError(listSort + " can not be extended to be a list sort.", p);
+                        }
                         if (listSort.equals(elemSort)) {
                             throw KExceptionManager.compilerError("Circular lists are not allowed.", p);
                         }

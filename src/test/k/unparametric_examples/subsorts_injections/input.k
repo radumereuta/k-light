@@ -1,5 +1,5 @@
 /*
- * The difference between subsorts which have a symbol/symbol and those which have none.
+ * The difference between subsorts which have a klabel/symbol and those which have none.
  */
 module COMMON
 syntax Top
@@ -21,9 +21,9 @@ endmodule
  
 module INPUT2
 import COMMON
-syntax Top ::= A1 [symbol(Top2A1)] | A2 [symbol(Top2A2)]
-syntax A1 ::= Var [symbol(A12Var)]
-syntax A2 ::= Var [symbol(A22Var)]
+syntax Top ::= A1 [klabel(Top2A1)] | A2 [klabel(Top2A2)]
+syntax A1 ::= Var [klabel(A12Var)]
+syntax A2 ::= Var [klabel(A22Var)]
 rule a [start(Top)]
 // output: amb(
 //    Top2A1(A12Var(#token("a", Var))),

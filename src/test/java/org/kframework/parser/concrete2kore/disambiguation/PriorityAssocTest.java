@@ -15,8 +15,8 @@ public class PriorityAssocTest {
     @Test
     public void testPriorityAssoc() throws Exception {
         String def = "module TEST " +
-                "syntax Exp ::= Exp \"*\" Exp [left, symbol('Mul)] " +
-                "> Exp \"+\" Exp [left, symbol('Plus)] " +
+                "syntax Exp ::= Exp \"*\" Exp [left, klabel('Mul)] " +
+                "> Exp \"+\" Exp [left, klabel('Plus)] " +
                 "| r\"[0-9]+\" [token] " +
                 "syntax left 'Plus " +
                 "syntax left 'Mul " +

@@ -20,7 +20,7 @@ import java.lang.annotation.Annotation;
 public class Attribute extends ASTNode {
 
     public static final String TOKEN = "token";
-    public static final String KLABEL = "symbol";
+    public static final String KLABEL = "klabel";
     public static final String RULE = "rule";
     public static final String CONFIG = "config";
     public static final String CONTEXT = "context";

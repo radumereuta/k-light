@@ -19,7 +19,6 @@ import org.kframework.parser.concrete2kore.kernel.Grammar.RegExState;
 import org.kframework.parser.concrete2kore.kernel.Grammar.RuleState;
 import org.kframework.parser.concrete2kore.kernel.Rule.WrapLabelRule;
 import org.kframework.treeNodes.*;
-import org.kframework.utils.Constants;
 import org.pcollections.ConsPStack;
 
 import java.lang.management.ManagementFactory;
@@ -91,7 +90,7 @@ public class ParserTest {
 
     @Test
     public void testListOfTokens() throws Exception {
-        // A ::= ("[a-zA-Z0-9]")*  [symbol(seq)]
+        // A ::= ("[a-zA-Z0-9]")*  [klabel(seq)]
         Production prd = constant("seq");
 
         NonTerminal nt1 = new NonTerminal("StartNT");
@@ -148,8 +147,8 @@ public class ParserTest {
 
     @Test
     public void testNestedNonTerminals1() throws Exception {
-        // A ::= ""    [symbol(epsilon)]
-        //     | x A y [symbol(xAy)]
+        // A ::= ""    [klabel(epsilon)]
+        //     | x A y [klabel(xAy)]
         NonTerminal nt1 = new NonTerminal("StartNT");
 
         RegExState resx = new RegExState("RegExStidx", nt1, regex("x"));
@@ -192,8 +191,8 @@ public class ParserTest {
 
     @Test
     public void testNestedNonTerminals2() throws Exception {
-        // A ::= ""  [symbol(epsilon)]
-        //     | A y [symbol(Ay)]
+        // A ::= ""  [klabel(epsilon)]
+        //     | A y [klabel(Ay)]
         NonTerminal nt1 = new NonTerminal("StartNT");
 
         RegExState resy = new RegExState("RegExStidy", nt1, regex("y"));
@@ -233,8 +232,8 @@ public class ParserTest {
 
     @Test
     public void testNestedNonTerminals3() throws Exception {
-        // A ::= ""  [symbol(epsilon)]
-        //     | x A [symbol(xA)]
+        // A ::= ""  [klabel(epsilon)]
+        //     | x A [klabel(xA)]
         NonTerminal nt1 = new NonTerminal("StartNT");
 
         RegExState resx = new RegExState("RegExStidx", nt1, regex("x"));
@@ -275,8 +274,8 @@ public class ParserTest {
 
     @Test
     public void testNestedNonTerminals4() throws Exception {
-        // A ::= "x" [symbol(x)]
-        //     | A A [symbol(AA)]
+        // A ::= "x" [klabel(x)]
+        //     | A A [klabel(AA)]
         NonTerminal nt1 = new NonTerminal("StartNT");
 
         RegExState resx = new RegExState("RegExStidx", nt1,regex("x"));
@@ -336,10 +335,10 @@ public class ParserTest {
 
     @Test
     public void testNestedNonTerminals5() throws Exception {
-        // A1 ::= "x"  [symbol(x)]
-        // A2 ::= A1   [symbol(n1)]
+        // A1 ::= "x"  [klabel(x)]
+        // A2 ::= A1   [klabel(n1)]
         // ....
-        // An ::= An-1 [symbol(n[n-1])]
+        // An ::= An-1 [klabel(n[n-1])]
         // start symb is An
         NonTerminal baseCase = new NonTerminal("BaseCase");
         RegExState resx = new RegExState("X", baseCase, regex("x"));
@@ -377,10 +376,10 @@ public class ParserTest {
 
     @Test
     public void testNestedNonTerminals6() throws Exception {
-        // A1 ::= ""  [symbol(x)]
-        // A2 ::= A1   [symbol(n1)]
+        // A1 ::= ""  [klabel(x)]
+        // A2 ::= A1   [klabel(n1)]
         // ....
-        // An ::= An-1 [symbol(n[n-1])]
+        // An ::= An-1 [klabel(n[n-1])]
         // start symb is An
 
         NonTerminal baseCase = new NonTerminal("BaseCase");
@@ -419,11 +418,11 @@ public class ParserTest {
 
     @Test
     public void testArithmeticLanguage() throws Exception {
-        // Lit  ::= Token{[0-9]+}[symbol(lit)]
-        // Term ::= "(" Exp ")"  [symbol(bracket)]
-        //        | Term "*" Lit [symbol(mul)]
+        // Lit  ::= Token{[0-9]+}[klabel(lit)]
+        // Term ::= "(" Exp ")"  [klabel(bracket)]
+        //        | Term "*" Lit [klabel(mul)]
         //        | Lit
-        // Exp  ::= Exp "+" Term [symbol(plus)]
+        // Exp  ::= Exp "+" Term [klabel(plus)]
         //        | Term
         NonTerminal lit = new NonTerminal("Lit");
         NonTerminal trm = new NonTerminal("Trm");
@@ -529,7 +528,7 @@ public class ParserTest {
 
         PrimitiveState minus = new RegExState("Minus-State", expNt, regex("\\-"));
         NonTerminalState expExp = new NonTerminalState("Exp-nts(Exp)", expNt, expNt);
-        Production p1 = Production(EXP_SORT, Seq(Terminal("-"), NonTerminal(EXP_SORT)), Att().add(Constants.SYMBOL, "-_"));
+        Production p1 = Production(EXP_SORT, Seq(Terminal("-"), NonTerminal(EXP_SORT)), Att().add("klabel", "-_"));
         RuleState rs1 = new RuleState("Exps-wrapMinus", expNt, new WrapLabelRule(p1));
         expNt.entryState.next.add(minus);
         minus.next.add(expExp);
@@ -544,7 +543,7 @@ public class ParserTest {
          */
         NonTerminal expsNt = new NonTerminal("Exps");
         NonTerminalState expExps = new NonTerminalState("Exp-nts(Exps)", expsNt, expNt);
-        Production p2 = Production(Sort("Exps"), Seq(NonTerminal(EXP_SORT)), Att().add(Constants.SYMBOL, "_,_"));
+        Production p2 = Production(Sort("Exps"), Seq(NonTerminal(EXP_SORT)), Att().add("klabel", "_,_"));
         PrimitiveState separator = new RegExState("Sep-State", expsNt, regex("\\,"));
         RuleState labelList = new RuleState("RuleStateExps", expsNt, new WrapLabelRule(p2));
         expsNt.entryState.next.add(expExps);

@@ -61,7 +61,7 @@ case class Definition(
 trait Sorting {
   def computeSubsortPOSet(sentences: Set[Sentence]): POSet[Sort] = {
     val subsortRelations: Set[(Sort, Sort)] = sentences collect {
-      case Production(endSort, Seq(NonTerminal(startSort, _, _)), att, _, _) if !att.contains("symbol") => (startSort, endSort)
+      case Production(endSort, Seq(NonTerminal(startSort, _, _)), att, _, _) if !att.contains("klabel") => (startSort, endSort)
     }
 
     POSet(subsortRelations)
@@ -78,7 +78,7 @@ trait GeneratingListSubsortProductions extends Sorting {
     val listProductions =
       for (l1 <- userLists;
            l2 <- userLists
-           if l1 != l2 && l1.symbol == l2.symbol &&
+           if l1 != l2 && l1.klabel == l2.klabel &&
              subsorts.>(l1.childSort, l2.childSort)) yield {
         new Production(l1.sort, Seq(new NonTerminal(l2.sort, Option.empty, Source(Att.generatedByListSubsorting))), Att().add(Att.generatedByListSubsorting), Option.empty, Source(Att.generatedByListSubsorting))
       }
@@ -208,7 +208,7 @@ case class Module(name: String, imports: Set[Module], unresolvedLocalSentences: 
 
   @transient lazy val sortFor: Map[String, Sort] = productionsFor mapValues {_.head.sort}
 
-  def isSort(symbol: String, s: Sort):Boolean = subsorts.<(sortFor(symbol), s)
+  def isSort(klabel: String, s: Sort):Boolean = subsorts.<(sortFor(klabel), s)
 
 
   @transient lazy val attributesFor: Map[String, Set[(String, Option[String])]] = productionsFor mapValues mergeAttributes
@@ -345,8 +345,8 @@ case class Production(sort: Sort, items: Seq[ProductionItem], att: Att, location
 }
 
 //object Production {
-//  def apply(symbol: String, sort: Sort, items: Seq[ProductionItem], att: Att = Att()): Production = {
-//    Production(sort, items, att + (Att.kLabelAttribute -> symbol))
+//  def apply(klabel: String, sort: Sort, items: Seq[ProductionItem], att: Att = Att()): Production = {
+//    Production(sort, items, att + (Att.kLabelAttribute -> klabel))
 //  }
 //}
 

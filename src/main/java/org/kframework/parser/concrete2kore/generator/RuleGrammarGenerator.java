@@ -78,19 +78,19 @@ public class RuleGrammarGenerator {
 
                     Att newAtts = ul.attrs.remove("userList");
                     // TODO: find a way to pass on the original production to the parser
-                    // Es#Terminator ::= "" [symbol('.Es)]
-                    prod1 = Constructors.Production(ul.terminatorSymbol,
+                    // Es#Terminator ::= "" [klabel('.Es)]
+                    prod1 = Constructors.Production(ul.terminatorKLabel,
                             Sort(ul.sort.localName() + "#Terminator"),
                             Collections.Seq(Constructors.Terminal("")),
-                            newAtts.add("symbol", ul.terminatorSymbol).add(Constants.ORIGINAL_PRD, ul.pTerminator.toString()));
-                    // Ne#Es ::= E "," Ne#Es [symbol('_,_)]
-                    prod2 = Constructors.Production(ul.symbol, Sort("Ne#" + ul.sort.localName()),
+                            newAtts.add("klabel", ul.terminatorKLabel).add(Constants.ORIGINAL_PRD, ul.pTerminator.toString()));
+                    // Ne#Es ::= E "," Ne#Es [klabel('_,_)]
+                    prod2 = Constructors.Production(ul.klabel, Sort("Ne#" + ul.sort.localName()),
                             Collections.Seq(NonTerminal(ul.childSort), Constructors.Terminal(ul.separator), NonTerminal(Sort("Ne#" + ul.sort.localName()))),
-                            newAtts.add("symbol", ul.symbol).add(Constants.ORIGINAL_PRD, ul.pList.toString()));
-                    // Ne#Es ::= E Es#Terminator [symbol('_,_)]
-                    prod3 = Constructors.Production(ul.symbol, Sort("Ne#" + ul.sort.localName()),
+                            newAtts.add("klabel", ul.klabel).add(Constants.ORIGINAL_PRD, ul.pList.toString()));
+                    // Ne#Es ::= E Es#Terminator [klabel('_,_)]
+                    prod3 = Constructors.Production(ul.klabel, Sort("Ne#" + ul.sort.localName()),
                             Collections.Seq(NonTerminal(ul.childSort), NonTerminal(Sort(ul.sort.localName() + "#Terminator"))),
-                            newAtts.add("symbol", ul.symbol).add(Constants.ORIGINAL_PRD, ul.pList.toString()));
+                            newAtts.add("klabel", ul.klabel).add(Constants.ORIGINAL_PRD, ul.pList.toString()));
                     // Es ::= Ne#Es
                     prod4 = Constructors.Production(ul.sort, Collections.Seq(NonTerminal(Sort("Ne#" + ul.sort.localName()))));
                     // Es ::= Es#Terminator // if the list is *

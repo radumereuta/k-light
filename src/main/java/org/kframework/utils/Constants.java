@@ -24,7 +24,6 @@ public class Constants {
     public static final String CONS_cons_ATTR = "cons";
     public static final String SOURCE_ATTR = "source";
     public static final String ORIGINAL_PRD = "originalPrd";
-    public static final String SYMBOL = "symbol";
 
     public static final String LAYOUT = "Layout";
 

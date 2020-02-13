@@ -4,10 +4,10 @@
  */
 module COMMON
 syntax Layout ::= r"([\\ \n\r\t])*" [token]
-syntax Decl ::= Type Exp ";" [symbol(typeDecl)]
-syntax Type ::= "int" [symbol(intType)] | "double" [symbol(doubleType)]
+syntax Decl ::= Type Exp ";" [klabel(typeDecl)]
+syntax Type ::= "int" [klabel(intType)] | "double" [klabel(doubleType)]
 syntax Id
-syntax Exp  ::= Id [symbol(inj)]
+syntax Exp  ::= Id [klabel(inj)]
 endmodule
 
 module INPUT

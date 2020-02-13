@@ -46,6 +46,19 @@ public class ParserUtils {
         this.options = options;
     }
 
+    public static Term parseWithFile(String theTextToParse,
+                                  String mainModule,
+                                  Sort startSymbol,
+                                  File definitionFile) {
+        String definitionText;
+        try {
+            definitionText = FileUtils.readFileToString(definitionFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return parseWithString(theTextToParse, mainModule, startSymbol, Source.apply(definitionFile.getAbsolutePath()), definitionText);
+    }
+
     public static Term parseWithString(String theTextToParse,
                                     String mainModule,
                                     Sort startSymbol,

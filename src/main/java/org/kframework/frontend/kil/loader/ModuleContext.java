@@ -19,7 +19,7 @@ public class ModuleContext implements Serializable {
     private Set<Module> importedModules = new HashSet<>();
     /** declared sorts visible in this module (transitive) */
     private Set<Sort> declaredSorts = new HashSet<>();
-    /** multimap from a symbol to a production visible in this m/odule (transitive) */
+    /** multimap from a klabel to a production visible in this m/odule (transitive) */
     public SetMultimap<String, Production> klabels = HashMultimap.create();
     /** multimap from a tag to a production visible in this module (transitive) */
     public SetMultimap<String, Production> tags = HashMultimap.create();
@@ -40,9 +40,12 @@ public class ModuleContext implements Serializable {
 
     public void addProduction(Production p) {
         productions.add(p);
-        if (p.getSymbol() != null) {
-            klabels.put(p.getSymbol(), p);
-            tags.put(p.getSymbol(), p);
+        if (p.getKLabel() != null) {
+            klabels.put(p.getKLabel(), p);
+            tags.put(p.getKLabel(), p);
+            if (p.isListDecl()) {
+                listKLabels.put(p.getTerminatorKLabel(), p);
+            }
         }
         if (p.isListDecl()) {
             listProductions.put(p.getSort(), p);
