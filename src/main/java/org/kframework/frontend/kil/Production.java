@@ -1,12 +1,10 @@
 // Copyright (c) 2012-2016 K Team. All Rights Reserved.
 package org.kframework.frontend.kil;
 
-import com.google.common.collect.Multimap;
 import org.kframework.frontend.kil.visitors.Visitor;
+import org.kframework.utils.Constants;
 import org.kframework.utils.StringUtil;
-import org.kframework.utils.errorsystem.KExceptionManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,30 +12,9 @@ import java.util.List;
  */
 public class Production extends ASTNode implements Interfaces.MutableList<ProductionItem, Enum<?>> {
 
-    /*
-     * Andrei S: It appears that the cons attribute is mandatory for all new production added during compilation, otherwise a null pointer exception can be thrown in one of the later compilation
-     * steps.
-     */
     protected List<ProductionItem> items;
     protected Sort sort;
     protected String ownerModuleName;
-    private Multimap<Integer, Integer> binderMap;
-
-    public static Production makeFunction(Sort funSort, String funName, Sort argSort, org.kframework.frontend.kil.loader.Context context) {
-        List<ProductionItem> prodItems = new ArrayList<>();
-        prodItems.add(new Terminal(funName));
-        prodItems.add(new Terminal("("));
-        prodItems.add(new NonTerminal(argSort));
-        prodItems.add(new Terminal(")"));
-
-        Production funProd = new Production(new NonTerminal(funSort), prodItems);
-        if (funSort.isComputationSort()) {
-            funProd.putAttribute("klabel", funName);
-            context.addProduction(funProd);
-        }
-
-        return funProd;
-    }
 
     public boolean isListDecl() {
         return items.size() == 1 && items.get(0) instanceof UserList;
@@ -174,10 +151,7 @@ public class Production extends ASTNode implements Interfaces.MutableList<Produc
         if (klabel == null && isSyntacticSubsort()) {
             return null;
         } else if (klabel == null) {
-            if (sort.equals(Sort.KLABEL) && getArity() == 0)
-                return null;
-            else
-                klabel = getPrefixLabel();
+            klabel = getPrefixLabel();
         }
         return klabel.replace(" ", "");
     }
@@ -279,20 +253,10 @@ public class Production extends ASTNode implements Interfaces.MutableList<Produc
                 return false;
         } else if (!items.equals(other.items))
             return false;
-        if (getKLabel() == null) {
-            if (other.getKLabel() != null)
-                return false;
-        } else if (!getKLabel().equals(other.getKLabel()))
-            return false;
-        if (sort == null) {
+        else if (sort == null) {
             if (other.sort != null)
                 return false;
         } else if (!sort.equals(other.sort))
-            return false;
-        if (binderMap == null) {
-            if (other.binderMap != null)
-                return false;
-        } else if (!binderMap.equals(other.binderMap))
             return false;
         return true;
     }
@@ -301,11 +265,8 @@ public class Production extends ASTNode implements Interfaces.MutableList<Produc
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((items == null) ? 0 : items.hashCode());
-        result = prime * result
-                + ((getKLabel() == null) ? 0 : getKLabel().hashCode());
+        result = prime * result + ((items == null) ? 0 : items.hashCode());;
         result = prime * result + ((sort == null) ? 0 : sort.hashCode());
-        result = prime * result + ((binderMap == null) ? 0 : binderMap.hashCode());
         return result;
     }
 
@@ -322,72 +283,6 @@ public class Production extends ASTNode implements Interfaces.MutableList<Produc
         return new Production(this);
     }
 
-    public String getOwnerModuleName() {
-        return ownerModuleName;
-    }
-
-    public void setOwnerModuleName(String ownerModuleName) {
-        this.ownerModuleName = ownerModuleName;
-    }
-
-    public boolean hasTerminalToRight(int idx) {
-        int arity = 0;
-        for (int i = 0; i < items.size(); i++) {
-            ProductionItem item = items.get(i);
-            if (item instanceof UserList) {
-                if (idx == arity)
-                    return !((UserList) item).getSeparator().equals("");
-                if (idx == arity + 1)
-                    return false;
-                arity += 2;
-            } else if (item instanceof NonTerminal) {
-                if (idx == arity)
-                    return i != items.size() - 1 && items.get(i + 1) instanceof Terminal;
-                arity++;
-            }
-        }
-        throw new IllegalArgumentException("Index not found in production");
-    }
-
-    public boolean hasTerminalToLeft(int idx) {
-        int arity = 0;
-        for (int i = 0; i < items.size(); i++) {
-            ProductionItem item = items.get(i);
-            if (item instanceof UserList) {
-                if (idx == arity)
-                    return false;
-                if (idx == arity + 1)
-                    return !((UserList) item).getSeparator().equals("");
-                arity += 2;
-            } else if (item instanceof NonTerminal) {
-                if (idx == arity)
-                    return i != 0 && items.get(i - 1) instanceof Terminal;
-                arity++;
-            }
-        }
-        throw new IllegalArgumentException("Index not found in production");
-    }
-
-    /**
-     * Getter for the {@code binderMap} structure.
-     * The binder map is a MultiMap consisting of key -> value pairs
-     * representing the position of a bounded variable and the position
-     * of an expression in which it is bound.
-     *
-     * Important note:  Unlike the positions specified by user (which start at 1),
-     * the positions in binderMap are rebased to start at 0 as it
-     * is customary for Java collections.
-     *
-     * @return the binder map associated to this production
-     */
-    public Multimap<Integer, Integer> getBinderMap() {
-        return binderMap;
-    }
-
-    public void setBinderMap(Multimap<Integer, Integer> binderMap) {
-        this.binderMap = binderMap;
-    }
-
     @Override
     public List<ProductionItem> getChildren(Enum<?> _void) {
         return items;
@@ -396,22 +291,5 @@ public class Production extends ASTNode implements Interfaces.MutableList<Produc
     @Override
     public void setChildren(List<ProductionItem> children, Enum<?> _void) {
         this.items = children;
-    }
-
-    /**
-     * Gets the KLabel which is declared in the definition by this production.
-     * A production declares a KLabel if it has a corresponding KLabel (ie,
-     * produces a term of sort KItem), or if it is a constant constructor
-     * of sort KLabel.
-     * @return
-     */
-    public String getKLabelOfKItem() {
-        if (sort.equals(Sort.KLABEL) && isConstant()) {
-            return getConstant().getTerminal();
-        }
-        if (getKLabel() == null) {
-            throw KExceptionManager.internalError("Attempted to get null KLabel of production.", this);
-        }
-        return getKLabel();
     }
 }
